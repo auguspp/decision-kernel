@@ -1,0 +1,3838 @@
+{
+  "acquisition_plan": {
+    "all_market_snapshot_required": true,
+    "budget_semantics": "OPERATIONS_SAFETY_BUDGET_ONLY_NOT_A_SIGNAL_OR_RANKING_THRESHOLD",
+    "candidate_count": 7,
+    "candidate_thscodes": [
+      "881148.TI",
+      "884064.TI",
+      "884015.TI",
+      "884083.TI",
+      "884191.TI",
+      "884307.TI",
+      "884312.TI"
+    ],
+    "distinct_membership_request_count": 12,
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "market_session": "2026-10-08",
+    "max_membership_requests": 32,
+    "membership_requests": [
+      {
+        "name": "煤炭开采加工",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881105.TI"
+      },
+      {
+        "name": "建筑材料",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881115.TI"
+      },
+      {
+        "name": "专用设备",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881118.TI"
+      },
+      {
+        "name": "港口航运",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881148.TI"
+      },
+      {
+        "name": "风电设备",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881280.TI"
+      },
+      {
+        "name": "电池",
+        "roles": [
+          "CURRENT_HINTED_PARENT_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "881281.TI"
+      },
+      {
+        "name": "焦炭加工",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884015.TI"
+      },
+      {
+        "name": "管材",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884064.TI"
+      },
+      {
+        "name": "楼宇设备",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884083.TI"
+      },
+      {
+        "name": "航运",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884191.TI"
+      },
+      {
+        "name": "风电整机",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884307.TI"
+      },
+      {
+        "name": "其他电池",
+        "roles": [
+          "CURRENT_BREADTH_FOR_FALSE_TO_TRUE_CANDIDATE",
+          "CURRENT_GRANULAR_CHILD_CONTAINMENT_REVALIDATION"
+        ],
+        "thscode": "884312.TI"
+      }
+    ],
+    "plan_hash": "abce31185483465bf8209c761dcfc1cc826afc3d7b4666f3a984352290e4aea4",
+    "status": "READY_FOR_CURRENT_BREADTH_ENRICHMENT"
+  },
+  "artifact_semantics": "PURE_PROSPECTIVE_SHADOW_COMPOSITION_AUDIT_ONLY",
+  "benchmark_thscode": "000300.SH",
+  "breadth_observations": [
+    {
+      "advancer_share": "0.9142857142857142857142857143",
+      "advancers": 32,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "d2ac70f54310153acf459c9d93231dff13193cd3929c0dfd8baade6cc2b7820e",
+      "coverage_ratio": "0.9722222222222222222222222222",
+      "decliner_share": "0.08571428571428571428571428571",
+      "decliners": 3,
+      "equal_weight_mean_daily_return": "0.02039362196527355615088820139",
+      "equal_weight_median_daily_return": "0.015011547344110854503464203",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.020393448721852088273568249",
+      "index_minus_equal_weight_mean": "-0.00000017324342146787731995239",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0137457044673539518900343643",
+          "name": "海航科技",
+          "thscode": "600751.SH",
+          "ticker": "600751",
+          "turnover": "68563845"
+        },
+        {
+          "daily_return": "-0.0078988941548183254344391785",
+          "name": "海峡股份",
+          "thscode": "002320.SZ",
+          "ticker": "002320",
+          "turnover": "130836189"
+        },
+        {
+          "daily_return": "-0.0009940357852882703777335984",
+          "name": "青岛港",
+          "thscode": "601298.SH",
+          "ticker": "601298",
+          "turnover": "107728637"
+        },
+        {
+          "daily_return": "0.001251564455569461827284105",
+          "name": "渤海轮渡",
+          "thscode": "603167.SH",
+          "ticker": "603167",
+          "turnover": "16415003"
+        },
+        {
+          "daily_return": "0.004048582995951417004048583",
+          "name": "珠海港",
+          "thscode": "000507.SZ",
+          "ticker": "000507",
+          "turnover": "32626954"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.100194552529182879377431907",
+          "name": "中远海能",
+          "thscode": "600026.SH",
+          "ticker": "600026",
+          "turnover": "870079410"
+        },
+        {
+          "daily_return": "0.099557522123893805309734513",
+          "name": "招商南油",
+          "thscode": "601975.SH",
+          "ticker": "601975",
+          "turnover": "1466802800"
+        },
+        {
+          "daily_return": "0.093300248138957816377171216",
+          "name": "招商轮船",
+          "thscode": "601872.SH",
+          "ticker": "601872",
+          "turnover": "5013475000"
+        },
+        {
+          "daily_return": "0.035276073619631901840490798",
+          "name": "海通发展",
+          "thscode": "603162.SH",
+          "ticker": "603162",
+          "turnover": "569207800"
+        },
+        {
+          "daily_return": "0.029249011857707509881422925",
+          "name": "锦江航运",
+          "thscode": "601083.SH",
+          "ticker": "601083",
+          "turnover": "170817810"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 36,
+      "membership_captured_at": "2026-10-08T10:15:56.497000Z",
+      "missing_or_unpriced_member_count": 1,
+      "missing_or_unpriced_members": [
+        {
+          "name": "北部湾港",
+          "thscode": "000582.SZ",
+          "ticker": "000582"
+        }
+      ],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 35,
+      "sector_name": "港口航运",
+      "sector_thscode": "881148.TI",
+      "top_three_positive_return_mass_share": "0.3979443144749312901967045081",
+      "top_three_turnover_share": "0.5781386515005554956276812409",
+      "total_constituent_turnover": "13390754363",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.5714285714285714285714285714",
+      "advancers": 4,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "48224773a5a1e4cc542f84d14314b3e5ab81175d34c19ee218f3effcde444299",
+      "coverage_ratio": "1",
+      "decliner_share": "0.2857142857142857142857142857",
+      "decliners": 2,
+      "equal_weight_mean_daily_return": "0.01398618008464657110856838363",
+      "equal_weight_median_daily_return": "0.009377664109121909633418585",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.013986467498216563263364967",
+      "index_minus_equal_weight_mean": "0.00000028741356999215479658337",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0370370370370370370370370370",
+          "name": "*ST纳川",
+          "thscode": "300198.SZ",
+          "ticker": "300198",
+          "turnover": "26651656"
+        },
+        {
+          "daily_return": "-0.0072463768115942028985507246",
+          "name": "*ST顾地",
+          "thscode": "002694.SZ",
+          "ticker": "002694",
+          "turnover": "26237295"
+        },
+        {
+          "daily_return": "0",
+          "name": "公元股份",
+          "thscode": "002641.SZ",
+          "ticker": "002641",
+          "turnover": "26145884"
+        },
+        {
+          "daily_return": "0.009377664109121909633418585",
+          "name": "东宏股份",
+          "thscode": "603856.SH",
+          "ticker": "603856",
+          "turnover": "30213606"
+        },
+        {
+          "daily_return": "0.015030946065428824049513705",
+          "name": "青龙管业",
+          "thscode": "002457.SZ",
+          "ticker": "002457",
+          "turnover": "230763730"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.097183098591549295774647887",
+          "name": "雄塑科技",
+          "thscode": "300599.SZ",
+          "ticker": "300599",
+          "turnover": "499214230"
+        },
+        {
+          "daily_return": "0.020594965675057208237986270",
+          "name": "伟星新材",
+          "thscode": "002372.SZ",
+          "ticker": "002372",
+          "turnover": "187983120"
+        },
+        {
+          "daily_return": "0.015030946065428824049513705",
+          "name": "青龙管业",
+          "thscode": "002457.SZ",
+          "ticker": "002457",
+          "turnover": "230763730"
+        },
+        {
+          "daily_return": "0.009377664109121909633418585",
+          "name": "东宏股份",
+          "thscode": "603856.SH",
+          "ticker": "603856",
+          "turnover": "30213606"
+        },
+        {
+          "daily_return": "0",
+          "name": "公元股份",
+          "thscode": "002641.SZ",
+          "ticker": "002641",
+          "turnover": "26145884"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 7,
+      "membership_captured_at": "2026-10-08T10:17:21.782000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 7,
+      "sector_name": "管材",
+      "sector_thscode": "884064.TI",
+      "top_three_positive_return_mass_share": "0.9340468145416624309012602579",
+      "top_three_turnover_share": "0.8936454162791974355152029398",
+      "total_constituent_turnover": "1027209521",
+      "unchanged": 1
+    },
+    {
+      "advancer_share": "1",
+      "advancers": 5,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "7325cdb1204584917698d6e80dafb54d947d7d5cdb8918b200e4c0c395b5549c",
+      "coverage_ratio": "1",
+      "decliner_share": "0",
+      "decliners": 0,
+      "equal_weight_mean_daily_return": "0.0442227906893024661091653108",
+      "equal_weight_median_daily_return": "0.035714285714285714285714286",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.044223115981866567402519505",
+      "index_minus_equal_weight_mean": "0.0000003252925641012933541942",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "0.007978723404255319148936170",
+          "name": "山西焦化",
+          "thscode": "600740.SH",
+          "ticker": "600740",
+          "turnover": "113353208"
+        },
+        {
+          "daily_return": "0.008547008547008547008547009",
+          "name": "美锦能源",
+          "thscode": "000723.SZ",
+          "ticker": "000723",
+          "turnover": "204600720"
+        },
+        {
+          "daily_return": "0.035714285714285714285714286",
+          "name": "云煤能源",
+          "thscode": "600792.SH",
+          "ticker": "600792",
+          "turnover": "505869600"
+        },
+        {
+          "daily_return": "0.069832402234636871508379888",
+          "name": "陕西黑猫",
+          "thscode": "601015.SH",
+          "ticker": "601015",
+          "turnover": "535073880"
+        },
+        {
+          "daily_return": "0.099041533546325878594249201",
+          "name": "安泰集团",
+          "thscode": "600408.SH",
+          "ticker": "600408",
+          "turnover": "217813850"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.099041533546325878594249201",
+          "name": "安泰集团",
+          "thscode": "600408.SH",
+          "ticker": "600408",
+          "turnover": "217813850"
+        },
+        {
+          "daily_return": "0.069832402234636871508379888",
+          "name": "陕西黑猫",
+          "thscode": "601015.SH",
+          "ticker": "601015",
+          "turnover": "535073880"
+        },
+        {
+          "daily_return": "0.035714285714285714285714286",
+          "name": "云煤能源",
+          "thscode": "600792.SH",
+          "ticker": "600792",
+          "turnover": "505869600"
+        },
+        {
+          "daily_return": "0.008547008547008547008547009",
+          "name": "美锦能源",
+          "thscode": "000723.SZ",
+          "ticker": "000723",
+          "turnover": "204600720"
+        },
+        {
+          "daily_return": "0.007978723404255319148936170",
+          "name": "山西焦化",
+          "thscode": "600740.SH",
+          "ticker": "600740",
+          "turnover": "113353208"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 5,
+      "membership_captured_at": "2026-10-08T10:17:00.713000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 5,
+      "sector_name": "焦炭加工",
+      "sector_thscode": "884015.TI",
+      "top_three_positive_return_mass_share": "0.9252614695107359835986850251",
+      "top_three_turnover_share": "0.7983435924702454303145465332",
+      "total_constituent_turnover": "1576711258",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.5833333333333333333333333333",
+      "advancers": 7,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "e9145c36a3205743154b365477a954877df05f91fe82efed08c16085b2b8e58d",
+      "coverage_ratio": "1",
+      "decliner_share": "0.4166666666666666666666666667",
+      "decliners": 5,
+      "equal_weight_mean_daily_return": "0.008362766863835289309663807392",
+      "equal_weight_median_daily_return": "0.0023777327022763128239801665",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.008362702593081826503039239",
+      "index_minus_equal_weight_mean": "-0.000000064270753462806624568392",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0322580645161290322580645161",
+          "name": "上海机电",
+          "thscode": "600835.SH",
+          "ticker": "600835",
+          "turnover": "91730588"
+        },
+        {
+          "daily_return": "-0.0194174757281553398058252427",
+          "name": "梅轮电梯",
+          "thscode": "603321.SH",
+          "ticker": "603321",
+          "turnover": "52101360"
+        },
+        {
+          "daily_return": "-0.0186335403726708074534161491",
+          "name": "沪宁股份",
+          "thscode": "300669.SZ",
+          "ticker": "300669",
+          "turnover": "31531229"
+        },
+        {
+          "daily_return": "-0.0082508250825082508250825083",
+          "name": "康力电梯",
+          "thscode": "002367.SZ",
+          "ticker": "002367",
+          "turnover": "109653650"
+        },
+        {
+          "daily_return": "-0.0060569351907934585099939431",
+          "name": "华菱精工",
+          "thscode": "603356.SH",
+          "ticker": "603356",
+          "turnover": "42652980"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.099942229924898902368573079",
+          "name": "快意电梯",
+          "thscode": "002774.SZ",
+          "ticker": "002774",
+          "turnover": "134655120"
+        },
+        {
+          "daily_return": "0.037037037037037037037037037",
+          "name": "通用电梯",
+          "thscode": "300931.SZ",
+          "ticker": "300931",
+          "turnover": "305880040"
+        },
+        {
+          "daily_return": "0.022324865280985373364126251",
+          "name": "森赫股份",
+          "thscode": "301056.SZ",
+          "ticker": "301056",
+          "turnover": "65768047"
+        },
+        {
+          "daily_return": "0.014084507042253521126760563",
+          "name": "同力天启",
+          "thscode": "605286.SH",
+          "ticker": "605286",
+          "turnover": "51765412"
+        },
+        {
+          "daily_return": "0.006825938566552901023890785",
+          "name": "ST远智",
+          "thscode": "002689.SZ",
+          "ticker": "002689",
+          "turnover": "18958297"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 12,
+      "membership_captured_at": "2026-10-08T10:17:43.412000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 12,
+      "sector_name": "楼宇设备",
+      "sector_thscode": "884083.TI",
+      "top_three_positive_return_mass_share": "0.8612428771625558722154541612",
+      "top_three_turnover_share": "0.5404482140176334550480142750",
+      "total_constituent_turnover": "1018023181",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.8947368421052631578947368421",
+      "advancers": 17,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "21fa5b06445f6fa227d65a21a695de88a63479eb996655e5e97299f1ec2b73c0",
+      "coverage_ratio": "1",
+      "decliner_share": "0.1052631578947368421052631579",
+      "decliners": 2,
+      "equal_weight_mean_daily_return": "0.02702298456583318993711556954",
+      "equal_weight_median_daily_return": "0.016393442622950819672131148",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.027023089346372348784508589",
+      "index_minus_equal_weight_mean": "0.00000010478053915884739301946",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0137457044673539518900343643",
+          "name": "海航科技",
+          "thscode": "600751.SH",
+          "ticker": "600751",
+          "turnover": "68563845"
+        },
+        {
+          "daily_return": "-0.0078988941548183254344391785",
+          "name": "海峡股份",
+          "thscode": "002320.SZ",
+          "ticker": "002320",
+          "turnover": "130836189"
+        },
+        {
+          "daily_return": "0.001251564455569461827284105",
+          "name": "渤海轮渡",
+          "thscode": "603167.SH",
+          "ticker": "603167",
+          "turnover": "16415003"
+        },
+        {
+          "daily_return": "0.006925207756232686980609418",
+          "name": "盛航股份",
+          "thscode": "001205.SZ",
+          "ticker": "001205",
+          "turnover": "66730983"
+        },
+        {
+          "daily_return": "0.009195402298850574712643678",
+          "name": "安通控股",
+          "thscode": "600179.SH",
+          "ticker": "600179",
+          "turnover": "113511495"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.100194552529182879377431907",
+          "name": "中远海能",
+          "thscode": "600026.SH",
+          "ticker": "600026",
+          "turnover": "870079410"
+        },
+        {
+          "daily_return": "0.099557522123893805309734513",
+          "name": "招商南油",
+          "thscode": "601975.SH",
+          "ticker": "601975",
+          "turnover": "1466802800"
+        },
+        {
+          "daily_return": "0.093300248138957816377171216",
+          "name": "招商轮船",
+          "thscode": "601872.SH",
+          "ticker": "601872",
+          "turnover": "5013475000"
+        },
+        {
+          "daily_return": "0.035276073619631901840490798",
+          "name": "海通发展",
+          "thscode": "603162.SH",
+          "ticker": "603162",
+          "turnover": "569207800"
+        },
+        {
+          "daily_return": "0.029249011857707509881422925",
+          "name": "锦江航运",
+          "thscode": "601083.SH",
+          "ticker": "601083",
+          "turnover": "170817810"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 19,
+      "membership_captured_at": "2026-10-08T10:18:06.564000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 19,
+      "sector_name": "航运",
+      "sector_thscode": "884191.TI",
+      "top_three_positive_return_mass_share": "0.5476781189126930570669720377",
+      "top_three_turnover_share": "0.6982910493339409752875469973",
+      "total_constituent_turnover": "11086656026",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.1666666666666666666666666667",
+      "advancers": 1,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "a81b38e2c14f5c205ff58ecf20ba5f2b899e74d443678c3d76689a853eb4167f",
+      "coverage_ratio": "1",
+      "decliner_share": "0.8333333333333333333333333333",
+      "decliners": 5,
+      "equal_weight_mean_daily_return": "-0.0179604190557844242622422120",
+      "equal_weight_median_daily_return": "-0.0208686427508816131344817441",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "-0.0179604254125362643860630526",
+      "index_minus_equal_weight_mean": "-0.0000000063567518401238208406",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0313588850174216027874564460",
+          "name": "金风科技",
+          "thscode": "002202.SZ",
+          "ticker": "002202",
+          "turnover": "1095174700"
+        },
+        {
+          "daily_return": "-0.0237113402061855670103092784",
+          "name": "中船科技",
+          "thscode": "600072.SH",
+          "ticker": "600072",
+          "turnover": "678812320"
+        },
+        {
+          "daily_return": "-0.0214943705220061412487205732",
+          "name": "明阳智能",
+          "thscode": "601615.SH",
+          "ticker": "601615",
+          "turnover": "380175080"
+        },
+        {
+          "daily_return": "-0.0202429149797570850202429150",
+          "name": "运达股份",
+          "thscode": "300772.SZ",
+          "ticker": "300772",
+          "turnover": "176414910"
+        },
+        {
+          "daily_return": "-0.0154867256637168141592920354",
+          "name": "电气风电",
+          "thscode": "688660.SH",
+          "ticker": "688660",
+          "turnover": "246235130"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.004531722054380664652567976",
+          "name": "三一重能",
+          "thscode": "688349.SH",
+          "ticker": "688349",
+          "turnover": "108936065"
+        },
+        {
+          "daily_return": "-0.0154867256637168141592920354",
+          "name": "电气风电",
+          "thscode": "688660.SH",
+          "ticker": "688660",
+          "turnover": "246235130"
+        },
+        {
+          "daily_return": "-0.0202429149797570850202429150",
+          "name": "运达股份",
+          "thscode": "300772.SZ",
+          "ticker": "300772",
+          "turnover": "176414910"
+        },
+        {
+          "daily_return": "-0.0214943705220061412487205732",
+          "name": "明阳智能",
+          "thscode": "601615.SH",
+          "ticker": "601615",
+          "turnover": "380175080"
+        },
+        {
+          "daily_return": "-0.0237113402061855670103092784",
+          "name": "中船科技",
+          "thscode": "600072.SH",
+          "ticker": "600072",
+          "turnover": "678812320"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 6,
+      "membership_captured_at": "2026-10-08T10:18:27.393000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 6,
+      "sector_name": "风电整机",
+      "sector_thscode": "884307.TI",
+      "top_three_positive_return_mass_share": "1",
+      "top_three_turnover_share": "0.8020715031996083936692047421",
+      "total_constituent_turnover": "2685748205",
+      "unchanged": 0
+    },
+    {
+      "advancer_share": "0.7272727272727272727272727273",
+      "advancers": 8,
+      "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+      "constituent_set_hash": "29d62bdc1efbd228e4f4a7860cd6e8e3497e8c5287f8e957551eb2de2e31dff6",
+      "coverage_ratio": "1",
+      "decliner_share": "0.2727272727272727272727272727",
+      "decliners": 3,
+      "equal_weight_mean_daily_return": "0.05205769990231192116205991344",
+      "equal_weight_median_daily_return": "0.024237685691946833463643471",
+      "formula_version": "sector-current-breadth-v0",
+      "historical_breadth_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "index_contribution_authority": "NONE",
+      "index_daily_return": "0.052057785199420083357345270",
+      "index_minus_equal_weight_mean": "0.00000008529710816219528535656",
+      "investment_authority": "NONE",
+      "laggards": [
+        {
+          "daily_return": "-0.0755385874011453504226888465",
+          "name": "安孚科技",
+          "thscode": "603031.SH",
+          "ticker": "603031",
+          "turnover": "459967650"
+        },
+        {
+          "daily_return": "-0.0312249799839871897518014412",
+          "name": "浙江恒威",
+          "thscode": "301222.SZ",
+          "ticker": "301222",
+          "turnover": "67205754"
+        },
+        {
+          "daily_return": "-0.0034280117531831537708129285",
+          "name": "亿华通-U",
+          "thscode": "688339.SH",
+          "ticker": "688339",
+          "turnover": "173644120"
+        },
+        {
+          "daily_return": "0.005434782608695652173913043",
+          "name": "骆驼股份",
+          "thscode": "601311.SH",
+          "ticker": "601311",
+          "turnover": "85445750"
+        },
+        {
+          "daily_return": "0.009624639076034648700673725",
+          "name": "天能股份",
+          "thscode": "688819.SH",
+          "ticker": "688819",
+          "turnover": "65348620"
+        }
+      ],
+      "leaders": [
+        {
+          "daily_return": "0.299562682215743440233236152",
+          "name": "力王股份",
+          "thscode": "920627.BJ",
+          "ticker": "920627",
+          "turnover": "213939190"
+        },
+        {
+          "daily_return": "0.100174723354688410017472335",
+          "name": "雄韬股份",
+          "thscode": "002733.SZ",
+          "ticker": "002733",
+          "turnover": "304284350"
+        },
+        {
+          "daily_return": "0.1",
+          "name": "野马电池",
+          "thscode": "605378.SH",
+          "ticker": "605378",
+          "turnover": "271600140"
+        },
+        {
+          "daily_return": "0.094262295081967213114754098",
+          "name": "圣阳股份",
+          "thscode": "002580.SZ",
+          "ticker": "002580",
+          "turnover": "2546677500"
+        },
+        {
+          "daily_return": "0.049529470034670629024269440",
+          "name": "长虹能源",
+          "thscode": "920239.BJ",
+          "ticker": "920239",
+          "turnover": "55835363"
+        }
+      ],
+      "market_session": "2026-10-08",
+      "member_count": 11,
+      "membership_captured_at": "2026-10-08T10:18:49.002000Z",
+      "missing_or_unpriced_member_count": 0,
+      "missing_or_unpriced_members": [],
+      "observed_at": "2026-10-08T10:23:14.420415Z",
+      "priced_member_count": 11,
+      "sector_name": "其他电池",
+      "sector_thscode": "884312.TI",
+      "top_three_positive_return_mass_share": "0.7318661006830462209340996610",
+      "top_three_turnover_share": "0.7658260057929450533995684282",
+      "total_constituent_turnover": "4323344304",
+      "unchanged": 0
+    }
+  ],
+  "broad_entries": {
+    "as_of_session": "2026-10-08",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0748034506783500994189436518",
+        "horizon_20_rank": "8",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0692210798587822920716544902",
+        "horizon_5_rank": "5",
+        "horizon_5_rating": 95,
+        "horizon_60_excess_return": "0.2439308275284858452686099233",
+        "horizon_60_rating": 93,
+        "name": "港口航运",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 56,
+        "rank_change_5_sessions_20d": "45",
+        "thscode": "881148.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+      }
+    ],
+    "family": "BROAD_881",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-30",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+  "composition": {
+    "all_candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-10-08",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0954785932215227401992181478",
+        "horizon_20_rank": "17",
+        "horizon_20_rating": 92,
+        "horizon_5_excess_return": "0.1166268694068936733376108162",
+        "horizon_5_rank": "1",
+        "horizon_5_rating": 99,
+        "horizon_60_excess_return": "0.1743630528244796214226151303",
+        "horizon_60_rating": 68,
+        "name": "管材",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 38,
+        "rank_change_5_sessions_20d": "133",
+        "thscode": "884064.TI",
+        "top_quartile_20d_persistence_sessions": 4,
+        "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+        "family": "BROAD_881",
+        "horizon_20_excess_return": "0.0748034506783500994189436518",
+        "horizon_20_rank": "8",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0692210798587822920716544902",
+        "horizon_5_rank": "5",
+        "horizon_5_rating": 95,
+        "horizon_60_excess_return": "0.2439308275284858452686099233",
+        "horizon_60_rating": 93,
+        "name": "港口航运",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 56,
+        "rank_change_5_sessions_20d": "45",
+        "thscode": "881148.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1071554183863976067011839108",
+        "horizon_20_rank": "14",
+        "horizon_20_rating": 93,
+        "horizon_5_excess_return": "0.1022877396984638955853958652",
+        "horizon_5_rank": "3",
+        "horizon_5_rating": 98,
+        "horizon_60_excess_return": "0.4090630299550889748941003803",
+        "horizon_60_rating": 98,
+        "name": "焦炭加工",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 51,
+        "rank_change_5_sessions_20d": "63",
+        "thscode": "884015.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0881463115461438766103900418",
+        "horizon_20_rank": "19",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0305241327155794142024415826",
+        "horizon_5_rank": "83",
+        "horizon_5_rating": 64,
+        "horizon_60_excess_return": "0.2021901406784023328545348913",
+        "horizon_60_rating": 80,
+        "name": "楼宇设备",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 38,
+        "rank_change_5_sessions_20d": "17",
+        "thscode": "884083.TI",
+        "top_quartile_20d_persistence_sessions": 10,
+        "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0874825651852439278339268868",
+        "horizon_20_rank": "20",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0622299816857560753627321882",
+        "horizon_5_rank": "24",
+        "horizon_5_rating": 89,
+        "horizon_60_excess_return": "0.2739865599898053122555742853",
+        "horizon_60_rating": 91,
+        "name": "航运",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 50,
+        "rank_change_5_sessions_20d": "90",
+        "thscode": "884191.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0852869468810004154019193118",
+        "horizon_20_rank": "22",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0523388366948562881270559202",
+        "horizon_5_rank": "41",
+        "horizon_5_rating": 82,
+        "horizon_60_excess_return": "0.0719750067772109463086612115",
+        "horizon_60_rating": 31,
+        "name": "风电整机",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "185",
+        "thscode": "884307.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0818071150685288360473094708",
+        "horizon_20_rank": "23",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0976998470289414988785365662",
+        "horizon_5_rank": "4",
+        "horizon_5_rating": 98,
+        "horizon_60_excess_return": "0.0969396835759877968726008593",
+        "horizon_60_rating": 40,
+        "name": "其他电池",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "156",
+        "thscode": "884312.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+      }
+    ],
+    "all_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": true,
+            "as_of_session": "2026-10-08",
+            "event_type": "ACCELERATING_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0954785932215227401992181478",
+            "horizon_20_rank": "17",
+            "horizon_20_rating": 92,
+            "horizon_5_excess_return": "0.1166268694068936733376108162",
+            "horizon_5_rank": "1",
+            "horizon_5_rating": 99,
+            "horizon_60_excess_return": "0.1743630528244796214226151303",
+            "horizon_60_rating": 68,
+            "name": "管材",
+            "persistent_gate_entered": false,
+            "positive_20d_excess_persistence_sessions": 38,
+            "rank_change_5_sessions_20d": "133",
+            "thscode": "884064.TI",
+            "top_quartile_20d_persistence_sessions": 4,
+            "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881115.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "建筑材料",
+        "parent_context_thscode": "881115.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5714285714285714285714285714",
+          "advancers": 4,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "48224773a5a1e4cc542f84d14314b3e5ab81175d34c19ee218f3effcde444299",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2857142857142857142857142857",
+          "decliners": 2,
+          "equal_weight_mean_daily_return": "0.01398618008464657110856838363",
+          "equal_weight_median_daily_return": "0.009377664109121909633418585",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013986467498216563263364967",
+          "index_minus_equal_weight_mean": "0.00000028741356999215479658337",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0370370370370370370370370370",
+              "name": "*ST纳川",
+              "thscode": "300198.SZ",
+              "ticker": "300198",
+              "turnover": "26651656"
+            },
+            {
+              "daily_return": "-0.0072463768115942028985507246",
+              "name": "*ST顾地",
+              "thscode": "002694.SZ",
+              "ticker": "002694",
+              "turnover": "26237295"
+            },
+            {
+              "daily_return": "0",
+              "name": "公元股份",
+              "thscode": "002641.SZ",
+              "ticker": "002641",
+              "turnover": "26145884"
+            },
+            {
+              "daily_return": "0.009377664109121909633418585",
+              "name": "东宏股份",
+              "thscode": "603856.SH",
+              "ticker": "603856",
+              "turnover": "30213606"
+            },
+            {
+              "daily_return": "0.015030946065428824049513705",
+              "name": "青龙管业",
+              "thscode": "002457.SZ",
+              "ticker": "002457",
+              "turnover": "230763730"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.097183098591549295774647887",
+              "name": "雄塑科技",
+              "thscode": "300599.SZ",
+              "ticker": "300599",
+              "turnover": "499214230"
+            },
+            {
+              "daily_return": "0.020594965675057208237986270",
+              "name": "伟星新材",
+              "thscode": "002372.SZ",
+              "ticker": "002372",
+              "turnover": "187983120"
+            },
+            {
+              "daily_return": "0.015030946065428824049513705",
+              "name": "青龙管业",
+              "thscode": "002457.SZ",
+              "ticker": "002457",
+              "turnover": "230763730"
+            },
+            {
+              "daily_return": "0.009377664109121909633418585",
+              "name": "东宏股份",
+              "thscode": "603856.SH",
+              "ticker": "603856",
+              "turnover": "30213606"
+            },
+            {
+              "daily_return": "0",
+              "name": "公元股份",
+              "thscode": "002641.SZ",
+              "ticker": "002641",
+              "turnover": "26145884"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 7,
+          "membership_captured_at": "2026-10-08T10:17:21.782000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 7,
+          "sector_name": "管材",
+          "sector_thscode": "884064.TI",
+          "top_three_positive_return_mass_share": "0.9340468145416624309012602579",
+          "top_three_turnover_share": "0.8936454162791974355152029398",
+          "total_constituent_turnover": "1027209521",
+          "unchanged": 1
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": true,
+          "as_of_session": "2026-10-08",
+          "event_type": "ACCELERATING_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0954785932215227401992181478",
+          "horizon_20_rank": "17",
+          "horizon_20_rating": 92,
+          "horizon_5_excess_return": "0.1166268694068936733376108162",
+          "horizon_5_rank": "1",
+          "horizon_5_rating": 99,
+          "horizon_60_excess_return": "0.1743630528244796214226151303",
+          "horizon_60_rating": 68,
+          "name": "管材",
+          "persistent_gate_entered": false,
+          "positive_20d_excess_persistence_sessions": 38,
+          "rank_change_5_sessions_20d": "133",
+          "thscode": "884064.TI",
+          "top_quartile_20d_persistence_sessions": 4,
+          "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+            "family": "BROAD_881",
+            "horizon_20_excess_return": "0.0748034506783500994189436518",
+            "horizon_20_rank": "8",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0692210798587822920716544902",
+            "horizon_5_rank": "5",
+            "horizon_5_rating": 95,
+            "horizon_60_excess_return": "0.2439308275284858452686099233",
+            "horizon_60_rating": 93,
+            "name": "港口航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 56,
+            "rank_change_5_sessions_20d": "45",
+            "thscode": "881148.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+          },
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0874825651852439278339268868",
+            "horizon_20_rank": "20",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0622299816857560753627321882",
+            "horizon_5_rank": "24",
+            "horizon_5_rating": 89,
+            "horizon_60_excess_return": "0.2739865599898053122555742853",
+            "horizon_60_rating": 91,
+            "name": "航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 50,
+            "rank_change_5_sessions_20d": "90",
+            "thscode": "884191.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+          }
+        ],
+        "granular_driver_breadth": [
+          {
+            "advancer_share": "0.8947368421052631578947368421",
+            "advancers": 17,
+            "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+            "constituent_set_hash": "21fa5b06445f6fa227d65a21a695de88a63479eb996655e5e97299f1ec2b73c0",
+            "coverage_ratio": "1",
+            "decliner_share": "0.1052631578947368421052631579",
+            "decliners": 2,
+            "equal_weight_mean_daily_return": "0.02702298456583318993711556954",
+            "equal_weight_median_daily_return": "0.016393442622950819672131148",
+            "formula_version": "sector-current-breadth-v0",
+            "historical_breadth_authority": "NONE",
+            "human_attention_authority": "NONE",
+            "index_contribution_authority": "NONE",
+            "index_daily_return": "0.027023089346372348784508589",
+            "index_minus_equal_weight_mean": "0.00000010478053915884739301946",
+            "investment_authority": "NONE",
+            "laggards": [
+              {
+                "daily_return": "-0.0137457044673539518900343643",
+                "name": "海航科技",
+                "thscode": "600751.SH",
+                "ticker": "600751",
+                "turnover": "68563845"
+              },
+              {
+                "daily_return": "-0.0078988941548183254344391785",
+                "name": "海峡股份",
+                "thscode": "002320.SZ",
+                "ticker": "002320",
+                "turnover": "130836189"
+              },
+              {
+                "daily_return": "0.001251564455569461827284105",
+                "name": "渤海轮渡",
+                "thscode": "603167.SH",
+                "ticker": "603167",
+                "turnover": "16415003"
+              },
+              {
+                "daily_return": "0.006925207756232686980609418",
+                "name": "盛航股份",
+                "thscode": "001205.SZ",
+                "ticker": "001205",
+                "turnover": "66730983"
+              },
+              {
+                "daily_return": "0.009195402298850574712643678",
+                "name": "安通控股",
+                "thscode": "600179.SH",
+                "ticker": "600179",
+                "turnover": "113511495"
+              }
+            ],
+            "leaders": [
+              {
+                "daily_return": "0.100194552529182879377431907",
+                "name": "中远海能",
+                "thscode": "600026.SH",
+                "ticker": "600026",
+                "turnover": "870079410"
+              },
+              {
+                "daily_return": "0.099557522123893805309734513",
+                "name": "招商南油",
+                "thscode": "601975.SH",
+                "ticker": "601975",
+                "turnover": "1466802800"
+              },
+              {
+                "daily_return": "0.093300248138957816377171216",
+                "name": "招商轮船",
+                "thscode": "601872.SH",
+                "ticker": "601872",
+                "turnover": "5013475000"
+              },
+              {
+                "daily_return": "0.035276073619631901840490798",
+                "name": "海通发展",
+                "thscode": "603162.SH",
+                "ticker": "603162",
+                "turnover": "569207800"
+              },
+              {
+                "daily_return": "0.029249011857707509881422925",
+                "name": "锦江航运",
+                "thscode": "601083.SH",
+                "ticker": "601083",
+                "turnover": "170817810"
+              }
+            ],
+            "market_session": "2026-10-08",
+            "member_count": 19,
+            "membership_captured_at": "2026-10-08T10:18:06.564000Z",
+            "missing_or_unpriced_member_count": 0,
+            "missing_or_unpriced_members": [],
+            "observed_at": "2026-10-08T10:23:14.420415Z",
+            "priced_member_count": 19,
+            "sector_name": "航运",
+            "sector_thscode": "884191.TI",
+            "top_three_positive_return_mass_share": "0.5476781189126930570669720377",
+            "top_three_turnover_share": "0.6982910493339409752875469973",
+            "total_constituent_turnover": "11086656026",
+            "unchanged": 0
+          }
+        ],
+        "granular_drivers": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0874825651852439278339268868",
+            "horizon_20_rank": "20",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0622299816857560753627321882",
+            "horizon_5_rank": "24",
+            "horizon_5_rating": 89,
+            "horizon_60_excess_return": "0.2739865599898053122555742853",
+            "horizon_60_rating": 91,
+            "name": "航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 50,
+            "rank_change_5_sessions_20d": "90",
+            "thscode": "884191.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+          }
+        ],
+        "group_key": "881148.TI",
+        "grouping_reason": "QUALIFIED_881_PARENT_WITH_FULLY_CONTAINED_884_DRIVERS",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "港口航运",
+        "parent_context_thscode": "881148.TI",
+        "primary_breadth": {
+          "advancer_share": "0.9142857142857142857142857143",
+          "advancers": 32,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "d2ac70f54310153acf459c9d93231dff13193cd3929c0dfd8baade6cc2b7820e",
+          "coverage_ratio": "0.9722222222222222222222222222",
+          "decliner_share": "0.08571428571428571428571428571",
+          "decliners": 3,
+          "equal_weight_mean_daily_return": "0.02039362196527355615088820139",
+          "equal_weight_median_daily_return": "0.015011547344110854503464203",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.020393448721852088273568249",
+          "index_minus_equal_weight_mean": "-0.00000017324342146787731995239",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0137457044673539518900343643",
+              "name": "海航科技",
+              "thscode": "600751.SH",
+              "ticker": "600751",
+              "turnover": "68563845"
+            },
+            {
+              "daily_return": "-0.0078988941548183254344391785",
+              "name": "海峡股份",
+              "thscode": "002320.SZ",
+              "ticker": "002320",
+              "turnover": "130836189"
+            },
+            {
+              "daily_return": "-0.0009940357852882703777335984",
+              "name": "青岛港",
+              "thscode": "601298.SH",
+              "ticker": "601298",
+              "turnover": "107728637"
+            },
+            {
+              "daily_return": "0.001251564455569461827284105",
+              "name": "渤海轮渡",
+              "thscode": "603167.SH",
+              "ticker": "603167",
+              "turnover": "16415003"
+            },
+            {
+              "daily_return": "0.004048582995951417004048583",
+              "name": "珠海港",
+              "thscode": "000507.SZ",
+              "ticker": "000507",
+              "turnover": "32626954"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.100194552529182879377431907",
+              "name": "中远海能",
+              "thscode": "600026.SH",
+              "ticker": "600026",
+              "turnover": "870079410"
+            },
+            {
+              "daily_return": "0.099557522123893805309734513",
+              "name": "招商南油",
+              "thscode": "601975.SH",
+              "ticker": "601975",
+              "turnover": "1466802800"
+            },
+            {
+              "daily_return": "0.093300248138957816377171216",
+              "name": "招商轮船",
+              "thscode": "601872.SH",
+              "ticker": "601872",
+              "turnover": "5013475000"
+            },
+            {
+              "daily_return": "0.035276073619631901840490798",
+              "name": "海通发展",
+              "thscode": "603162.SH",
+              "ticker": "603162",
+              "turnover": "569207800"
+            },
+            {
+              "daily_return": "0.029249011857707509881422925",
+              "name": "锦江航运",
+              "thscode": "601083.SH",
+              "ticker": "601083",
+              "turnover": "170817810"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 36,
+          "membership_captured_at": "2026-10-08T10:15:56.497000Z",
+          "missing_or_unpriced_member_count": 1,
+          "missing_or_unpriced_members": [
+            {
+              "name": "北部湾港",
+              "thscode": "000582.SZ",
+              "ticker": "000582"
+            }
+          ],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 35,
+          "sector_name": "港口航运",
+          "sector_thscode": "881148.TI",
+          "top_three_positive_return_mass_share": "0.3979443144749312901967045081",
+          "top_three_turnover_share": "0.5781386515005554956276812409",
+          "total_constituent_turnover": "13390754363",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+          "family": "BROAD_881",
+          "horizon_20_excess_return": "0.0748034506783500994189436518",
+          "horizon_20_rank": "8",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "0.0692210798587822920716544902",
+          "horizon_5_rank": "5",
+          "horizon_5_rating": 95,
+          "horizon_60_excess_return": "0.2439308275284858452686099233",
+          "horizon_60_rating": 93,
+          "name": "港口航运",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 56,
+          "rank_change_5_sessions_20d": "45",
+          "thscode": "881148.TI",
+          "top_quartile_20d_persistence_sessions": 2,
+          "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1071554183863976067011839108",
+            "horizon_20_rank": "14",
+            "horizon_20_rating": 93,
+            "horizon_5_excess_return": "0.1022877396984638955853958652",
+            "horizon_5_rank": "3",
+            "horizon_5_rating": 98,
+            "horizon_60_excess_return": "0.4090630299550889748941003803",
+            "horizon_60_rating": 98,
+            "name": "焦炭加工",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 51,
+            "rank_change_5_sessions_20d": "63",
+            "thscode": "884015.TI",
+            "top_quartile_20d_persistence_sessions": 1,
+            "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881105.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "煤炭开采加工",
+        "parent_context_thscode": "881105.TI",
+        "primary_breadth": {
+          "advancer_share": "1",
+          "advancers": 5,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "7325cdb1204584917698d6e80dafb54d947d7d5cdb8918b200e4c0c395b5549c",
+          "coverage_ratio": "1",
+          "decliner_share": "0",
+          "decliners": 0,
+          "equal_weight_mean_daily_return": "0.0442227906893024661091653108",
+          "equal_weight_median_daily_return": "0.035714285714285714285714286",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.044223115981866567402519505",
+          "index_minus_equal_weight_mean": "0.0000003252925641012933541942",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "0.007978723404255319148936170",
+              "name": "山西焦化",
+              "thscode": "600740.SH",
+              "ticker": "600740",
+              "turnover": "113353208"
+            },
+            {
+              "daily_return": "0.008547008547008547008547009",
+              "name": "美锦能源",
+              "thscode": "000723.SZ",
+              "ticker": "000723",
+              "turnover": "204600720"
+            },
+            {
+              "daily_return": "0.035714285714285714285714286",
+              "name": "云煤能源",
+              "thscode": "600792.SH",
+              "ticker": "600792",
+              "turnover": "505869600"
+            },
+            {
+              "daily_return": "0.069832402234636871508379888",
+              "name": "陕西黑猫",
+              "thscode": "601015.SH",
+              "ticker": "601015",
+              "turnover": "535073880"
+            },
+            {
+              "daily_return": "0.099041533546325878594249201",
+              "name": "安泰集团",
+              "thscode": "600408.SH",
+              "ticker": "600408",
+              "turnover": "217813850"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099041533546325878594249201",
+              "name": "安泰集团",
+              "thscode": "600408.SH",
+              "ticker": "600408",
+              "turnover": "217813850"
+            },
+            {
+              "daily_return": "0.069832402234636871508379888",
+              "name": "陕西黑猫",
+              "thscode": "601015.SH",
+              "ticker": "601015",
+              "turnover": "535073880"
+            },
+            {
+              "daily_return": "0.035714285714285714285714286",
+              "name": "云煤能源",
+              "thscode": "600792.SH",
+              "ticker": "600792",
+              "turnover": "505869600"
+            },
+            {
+              "daily_return": "0.008547008547008547008547009",
+              "name": "美锦能源",
+              "thscode": "000723.SZ",
+              "ticker": "000723",
+              "turnover": "204600720"
+            },
+            {
+              "daily_return": "0.007978723404255319148936170",
+              "name": "山西焦化",
+              "thscode": "600740.SH",
+              "ticker": "600740",
+              "turnover": "113353208"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 5,
+          "membership_captured_at": "2026-10-08T10:17:00.713000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 5,
+          "sector_name": "焦炭加工",
+          "sector_thscode": "884015.TI",
+          "top_three_positive_return_mass_share": "0.9252614695107359835986850251",
+          "top_three_turnover_share": "0.7983435924702454303145465332",
+          "total_constituent_turnover": "1576711258",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1071554183863976067011839108",
+          "horizon_20_rank": "14",
+          "horizon_20_rating": 93,
+          "horizon_5_excess_return": "0.1022877396984638955853958652",
+          "horizon_5_rank": "3",
+          "horizon_5_rating": 98,
+          "horizon_60_excess_return": "0.4090630299550889748941003803",
+          "horizon_60_rating": 98,
+          "name": "焦炭加工",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 51,
+          "rank_change_5_sessions_20d": "63",
+          "thscode": "884015.TI",
+          "top_quartile_20d_persistence_sessions": 1,
+          "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0881463115461438766103900418",
+            "horizon_20_rank": "19",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0305241327155794142024415826",
+            "horizon_5_rank": "83",
+            "horizon_5_rating": 64,
+            "horizon_60_excess_return": "0.2021901406784023328545348913",
+            "horizon_60_rating": 80,
+            "name": "楼宇设备",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 38,
+            "rank_change_5_sessions_20d": "17",
+            "thscode": "884083.TI",
+            "top_quartile_20d_persistence_sessions": 10,
+            "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881118.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "专用设备",
+        "parent_context_thscode": "881118.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5833333333333333333333333333",
+          "advancers": 7,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "e9145c36a3205743154b365477a954877df05f91fe82efed08c16085b2b8e58d",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4166666666666666666666666667",
+          "decliners": 5,
+          "equal_weight_mean_daily_return": "0.008362766863835289309663807392",
+          "equal_weight_median_daily_return": "0.0023777327022763128239801665",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.008362702593081826503039239",
+          "index_minus_equal_weight_mean": "-0.000000064270753462806624568392",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0322580645161290322580645161",
+              "name": "上海机电",
+              "thscode": "600835.SH",
+              "ticker": "600835",
+              "turnover": "91730588"
+            },
+            {
+              "daily_return": "-0.0194174757281553398058252427",
+              "name": "梅轮电梯",
+              "thscode": "603321.SH",
+              "ticker": "603321",
+              "turnover": "52101360"
+            },
+            {
+              "daily_return": "-0.0186335403726708074534161491",
+              "name": "沪宁股份",
+              "thscode": "300669.SZ",
+              "ticker": "300669",
+              "turnover": "31531229"
+            },
+            {
+              "daily_return": "-0.0082508250825082508250825083",
+              "name": "康力电梯",
+              "thscode": "002367.SZ",
+              "ticker": "002367",
+              "turnover": "109653650"
+            },
+            {
+              "daily_return": "-0.0060569351907934585099939431",
+              "name": "华菱精工",
+              "thscode": "603356.SH",
+              "ticker": "603356",
+              "turnover": "42652980"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099942229924898902368573079",
+              "name": "快意电梯",
+              "thscode": "002774.SZ",
+              "ticker": "002774",
+              "turnover": "134655120"
+            },
+            {
+              "daily_return": "0.037037037037037037037037037",
+              "name": "通用电梯",
+              "thscode": "300931.SZ",
+              "ticker": "300931",
+              "turnover": "305880040"
+            },
+            {
+              "daily_return": "0.022324865280985373364126251",
+              "name": "森赫股份",
+              "thscode": "301056.SZ",
+              "ticker": "301056",
+              "turnover": "65768047"
+            },
+            {
+              "daily_return": "0.014084507042253521126760563",
+              "name": "同力天启",
+              "thscode": "605286.SH",
+              "ticker": "605286",
+              "turnover": "51765412"
+            },
+            {
+              "daily_return": "0.006825938566552901023890785",
+              "name": "ST远智",
+              "thscode": "002689.SZ",
+              "ticker": "002689",
+              "turnover": "18958297"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 12,
+          "membership_captured_at": "2026-10-08T10:17:43.412000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 12,
+          "sector_name": "楼宇设备",
+          "sector_thscode": "884083.TI",
+          "top_three_positive_return_mass_share": "0.8612428771625558722154541612",
+          "top_three_turnover_share": "0.5404482140176334550480142750",
+          "total_constituent_turnover": "1018023181",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0881463115461438766103900418",
+          "horizon_20_rank": "19",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "0.0305241327155794142024415826",
+          "horizon_5_rank": "83",
+          "horizon_5_rating": 64,
+          "horizon_60_excess_return": "0.2021901406784023328545348913",
+          "horizon_60_rating": 80,
+          "name": "楼宇设备",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 38,
+          "rank_change_5_sessions_20d": "17",
+          "thscode": "884083.TI",
+          "top_quartile_20d_persistence_sessions": 10,
+          "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0852869468810004154019193118",
+            "horizon_20_rank": "22",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "0.0523388366948562881270559202",
+            "horizon_5_rank": "41",
+            "horizon_5_rating": 82,
+            "horizon_60_excess_return": "0.0719750067772109463086612115",
+            "horizon_60_rating": 31,
+            "name": "风电整机",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "185",
+            "thscode": "884307.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881280.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "风电设备",
+        "parent_context_thscode": "881280.TI",
+        "primary_breadth": {
+          "advancer_share": "0.1666666666666666666666666667",
+          "advancers": 1,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "a81b38e2c14f5c205ff58ecf20ba5f2b899e74d443678c3d76689a853eb4167f",
+          "coverage_ratio": "1",
+          "decliner_share": "0.8333333333333333333333333333",
+          "decliners": 5,
+          "equal_weight_mean_daily_return": "-0.0179604190557844242622422120",
+          "equal_weight_median_daily_return": "-0.0208686427508816131344817441",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "-0.0179604254125362643860630526",
+          "index_minus_equal_weight_mean": "-0.0000000063567518401238208406",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0313588850174216027874564460",
+              "name": "金风科技",
+              "thscode": "002202.SZ",
+              "ticker": "002202",
+              "turnover": "1095174700"
+            },
+            {
+              "daily_return": "-0.0237113402061855670103092784",
+              "name": "中船科技",
+              "thscode": "600072.SH",
+              "ticker": "600072",
+              "turnover": "678812320"
+            },
+            {
+              "daily_return": "-0.0214943705220061412487205732",
+              "name": "明阳智能",
+              "thscode": "601615.SH",
+              "ticker": "601615",
+              "turnover": "380175080"
+            },
+            {
+              "daily_return": "-0.0202429149797570850202429150",
+              "name": "运达股份",
+              "thscode": "300772.SZ",
+              "ticker": "300772",
+              "turnover": "176414910"
+            },
+            {
+              "daily_return": "-0.0154867256637168141592920354",
+              "name": "电气风电",
+              "thscode": "688660.SH",
+              "ticker": "688660",
+              "turnover": "246235130"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.004531722054380664652567976",
+              "name": "三一重能",
+              "thscode": "688349.SH",
+              "ticker": "688349",
+              "turnover": "108936065"
+            },
+            {
+              "daily_return": "-0.0154867256637168141592920354",
+              "name": "电气风电",
+              "thscode": "688660.SH",
+              "ticker": "688660",
+              "turnover": "246235130"
+            },
+            {
+              "daily_return": "-0.0202429149797570850202429150",
+              "name": "运达股份",
+              "thscode": "300772.SZ",
+              "ticker": "300772",
+              "turnover": "176414910"
+            },
+            {
+              "daily_return": "-0.0214943705220061412487205732",
+              "name": "明阳智能",
+              "thscode": "601615.SH",
+              "ticker": "601615",
+              "turnover": "380175080"
+            },
+            {
+              "daily_return": "-0.0237113402061855670103092784",
+              "name": "中船科技",
+              "thscode": "600072.SH",
+              "ticker": "600072",
+              "turnover": "678812320"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 6,
+          "membership_captured_at": "2026-10-08T10:18:27.393000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 6,
+          "sector_name": "风电整机",
+          "sector_thscode": "884307.TI",
+          "top_three_positive_return_mass_share": "1",
+          "top_three_turnover_share": "0.8020715031996083936692047421",
+          "total_constituent_turnover": "2685748205",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0852869468810004154019193118",
+          "horizon_20_rank": "22",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "0.0523388366948562881270559202",
+          "horizon_5_rank": "41",
+          "horizon_5_rating": 82,
+          "horizon_60_excess_return": "0.0719750067772109463086612115",
+          "horizon_60_rating": 31,
+          "name": "风电整机",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "185",
+          "thscode": "884307.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0818071150685288360473094708",
+            "horizon_20_rank": "23",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "0.0976998470289414988785365662",
+            "horizon_5_rank": "4",
+            "horizon_5_rating": 98,
+            "horizon_60_excess_return": "0.0969396835759877968726008593",
+            "horizon_60_rating": 40,
+            "name": "其他电池",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "156",
+            "thscode": "884312.TI",
+            "top_quartile_20d_persistence_sessions": 1,
+            "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881281.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "电池",
+        "parent_context_thscode": "881281.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7272727272727272727272727273",
+          "advancers": 8,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "29d62bdc1efbd228e4f4a7860cd6e8e3497e8c5287f8e957551eb2de2e31dff6",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2727272727272727272727272727",
+          "decliners": 3,
+          "equal_weight_mean_daily_return": "0.05205769990231192116205991344",
+          "equal_weight_median_daily_return": "0.024237685691946833463643471",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.052057785199420083357345270",
+          "index_minus_equal_weight_mean": "0.00000008529710816219528535656",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0755385874011453504226888465",
+              "name": "安孚科技",
+              "thscode": "603031.SH",
+              "ticker": "603031",
+              "turnover": "459967650"
+            },
+            {
+              "daily_return": "-0.0312249799839871897518014412",
+              "name": "浙江恒威",
+              "thscode": "301222.SZ",
+              "ticker": "301222",
+              "turnover": "67205754"
+            },
+            {
+              "daily_return": "-0.0034280117531831537708129285",
+              "name": "亿华通-U",
+              "thscode": "688339.SH",
+              "ticker": "688339",
+              "turnover": "173644120"
+            },
+            {
+              "daily_return": "0.005434782608695652173913043",
+              "name": "骆驼股份",
+              "thscode": "601311.SH",
+              "ticker": "601311",
+              "turnover": "85445750"
+            },
+            {
+              "daily_return": "0.009624639076034648700673725",
+              "name": "天能股份",
+              "thscode": "688819.SH",
+              "ticker": "688819",
+              "turnover": "65348620"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.299562682215743440233236152",
+              "name": "力王股份",
+              "thscode": "920627.BJ",
+              "ticker": "920627",
+              "turnover": "213939190"
+            },
+            {
+              "daily_return": "0.100174723354688410017472335",
+              "name": "雄韬股份",
+              "thscode": "002733.SZ",
+              "ticker": "002733",
+              "turnover": "304284350"
+            },
+            {
+              "daily_return": "0.1",
+              "name": "野马电池",
+              "thscode": "605378.SH",
+              "ticker": "605378",
+              "turnover": "271600140"
+            },
+            {
+              "daily_return": "0.094262295081967213114754098",
+              "name": "圣阳股份",
+              "thscode": "002580.SZ",
+              "ticker": "002580",
+              "turnover": "2546677500"
+            },
+            {
+              "daily_return": "0.049529470034670629024269440",
+              "name": "长虹能源",
+              "thscode": "920239.BJ",
+              "ticker": "920239",
+              "turnover": "55835363"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 11,
+          "membership_captured_at": "2026-10-08T10:18:49.002000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 11,
+          "sector_name": "其他电池",
+          "sector_thscode": "884312.TI",
+          "top_three_positive_return_mass_share": "0.7318661006830462209340996610",
+          "top_three_turnover_share": "0.7658260057929450533995684282",
+          "total_constituent_turnover": "4323344304",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0818071150685288360473094708",
+          "horizon_20_rank": "23",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "0.0976998470289414988785365662",
+          "horizon_5_rank": "4",
+          "horizon_5_rating": 98,
+          "horizon_60_excess_return": "0.0969396835759877968726008593",
+          "horizon_60_rating": 40,
+          "name": "其他电池",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "156",
+          "thscode": "884312.TI",
+          "top_quartile_20d_persistence_sessions": 1,
+          "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "as_of_session": "2026-10-08",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "omitted_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0881463115461438766103900418",
+            "horizon_20_rank": "19",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0305241327155794142024415826",
+            "horizon_5_rank": "83",
+            "horizon_5_rating": 64,
+            "horizon_60_excess_return": "0.2021901406784023328545348913",
+            "horizon_60_rating": 80,
+            "name": "楼宇设备",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 38,
+            "rank_change_5_sessions_20d": "17",
+            "thscode": "884083.TI",
+            "top_quartile_20d_persistence_sessions": 10,
+            "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881118.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "专用设备",
+        "parent_context_thscode": "881118.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5833333333333333333333333333",
+          "advancers": 7,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "e9145c36a3205743154b365477a954877df05f91fe82efed08c16085b2b8e58d",
+          "coverage_ratio": "1",
+          "decliner_share": "0.4166666666666666666666666667",
+          "decliners": 5,
+          "equal_weight_mean_daily_return": "0.008362766863835289309663807392",
+          "equal_weight_median_daily_return": "0.0023777327022763128239801665",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.008362702593081826503039239",
+          "index_minus_equal_weight_mean": "-0.000000064270753462806624568392",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0322580645161290322580645161",
+              "name": "上海机电",
+              "thscode": "600835.SH",
+              "ticker": "600835",
+              "turnover": "91730588"
+            },
+            {
+              "daily_return": "-0.0194174757281553398058252427",
+              "name": "梅轮电梯",
+              "thscode": "603321.SH",
+              "ticker": "603321",
+              "turnover": "52101360"
+            },
+            {
+              "daily_return": "-0.0186335403726708074534161491",
+              "name": "沪宁股份",
+              "thscode": "300669.SZ",
+              "ticker": "300669",
+              "turnover": "31531229"
+            },
+            {
+              "daily_return": "-0.0082508250825082508250825083",
+              "name": "康力电梯",
+              "thscode": "002367.SZ",
+              "ticker": "002367",
+              "turnover": "109653650"
+            },
+            {
+              "daily_return": "-0.0060569351907934585099939431",
+              "name": "华菱精工",
+              "thscode": "603356.SH",
+              "ticker": "603356",
+              "turnover": "42652980"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099942229924898902368573079",
+              "name": "快意电梯",
+              "thscode": "002774.SZ",
+              "ticker": "002774",
+              "turnover": "134655120"
+            },
+            {
+              "daily_return": "0.037037037037037037037037037",
+              "name": "通用电梯",
+              "thscode": "300931.SZ",
+              "ticker": "300931",
+              "turnover": "305880040"
+            },
+            {
+              "daily_return": "0.022324865280985373364126251",
+              "name": "森赫股份",
+              "thscode": "301056.SZ",
+              "ticker": "301056",
+              "turnover": "65768047"
+            },
+            {
+              "daily_return": "0.014084507042253521126760563",
+              "name": "同力天启",
+              "thscode": "605286.SH",
+              "ticker": "605286",
+              "turnover": "51765412"
+            },
+            {
+              "daily_return": "0.006825938566552901023890785",
+              "name": "ST远智",
+              "thscode": "002689.SZ",
+              "ticker": "002689",
+              "turnover": "18958297"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 12,
+          "membership_captured_at": "2026-10-08T10:17:43.412000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 12,
+          "sector_name": "楼宇设备",
+          "sector_thscode": "884083.TI",
+          "top_three_positive_return_mass_share": "0.8612428771625558722154541612",
+          "top_three_turnover_share": "0.5404482140176334550480142750",
+          "total_constituent_turnover": "1018023181",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0881463115461438766103900418",
+          "horizon_20_rank": "19",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "0.0305241327155794142024415826",
+          "horizon_5_rank": "83",
+          "horizon_5_rating": 64,
+          "horizon_60_excess_return": "0.2021901406784023328545348913",
+          "horizon_60_rating": 80,
+          "name": "楼宇设备",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 38,
+          "rank_change_5_sessions_20d": "17",
+          "thscode": "884083.TI",
+          "top_quartile_20d_persistence_sessions": 10,
+          "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0852869468810004154019193118",
+            "horizon_20_rank": "22",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "0.0523388366948562881270559202",
+            "horizon_5_rank": "41",
+            "horizon_5_rating": 82,
+            "horizon_60_excess_return": "0.0719750067772109463086612115",
+            "horizon_60_rating": 31,
+            "name": "风电整机",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "185",
+            "thscode": "884307.TI",
+            "top_quartile_20d_persistence_sessions": 3,
+            "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881280.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "风电设备",
+        "parent_context_thscode": "881280.TI",
+        "primary_breadth": {
+          "advancer_share": "0.1666666666666666666666666667",
+          "advancers": 1,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "a81b38e2c14f5c205ff58ecf20ba5f2b899e74d443678c3d76689a853eb4167f",
+          "coverage_ratio": "1",
+          "decliner_share": "0.8333333333333333333333333333",
+          "decliners": 5,
+          "equal_weight_mean_daily_return": "-0.0179604190557844242622422120",
+          "equal_weight_median_daily_return": "-0.0208686427508816131344817441",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "-0.0179604254125362643860630526",
+          "index_minus_equal_weight_mean": "-0.0000000063567518401238208406",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0313588850174216027874564460",
+              "name": "金风科技",
+              "thscode": "002202.SZ",
+              "ticker": "002202",
+              "turnover": "1095174700"
+            },
+            {
+              "daily_return": "-0.0237113402061855670103092784",
+              "name": "中船科技",
+              "thscode": "600072.SH",
+              "ticker": "600072",
+              "turnover": "678812320"
+            },
+            {
+              "daily_return": "-0.0214943705220061412487205732",
+              "name": "明阳智能",
+              "thscode": "601615.SH",
+              "ticker": "601615",
+              "turnover": "380175080"
+            },
+            {
+              "daily_return": "-0.0202429149797570850202429150",
+              "name": "运达股份",
+              "thscode": "300772.SZ",
+              "ticker": "300772",
+              "turnover": "176414910"
+            },
+            {
+              "daily_return": "-0.0154867256637168141592920354",
+              "name": "电气风电",
+              "thscode": "688660.SH",
+              "ticker": "688660",
+              "turnover": "246235130"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.004531722054380664652567976",
+              "name": "三一重能",
+              "thscode": "688349.SH",
+              "ticker": "688349",
+              "turnover": "108936065"
+            },
+            {
+              "daily_return": "-0.0154867256637168141592920354",
+              "name": "电气风电",
+              "thscode": "688660.SH",
+              "ticker": "688660",
+              "turnover": "246235130"
+            },
+            {
+              "daily_return": "-0.0202429149797570850202429150",
+              "name": "运达股份",
+              "thscode": "300772.SZ",
+              "ticker": "300772",
+              "turnover": "176414910"
+            },
+            {
+              "daily_return": "-0.0214943705220061412487205732",
+              "name": "明阳智能",
+              "thscode": "601615.SH",
+              "ticker": "601615",
+              "turnover": "380175080"
+            },
+            {
+              "daily_return": "-0.0237113402061855670103092784",
+              "name": "中船科技",
+              "thscode": "600072.SH",
+              "ticker": "600072",
+              "turnover": "678812320"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 6,
+          "membership_captured_at": "2026-10-08T10:18:27.393000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 6,
+          "sector_name": "风电整机",
+          "sector_thscode": "884307.TI",
+          "top_three_positive_return_mass_share": "1",
+          "top_three_turnover_share": "0.8020715031996083936692047421",
+          "total_constituent_turnover": "2685748205",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0852869468810004154019193118",
+          "horizon_20_rank": "22",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "0.0523388366948562881270559202",
+          "horizon_5_rank": "41",
+          "horizon_5_rating": 82,
+          "horizon_60_excess_return": "0.0719750067772109463086612115",
+          "horizon_60_rating": 31,
+          "name": "风电整机",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "185",
+          "thscode": "884307.TI",
+          "top_quartile_20d_persistence_sessions": 3,
+          "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0818071150685288360473094708",
+            "horizon_20_rank": "23",
+            "horizon_20_rating": 90,
+            "horizon_5_excess_return": "0.0976998470289414988785365662",
+            "horizon_5_rank": "4",
+            "horizon_5_rating": 98,
+            "horizon_60_excess_return": "0.0969396835759877968726008593",
+            "horizon_60_rating": 40,
+            "name": "其他电池",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 5,
+            "rank_change_5_sessions_20d": "156",
+            "thscode": "884312.TI",
+            "top_quartile_20d_persistence_sessions": 1,
+            "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881281.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "电池",
+        "parent_context_thscode": "881281.TI",
+        "primary_breadth": {
+          "advancer_share": "0.7272727272727272727272727273",
+          "advancers": 8,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "29d62bdc1efbd228e4f4a7860cd6e8e3497e8c5287f8e957551eb2de2e31dff6",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2727272727272727272727272727",
+          "decliners": 3,
+          "equal_weight_mean_daily_return": "0.05205769990231192116205991344",
+          "equal_weight_median_daily_return": "0.024237685691946833463643471",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.052057785199420083357345270",
+          "index_minus_equal_weight_mean": "0.00000008529710816219528535656",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0755385874011453504226888465",
+              "name": "安孚科技",
+              "thscode": "603031.SH",
+              "ticker": "603031",
+              "turnover": "459967650"
+            },
+            {
+              "daily_return": "-0.0312249799839871897518014412",
+              "name": "浙江恒威",
+              "thscode": "301222.SZ",
+              "ticker": "301222",
+              "turnover": "67205754"
+            },
+            {
+              "daily_return": "-0.0034280117531831537708129285",
+              "name": "亿华通-U",
+              "thscode": "688339.SH",
+              "ticker": "688339",
+              "turnover": "173644120"
+            },
+            {
+              "daily_return": "0.005434782608695652173913043",
+              "name": "骆驼股份",
+              "thscode": "601311.SH",
+              "ticker": "601311",
+              "turnover": "85445750"
+            },
+            {
+              "daily_return": "0.009624639076034648700673725",
+              "name": "天能股份",
+              "thscode": "688819.SH",
+              "ticker": "688819",
+              "turnover": "65348620"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.299562682215743440233236152",
+              "name": "力王股份",
+              "thscode": "920627.BJ",
+              "ticker": "920627",
+              "turnover": "213939190"
+            },
+            {
+              "daily_return": "0.100174723354688410017472335",
+              "name": "雄韬股份",
+              "thscode": "002733.SZ",
+              "ticker": "002733",
+              "turnover": "304284350"
+            },
+            {
+              "daily_return": "0.1",
+              "name": "野马电池",
+              "thscode": "605378.SH",
+              "ticker": "605378",
+              "turnover": "271600140"
+            },
+            {
+              "daily_return": "0.094262295081967213114754098",
+              "name": "圣阳股份",
+              "thscode": "002580.SZ",
+              "ticker": "002580",
+              "turnover": "2546677500"
+            },
+            {
+              "daily_return": "0.049529470034670629024269440",
+              "name": "长虹能源",
+              "thscode": "920239.BJ",
+              "ticker": "920239",
+              "turnover": "55835363"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 11,
+          "membership_captured_at": "2026-10-08T10:18:49.002000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 11,
+          "sector_name": "其他电池",
+          "sector_thscode": "884312.TI",
+          "top_three_positive_return_mass_share": "0.7318661006830462209340996610",
+          "top_three_turnover_share": "0.7658260057929450533995684282",
+          "total_constituent_turnover": "4323344304",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0818071150685288360473094708",
+          "horizon_20_rank": "23",
+          "horizon_20_rating": 90,
+          "horizon_5_excess_return": "0.0976998470289414988785365662",
+          "horizon_5_rank": "4",
+          "horizon_5_rating": 98,
+          "horizon_60_excess_return": "0.0969396835759877968726008593",
+          "horizon_60_rating": 40,
+          "name": "其他电池",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 5,
+          "rank_change_5_sessions_20d": "156",
+          "thscode": "884312.TI",
+          "top_quartile_20d_persistence_sessions": 1,
+          "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY",
+    "surfaced_groups": [
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": true,
+            "as_of_session": "2026-10-08",
+            "event_type": "ACCELERATING_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0954785932215227401992181478",
+            "horizon_20_rank": "17",
+            "horizon_20_rating": 92,
+            "horizon_5_excess_return": "0.1166268694068936733376108162",
+            "horizon_5_rank": "1",
+            "horizon_5_rating": 99,
+            "horizon_60_excess_return": "0.1743630528244796214226151303",
+            "horizon_60_rating": 68,
+            "name": "管材",
+            "persistent_gate_entered": false,
+            "positive_20d_excess_persistence_sessions": 38,
+            "rank_change_5_sessions_20d": "133",
+            "thscode": "884064.TI",
+            "top_quartile_20d_persistence_sessions": 4,
+            "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881115.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "建筑材料",
+        "parent_context_thscode": "881115.TI",
+        "primary_breadth": {
+          "advancer_share": "0.5714285714285714285714285714",
+          "advancers": 4,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "48224773a5a1e4cc542f84d14314b3e5ab81175d34c19ee218f3effcde444299",
+          "coverage_ratio": "1",
+          "decliner_share": "0.2857142857142857142857142857",
+          "decliners": 2,
+          "equal_weight_mean_daily_return": "0.01398618008464657110856838363",
+          "equal_weight_median_daily_return": "0.009377664109121909633418585",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.013986467498216563263364967",
+          "index_minus_equal_weight_mean": "0.00000028741356999215479658337",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0370370370370370370370370370",
+              "name": "*ST纳川",
+              "thscode": "300198.SZ",
+              "ticker": "300198",
+              "turnover": "26651656"
+            },
+            {
+              "daily_return": "-0.0072463768115942028985507246",
+              "name": "*ST顾地",
+              "thscode": "002694.SZ",
+              "ticker": "002694",
+              "turnover": "26237295"
+            },
+            {
+              "daily_return": "0",
+              "name": "公元股份",
+              "thscode": "002641.SZ",
+              "ticker": "002641",
+              "turnover": "26145884"
+            },
+            {
+              "daily_return": "0.009377664109121909633418585",
+              "name": "东宏股份",
+              "thscode": "603856.SH",
+              "ticker": "603856",
+              "turnover": "30213606"
+            },
+            {
+              "daily_return": "0.015030946065428824049513705",
+              "name": "青龙管业",
+              "thscode": "002457.SZ",
+              "ticker": "002457",
+              "turnover": "230763730"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.097183098591549295774647887",
+              "name": "雄塑科技",
+              "thscode": "300599.SZ",
+              "ticker": "300599",
+              "turnover": "499214230"
+            },
+            {
+              "daily_return": "0.020594965675057208237986270",
+              "name": "伟星新材",
+              "thscode": "002372.SZ",
+              "ticker": "002372",
+              "turnover": "187983120"
+            },
+            {
+              "daily_return": "0.015030946065428824049513705",
+              "name": "青龙管业",
+              "thscode": "002457.SZ",
+              "ticker": "002457",
+              "turnover": "230763730"
+            },
+            {
+              "daily_return": "0.009377664109121909633418585",
+              "name": "东宏股份",
+              "thscode": "603856.SH",
+              "ticker": "603856",
+              "turnover": "30213606"
+            },
+            {
+              "daily_return": "0",
+              "name": "公元股份",
+              "thscode": "002641.SZ",
+              "ticker": "002641",
+              "turnover": "26145884"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 7,
+          "membership_captured_at": "2026-10-08T10:17:21.782000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 7,
+          "sector_name": "管材",
+          "sector_thscode": "884064.TI",
+          "top_three_positive_return_mass_share": "0.9340468145416624309012602579",
+          "top_three_turnover_share": "0.8936454162791974355152029398",
+          "total_constituent_turnover": "1027209521",
+          "unchanged": 1
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": true,
+          "as_of_session": "2026-10-08",
+          "event_type": "ACCELERATING_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.0954785932215227401992181478",
+          "horizon_20_rank": "17",
+          "horizon_20_rating": 92,
+          "horizon_5_excess_return": "0.1166268694068936733376108162",
+          "horizon_5_rank": "1",
+          "horizon_5_rating": 99,
+          "horizon_60_excess_return": "0.1743630528244796214226151303",
+          "horizon_60_rating": 68,
+          "name": "管材",
+          "persistent_gate_entered": false,
+          "positive_20d_excess_persistence_sessions": 38,
+          "rank_change_5_sessions_20d": "133",
+          "thscode": "884064.TI",
+          "top_quartile_20d_persistence_sessions": 4,
+          "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+            "family": "BROAD_881",
+            "horizon_20_excess_return": "0.0748034506783500994189436518",
+            "horizon_20_rank": "8",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0692210798587822920716544902",
+            "horizon_5_rank": "5",
+            "horizon_5_rating": 95,
+            "horizon_60_excess_return": "0.2439308275284858452686099233",
+            "horizon_60_rating": 93,
+            "name": "港口航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 56,
+            "rank_change_5_sessions_20d": "45",
+            "thscode": "881148.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+          },
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0874825651852439278339268868",
+            "horizon_20_rank": "20",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0622299816857560753627321882",
+            "horizon_5_rank": "24",
+            "horizon_5_rating": 89,
+            "horizon_60_excess_return": "0.2739865599898053122555742853",
+            "horizon_60_rating": 91,
+            "name": "航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 50,
+            "rank_change_5_sessions_20d": "90",
+            "thscode": "884191.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+          }
+        ],
+        "granular_driver_breadth": [
+          {
+            "advancer_share": "0.8947368421052631578947368421",
+            "advancers": 17,
+            "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+            "constituent_set_hash": "21fa5b06445f6fa227d65a21a695de88a63479eb996655e5e97299f1ec2b73c0",
+            "coverage_ratio": "1",
+            "decliner_share": "0.1052631578947368421052631579",
+            "decliners": 2,
+            "equal_weight_mean_daily_return": "0.02702298456583318993711556954",
+            "equal_weight_median_daily_return": "0.016393442622950819672131148",
+            "formula_version": "sector-current-breadth-v0",
+            "historical_breadth_authority": "NONE",
+            "human_attention_authority": "NONE",
+            "index_contribution_authority": "NONE",
+            "index_daily_return": "0.027023089346372348784508589",
+            "index_minus_equal_weight_mean": "0.00000010478053915884739301946",
+            "investment_authority": "NONE",
+            "laggards": [
+              {
+                "daily_return": "-0.0137457044673539518900343643",
+                "name": "海航科技",
+                "thscode": "600751.SH",
+                "ticker": "600751",
+                "turnover": "68563845"
+              },
+              {
+                "daily_return": "-0.0078988941548183254344391785",
+                "name": "海峡股份",
+                "thscode": "002320.SZ",
+                "ticker": "002320",
+                "turnover": "130836189"
+              },
+              {
+                "daily_return": "0.001251564455569461827284105",
+                "name": "渤海轮渡",
+                "thscode": "603167.SH",
+                "ticker": "603167",
+                "turnover": "16415003"
+              },
+              {
+                "daily_return": "0.006925207756232686980609418",
+                "name": "盛航股份",
+                "thscode": "001205.SZ",
+                "ticker": "001205",
+                "turnover": "66730983"
+              },
+              {
+                "daily_return": "0.009195402298850574712643678",
+                "name": "安通控股",
+                "thscode": "600179.SH",
+                "ticker": "600179",
+                "turnover": "113511495"
+              }
+            ],
+            "leaders": [
+              {
+                "daily_return": "0.100194552529182879377431907",
+                "name": "中远海能",
+                "thscode": "600026.SH",
+                "ticker": "600026",
+                "turnover": "870079410"
+              },
+              {
+                "daily_return": "0.099557522123893805309734513",
+                "name": "招商南油",
+                "thscode": "601975.SH",
+                "ticker": "601975",
+                "turnover": "1466802800"
+              },
+              {
+                "daily_return": "0.093300248138957816377171216",
+                "name": "招商轮船",
+                "thscode": "601872.SH",
+                "ticker": "601872",
+                "turnover": "5013475000"
+              },
+              {
+                "daily_return": "0.035276073619631901840490798",
+                "name": "海通发展",
+                "thscode": "603162.SH",
+                "ticker": "603162",
+                "turnover": "569207800"
+              },
+              {
+                "daily_return": "0.029249011857707509881422925",
+                "name": "锦江航运",
+                "thscode": "601083.SH",
+                "ticker": "601083",
+                "turnover": "170817810"
+              }
+            ],
+            "market_session": "2026-10-08",
+            "member_count": 19,
+            "membership_captured_at": "2026-10-08T10:18:06.564000Z",
+            "missing_or_unpriced_member_count": 0,
+            "missing_or_unpriced_members": [],
+            "observed_at": "2026-10-08T10:23:14.420415Z",
+            "priced_member_count": 19,
+            "sector_name": "航运",
+            "sector_thscode": "884191.TI",
+            "top_three_positive_return_mass_share": "0.5476781189126930570669720377",
+            "top_three_turnover_share": "0.6982910493339409752875469973",
+            "total_constituent_turnover": "11086656026",
+            "unchanged": 0
+          }
+        ],
+        "granular_drivers": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.0874825651852439278339268868",
+            "horizon_20_rank": "20",
+            "horizon_20_rating": 91,
+            "horizon_5_excess_return": "0.0622299816857560753627321882",
+            "horizon_5_rank": "24",
+            "horizon_5_rating": 89,
+            "horizon_60_excess_return": "0.2739865599898053122555742853",
+            "horizon_60_rating": 91,
+            "name": "航运",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 50,
+            "rank_change_5_sessions_20d": "90",
+            "thscode": "884191.TI",
+            "top_quartile_20d_persistence_sessions": 2,
+            "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+          }
+        ],
+        "group_key": "881148.TI",
+        "grouping_reason": "QUALIFIED_881_PARENT_WITH_FULLY_CONTAINED_884_DRIVERS",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "港口航运",
+        "parent_context_thscode": "881148.TI",
+        "primary_breadth": {
+          "advancer_share": "0.9142857142857142857142857143",
+          "advancers": 32,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "d2ac70f54310153acf459c9d93231dff13193cd3929c0dfd8baade6cc2b7820e",
+          "coverage_ratio": "0.9722222222222222222222222222",
+          "decliner_share": "0.08571428571428571428571428571",
+          "decliners": 3,
+          "equal_weight_mean_daily_return": "0.02039362196527355615088820139",
+          "equal_weight_median_daily_return": "0.015011547344110854503464203",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.020393448721852088273568249",
+          "index_minus_equal_weight_mean": "-0.00000017324342146787731995239",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "-0.0137457044673539518900343643",
+              "name": "海航科技",
+              "thscode": "600751.SH",
+              "ticker": "600751",
+              "turnover": "68563845"
+            },
+            {
+              "daily_return": "-0.0078988941548183254344391785",
+              "name": "海峡股份",
+              "thscode": "002320.SZ",
+              "ticker": "002320",
+              "turnover": "130836189"
+            },
+            {
+              "daily_return": "-0.0009940357852882703777335984",
+              "name": "青岛港",
+              "thscode": "601298.SH",
+              "ticker": "601298",
+              "turnover": "107728637"
+            },
+            {
+              "daily_return": "0.001251564455569461827284105",
+              "name": "渤海轮渡",
+              "thscode": "603167.SH",
+              "ticker": "603167",
+              "turnover": "16415003"
+            },
+            {
+              "daily_return": "0.004048582995951417004048583",
+              "name": "珠海港",
+              "thscode": "000507.SZ",
+              "ticker": "000507",
+              "turnover": "32626954"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.100194552529182879377431907",
+              "name": "中远海能",
+              "thscode": "600026.SH",
+              "ticker": "600026",
+              "turnover": "870079410"
+            },
+            {
+              "daily_return": "0.099557522123893805309734513",
+              "name": "招商南油",
+              "thscode": "601975.SH",
+              "ticker": "601975",
+              "turnover": "1466802800"
+            },
+            {
+              "daily_return": "0.093300248138957816377171216",
+              "name": "招商轮船",
+              "thscode": "601872.SH",
+              "ticker": "601872",
+              "turnover": "5013475000"
+            },
+            {
+              "daily_return": "0.035276073619631901840490798",
+              "name": "海通发展",
+              "thscode": "603162.SH",
+              "ticker": "603162",
+              "turnover": "569207800"
+            },
+            {
+              "daily_return": "0.029249011857707509881422925",
+              "name": "锦江航运",
+              "thscode": "601083.SH",
+              "ticker": "601083",
+              "turnover": "170817810"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 36,
+          "membership_captured_at": "2026-10-08T10:15:56.497000Z",
+          "missing_or_unpriced_member_count": 1,
+          "missing_or_unpriced_members": [
+            {
+              "name": "北部湾港",
+              "thscode": "000582.SZ",
+              "ticker": "000582"
+            }
+          ],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 35,
+          "sector_name": "港口航运",
+          "sector_thscode": "881148.TI",
+          "top_three_positive_return_mass_share": "0.3979443144749312901967045081",
+          "top_three_turnover_share": "0.5781386515005554956276812409",
+          "total_constituent_turnover": "13390754363",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0534043595841477849356427118",
+          "family": "BROAD_881",
+          "horizon_20_excess_return": "0.0748034506783500994189436518",
+          "horizon_20_rank": "8",
+          "horizon_20_rating": 91,
+          "horizon_5_excess_return": "0.0692210798587822920716544902",
+          "horizon_5_rank": "5",
+          "horizon_5_rating": 95,
+          "horizon_60_excess_return": "0.2439308275284858452686099233",
+          "horizon_60_rating": 93,
+          "name": "港口航运",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 56,
+          "rank_change_5_sessions_20d": "45",
+          "thscode": "881148.TI",
+          "top_quartile_20d_persistence_sessions": 2,
+          "turnover_pulse_5_vs_prior_20": "0.7376961899210723026566805535"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      },
+      {
+        "all_candidates": [
+          {
+            "acceleration_gate_entered": false,
+            "as_of_session": "2026-10-08",
+            "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+            "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+            "family": "GRANULAR_884",
+            "horizon_20_excess_return": "0.1071554183863976067011839108",
+            "horizon_20_rank": "14",
+            "horizon_20_rating": 93,
+            "horizon_5_excess_return": "0.1022877396984638955853958652",
+            "horizon_5_rank": "3",
+            "horizon_5_rating": 98,
+            "horizon_60_excess_return": "0.4090630299550889748941003803",
+            "horizon_60_rating": 98,
+            "name": "焦炭加工",
+            "persistent_gate_entered": true,
+            "positive_20d_excess_persistence_sessions": 51,
+            "rank_change_5_sessions_20d": "63",
+            "thscode": "884015.TI",
+            "top_quartile_20d_persistence_sessions": 1,
+            "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+          }
+        ],
+        "granular_driver_breadth": [],
+        "granular_drivers": [],
+        "group_key": "881105.TI",
+        "grouping_reason": "GRANULAR_PRIMARY_UNDER_NON_CANDIDATE_881_CONTEXT",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "parent_context_name": "煤炭开采加工",
+        "parent_context_thscode": "881105.TI",
+        "primary_breadth": {
+          "advancer_share": "1",
+          "advancers": 5,
+          "breadth_semantics": "CURRENT_CONSTITUENT_EQUAL_WEIGHT_PROXY_ONLY",
+          "constituent_set_hash": "7325cdb1204584917698d6e80dafb54d947d7d5cdb8918b200e4c0c395b5549c",
+          "coverage_ratio": "1",
+          "decliner_share": "0",
+          "decliners": 0,
+          "equal_weight_mean_daily_return": "0.0442227906893024661091653108",
+          "equal_weight_median_daily_return": "0.035714285714285714285714286",
+          "formula_version": "sector-current-breadth-v0",
+          "historical_breadth_authority": "NONE",
+          "human_attention_authority": "NONE",
+          "index_contribution_authority": "NONE",
+          "index_daily_return": "0.044223115981866567402519505",
+          "index_minus_equal_weight_mean": "0.0000003252925641012933541942",
+          "investment_authority": "NONE",
+          "laggards": [
+            {
+              "daily_return": "0.007978723404255319148936170",
+              "name": "山西焦化",
+              "thscode": "600740.SH",
+              "ticker": "600740",
+              "turnover": "113353208"
+            },
+            {
+              "daily_return": "0.008547008547008547008547009",
+              "name": "美锦能源",
+              "thscode": "000723.SZ",
+              "ticker": "000723",
+              "turnover": "204600720"
+            },
+            {
+              "daily_return": "0.035714285714285714285714286",
+              "name": "云煤能源",
+              "thscode": "600792.SH",
+              "ticker": "600792",
+              "turnover": "505869600"
+            },
+            {
+              "daily_return": "0.069832402234636871508379888",
+              "name": "陕西黑猫",
+              "thscode": "601015.SH",
+              "ticker": "601015",
+              "turnover": "535073880"
+            },
+            {
+              "daily_return": "0.099041533546325878594249201",
+              "name": "安泰集团",
+              "thscode": "600408.SH",
+              "ticker": "600408",
+              "turnover": "217813850"
+            }
+          ],
+          "leaders": [
+            {
+              "daily_return": "0.099041533546325878594249201",
+              "name": "安泰集团",
+              "thscode": "600408.SH",
+              "ticker": "600408",
+              "turnover": "217813850"
+            },
+            {
+              "daily_return": "0.069832402234636871508379888",
+              "name": "陕西黑猫",
+              "thscode": "601015.SH",
+              "ticker": "601015",
+              "turnover": "535073880"
+            },
+            {
+              "daily_return": "0.035714285714285714285714286",
+              "name": "云煤能源",
+              "thscode": "600792.SH",
+              "ticker": "600792",
+              "turnover": "505869600"
+            },
+            {
+              "daily_return": "0.008547008547008547008547009",
+              "name": "美锦能源",
+              "thscode": "000723.SZ",
+              "ticker": "000723",
+              "turnover": "204600720"
+            },
+            {
+              "daily_return": "0.007978723404255319148936170",
+              "name": "山西焦化",
+              "thscode": "600740.SH",
+              "ticker": "600740",
+              "turnover": "113353208"
+            }
+          ],
+          "market_session": "2026-10-08",
+          "member_count": 5,
+          "membership_captured_at": "2026-10-08T10:17:00.713000Z",
+          "missing_or_unpriced_member_count": 0,
+          "missing_or_unpriced_members": [],
+          "observed_at": "2026-10-08T10:23:14.420415Z",
+          "priced_member_count": 5,
+          "sector_name": "焦炭加工",
+          "sector_thscode": "884015.TI",
+          "top_three_positive_return_mass_share": "0.9252614695107359835986850251",
+          "top_three_turnover_share": "0.7983435924702454303145465332",
+          "total_constituent_turnover": "1576711258",
+          "unchanged": 0
+        },
+        "primary_candidate": {
+          "acceleration_gate_entered": false,
+          "as_of_session": "2026-10-08",
+          "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+          "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+          "family": "GRANULAR_884",
+          "horizon_20_excess_return": "0.1071554183863976067011839108",
+          "horizon_20_rank": "14",
+          "horizon_20_rating": 93,
+          "horizon_5_excess_return": "0.1022877396984638955853958652",
+          "horizon_5_rank": "3",
+          "horizon_5_rating": 98,
+          "horizon_60_excess_return": "0.4090630299550889748941003803",
+          "horizon_60_rating": 98,
+          "name": "焦炭加工",
+          "persistent_gate_entered": true,
+          "positive_20d_excess_persistence_sessions": 51,
+          "rank_change_5_sessions_20d": "63",
+          "thscode": "884015.TI",
+          "top_quartile_20d_persistence_sessions": 1,
+          "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+        },
+        "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+      }
+    ],
+    "truncated_group_count": 3
+  },
+  "event_ledger_update": {
+    "added_event_ids": [
+      "3604bc30578320d5646a50a0d57627e20c1228c66bfcd2898a59e8df228a9ef6",
+      "4cda0be95380f31f4989f18061a8c7757ea1348e5a843a5bd4e663805f6299f4",
+      "5b73a252f0e5287524b1fc928348d95105ba41098116c709d7802286c0bbbdb8",
+      "6bea8ce162af9de7c25d3bdf053845ff2d6e9acedaee81251767599a31bf2e22",
+      "90e7aaab3c0e93645c4812b4de9f1c98ac8c39256e32f818899a7bbadf05df1b",
+      "ac655bba7f9906acb5d4515d6fc27d0d6b18714bf25c5e5012eef1ee40233efe",
+      "e209e179facc63c9e99801571a4b6cff1d41f735d744d1a2d90c997e9f20ee75"
+    ],
+    "event_count": 174,
+    "event_ledger_hash": "8a2dbf8c43a43efe1ea8b8fb102955d695d73f7deddb875526c791cdda1b1695",
+    "previous_event_ledger_hash": "d89a5e8c1ed2916c57af2b148fa7d051bcc56103e04af0f49522ea398189de30",
+    "reused_event_ids": []
+  },
+  "granular_entries": {
+    "as_of_session": "2026-10-08",
+    "benchmark_thscode": "000300.SH",
+    "candidates": [
+      {
+        "acceleration_gate_entered": true,
+        "as_of_session": "2026-10-08",
+        "event_type": "ACCELERATING_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0820105307115768050830364766",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0954785932215227401992181478",
+        "horizon_20_rank": "17",
+        "horizon_20_rating": 92,
+        "horizon_5_excess_return": "0.1166268694068936733376108162",
+        "horizon_5_rank": "1",
+        "horizon_5_rating": 99,
+        "horizon_60_excess_return": "0.1743630528244796214226151303",
+        "horizon_60_rating": 68,
+        "name": "管材",
+        "persistent_gate_entered": false,
+        "positive_20d_excess_persistence_sessions": 38,
+        "rank_change_5_sessions_20d": "133",
+        "thscode": "884064.TI",
+        "top_quartile_20d_persistence_sessions": 4,
+        "turnover_pulse_5_vs_prior_20": "1.216410801336242380996697256"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0546427245294629651074301738",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.1071554183863976067011839108",
+        "horizon_20_rank": "14",
+        "horizon_20_rating": 93,
+        "horizon_5_excess_return": "0.1022877396984638955853958652",
+        "horizon_5_rank": "3",
+        "horizon_5_rating": 98,
+        "horizon_60_excess_return": "0.4090630299550889748941003803",
+        "horizon_60_rating": 98,
+        "name": "焦炭加工",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 51,
+        "rank_change_5_sessions_20d": "63",
+        "thscode": "884015.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "0.8361257806932491042382777717"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "-0.0086787973487568974000785602",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0881463115461438766103900418",
+        "horizon_20_rank": "19",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0305241327155794142024415826",
+        "horizon_5_rank": "83",
+        "horizon_5_rating": 64,
+        "horizon_60_excess_return": "0.2021901406784023328545348913",
+        "horizon_60_rating": 80,
+        "name": "楼宇设备",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 38,
+        "rank_change_5_sessions_20d": "17",
+        "thscode": "884083.TI",
+        "top_quartile_20d_persistence_sessions": 10,
+        "turnover_pulse_5_vs_prior_20": "1.170863203313999252642002246"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0533875885144160250605486478",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0874825651852439278339268868",
+        "horizon_20_rank": "20",
+        "horizon_20_rating": 91,
+        "horizon_5_excess_return": "0.0622299816857560753627321882",
+        "horizon_5_rank": "24",
+        "horizon_5_rating": 89,
+        "horizon_60_excess_return": "0.2739865599898053122555742853",
+        "horizon_60_rating": 91,
+        "name": "航运",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 50,
+        "rank_change_5_sessions_20d": "90",
+        "thscode": "884191.TI",
+        "top_quartile_20d_persistence_sessions": 2,
+        "turnover_pulse_5_vs_prior_20": "0.7225750641919774441142414232"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.1046959599645545927647194808",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0852869468810004154019193118",
+        "horizon_20_rank": "22",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0523388366948562881270559202",
+        "horizon_5_rank": "41",
+        "horizon_5_rating": 82,
+        "horizon_60_excess_return": "0.0719750067772109463086612115",
+        "horizon_60_rating": 31,
+        "name": "风电整机",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "185",
+        "thscode": "884307.TI",
+        "top_quartile_20d_persistence_sessions": 3,
+        "turnover_pulse_5_vs_prior_20": "0.8080036156996752030559496838"
+      },
+      {
+        "acceleration_gate_entered": false,
+        "as_of_session": "2026-10-08",
+        "event_type": "PERSISTENT_TOP_DECILE_ENTRY",
+        "excess_acceleration_5_sessions_20d": "0.0829591007423994886741581431",
+        "family": "GRANULAR_884",
+        "horizon_20_excess_return": "0.0818071150685288360473094708",
+        "horizon_20_rank": "23",
+        "horizon_20_rating": 90,
+        "horizon_5_excess_return": "0.0976998470289414988785365662",
+        "horizon_5_rank": "4",
+        "horizon_5_rating": 98,
+        "horizon_60_excess_return": "0.0969396835759877968726008593",
+        "horizon_60_rating": 40,
+        "name": "其他电池",
+        "persistent_gate_entered": true,
+        "positive_20d_excess_persistence_sessions": 5,
+        "rank_change_5_sessions_20d": "156",
+        "thscode": "884312.TI",
+        "top_quartile_20d_persistence_sessions": 1,
+        "turnover_pulse_5_vs_prior_20": "1.057370246708260980879775986"
+      }
+    ],
+    "family": "GRANULAR_884",
+    "formula_version": "sector-rs-5-20-60-persistence126-v0",
+    "human_attention_authority": "NONE",
+    "investment_authority": "NONE",
+    "policy_version": "sector-shadow-state-entry-hierarchy-v0",
+    "previous_session": "2026-09-30",
+    "quiet_reason": null,
+    "shadow_semantics": "PROSPECTIVE_SHADOW_OBSERVATION_ONLY"
+  },
+  "human_attention_authority": "NONE",
+  "input_market_state_hash": "7e821b2fb6421df254c60c1be6e7f17787e65bb3db6975868514ca7b581807b6",
+  "investment_authority": "NONE",
+  "market_session": "2026-10-08",
+  "output_market_state_hash": "de541dea14c930cc82c5410354a96cf8981fe65a17b3c32a009b052c36917f61",
+  "parent_hint_mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+  "parent_revalidations": [
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "48224773a5a1e4cc542f84d14314b3e5ab81175d34c19ee218f3effcde444299",
+        "child_fully_contained": true,
+        "child_member_count": 7,
+        "child_membership_captured_at": "2026-10-08T10:17:21.782000Z",
+        "child_name": "管材",
+        "child_thscode": "884064.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 7,
+        "investment_authority": "NONE",
+        "jaccard": "0.09589041095890410958904109589",
+        "parent_constituent_set_hash": "728fcb8833dc0a42c203f30580fba541a36a0183e652e0dc5b9bd792be8d0093",
+        "parent_member_count": 73,
+        "parent_membership_captured_at": "2026-10-08T10:15:13.553000Z",
+        "parent_name": "建筑材料",
+        "parent_thscode": "881115.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "48224773a5a1e4cc542f84d14314b3e5ab81175d34c19ee218f3effcde444299",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 7,
+        "child_membership_captured_at": "2026-09-04T16:26:38.188000Z",
+        "child_name": "管材",
+        "child_thscode": "884064.TI",
+        "intersection_count_at_capture": 7,
+        "parent_constituent_set_hash_at_capture": "728fcb8833dc0a42c203f30580fba541a36a0183e652e0dc5b9bd792be8d0093",
+        "parent_member_count_at_capture": 73,
+        "parent_membership_captured_at": "2026-09-04T16:18:54.630000Z",
+        "parent_name": "建筑材料",
+        "parent_thscode": "881115.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": false,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "7325cdb1204584917698d6e80dafb54d947d7d5cdb8918b200e4c0c395b5549c",
+        "child_fully_contained": true,
+        "child_member_count": 5,
+        "child_membership_captured_at": "2026-10-08T10:17:00.713000Z",
+        "child_name": "焦炭加工",
+        "child_thscode": "884015.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 5,
+        "investment_authority": "NONE",
+        "jaccard": "0.1470588235294117647058823529",
+        "parent_constituent_set_hash": "9a972fdcf3712c84e3ef2bfb5117d73c6f069ff9bc88cfa2eb9f3fbedd8df7ab",
+        "parent_member_count": 34,
+        "parent_membership_captured_at": "2026-10-08T10:14:52.471000Z",
+        "parent_name": "煤炭开采加工",
+        "parent_thscode": "881105.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "7325cdb1204584917698d6e80dafb54d947d7d5cdb8918b200e4c0c395b5549c",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 5,
+        "child_membership_captured_at": "2026-09-04T16:24:33.146000Z",
+        "child_name": "焦炭加工",
+        "child_thscode": "884015.TI",
+        "intersection_count_at_capture": 5,
+        "parent_constituent_set_hash_at_capture": "9a972fdcf3712c84e3ef2bfb5117d73c6f069ff9bc88cfa2eb9f3fbedd8df7ab",
+        "parent_member_count_at_capture": 34,
+        "parent_membership_captured_at": "2026-09-04T16:18:03.015000Z",
+        "parent_name": "煤炭开采加工",
+        "parent_thscode": "881105.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": false,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "e9145c36a3205743154b365477a954877df05f91fe82efed08c16085b2b8e58d",
+        "child_fully_contained": true,
+        "child_member_count": 12,
+        "child_membership_captured_at": "2026-10-08T10:17:43.412000Z",
+        "child_name": "楼宇设备",
+        "child_thscode": "884083.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 12,
+        "investment_authority": "NONE",
+        "jaccard": "0.05882352941176470588235294118",
+        "parent_constituent_set_hash": "152929e7b2c384bee0841dbc691126b7fbf540cd16f3a4039387f281e4c21fd6",
+        "parent_member_count": 204,
+        "parent_membership_captured_at": "2026-10-08T10:15:35.155000Z",
+        "parent_name": "专用设备",
+        "parent_thscode": "881118.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "e9145c36a3205743154b365477a954877df05f91fe82efed08c16085b2b8e58d",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 12,
+        "child_membership_captured_at": "2026-09-04T16:27:27.083000Z",
+        "child_name": "楼宇设备",
+        "child_thscode": "884083.TI",
+        "intersection_count_at_capture": 12,
+        "parent_constituent_set_hash_at_capture": "7d60343234a52f2cde1b4b1984a7ed1beaab0411af0c3aea7ef16df76beb80f6",
+        "parent_member_count_at_capture": 201,
+        "parent_membership_captured_at": "2026-09-04T16:19:04.802000Z",
+        "parent_name": "专用设备",
+        "parent_thscode": "881118.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": true,
+      "parent_membership_changed_since_hint_capture": true,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "21fa5b06445f6fa227d65a21a695de88a63479eb996655e5e97299f1ec2b73c0",
+        "child_fully_contained": true,
+        "child_member_count": 19,
+        "child_membership_captured_at": "2026-10-08T10:18:06.564000Z",
+        "child_name": "航运",
+        "child_thscode": "884191.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 19,
+        "investment_authority": "NONE",
+        "jaccard": "0.5277777777777777777777777778",
+        "parent_constituent_set_hash": "d2ac70f54310153acf459c9d93231dff13193cd3929c0dfd8baade6cc2b7820e",
+        "parent_member_count": 36,
+        "parent_membership_captured_at": "2026-10-08T10:15:56.497000Z",
+        "parent_name": "港口航运",
+        "parent_thscode": "881148.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "21fa5b06445f6fa227d65a21a695de88a63479eb996655e5e97299f1ec2b73c0",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 19,
+        "child_membership_captured_at": "2026-09-04T16:31:10.172000Z",
+        "child_name": "航运",
+        "child_thscode": "884191.TI",
+        "intersection_count_at_capture": 19,
+        "parent_constituent_set_hash_at_capture": "d2ac70f54310153acf459c9d93231dff13193cd3929c0dfd8baade6cc2b7820e",
+        "parent_member_count_at_capture": 36,
+        "parent_membership_captured_at": "2026-09-04T16:21:02.022000Z",
+        "parent_name": "港口航运",
+        "parent_thscode": "881148.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": false,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "a81b38e2c14f5c205ff58ecf20ba5f2b899e74d443678c3d76689a853eb4167f",
+        "child_fully_contained": true,
+        "child_member_count": 6,
+        "child_membership_captured_at": "2026-10-08T10:18:27.393000Z",
+        "child_name": "风电整机",
+        "child_thscode": "884307.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 6,
+        "investment_authority": "NONE",
+        "jaccard": "0.1875",
+        "parent_constituent_set_hash": "14c4a586967384bf6b71d00bb6b4a0d1a4d06adeb3bb497654b054abe4c94f3b",
+        "parent_member_count": 32,
+        "parent_membership_captured_at": "2026-10-08T10:16:17.346000Z",
+        "parent_name": "风电设备",
+        "parent_thscode": "881280.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "a81b38e2c14f5c205ff58ecf20ba5f2b899e74d443678c3d76689a853eb4167f",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 6,
+        "child_membership_captured_at": "2026-09-04T16:36:02.806000Z",
+        "child_name": "风电整机",
+        "child_thscode": "884307.TI",
+        "intersection_count_at_capture": 6,
+        "parent_constituent_set_hash_at_capture": "921c6be39fe1c1258741c6f9c0c9d5957a447c10e9a5ca3c284f40c3f4ee6e58",
+        "parent_member_count_at_capture": 31,
+        "parent_membership_captured_at": "2026-09-04T16:23:37.364000Z",
+        "parent_name": "风电设备",
+        "parent_thscode": "881280.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": true,
+      "parent_membership_changed_since_hint_capture": true,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    },
+    {
+      "catalog_validation": {
+        "broad_count": 90,
+        "current_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "frozen_catalog_hash": "367d64660f5ef1f715ae0ef1d832a180d075ec7d6fc0a915797cbfafbd33f360",
+        "granular_count": 230,
+        "historical_taxonomy_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "investment_authority": "NONE",
+        "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+        "validated_child_count": 230,
+        "validation_semantics": "EXACT_CURRENT_FORMAL_INDUSTRY_CATALOG_MATCH"
+      },
+      "child_member_count_changed_since_hint_capture": false,
+      "child_membership_changed_since_hint_capture": false,
+      "current_parent_link": {
+        "child_constituent_set_hash": "29d62bdc1efbd228e4f4a7860cd6e8e3497e8c5287f8e957551eb2de2e31dff6",
+        "child_fully_contained": true,
+        "child_member_count": 11,
+        "child_membership_captured_at": "2026-10-08T10:18:49.002000Z",
+        "child_name": "其他电池",
+        "child_thscode": "884312.TI",
+        "historical_membership_authority": "NONE",
+        "human_attention_authority": "NONE",
+        "intersection_count": 11,
+        "investment_authority": "NONE",
+        "jaccard": "0.1028037383177570093457943925",
+        "parent_constituent_set_hash": "bc5b0e49c182e44ad9f8512320a33d7e5ad428574ccb2c8bfff6335ce3a3f659",
+        "parent_member_count": 107,
+        "parent_membership_captured_at": "2026-10-08T10:16:39.412000Z",
+        "parent_name": "电池",
+        "parent_thscode": "881281.TI",
+        "relation_semantics": "CURRENT_CONSTITUENT_PARENT_LINK_ONLY"
+      },
+      "hint": {
+        "child_constituent_set_hash_at_capture": "29d62bdc1efbd228e4f4a7860cd6e8e3497e8c5287f8e957551eb2de2e31dff6",
+        "child_fully_contained_at_capture": true,
+        "child_member_count_at_capture": 11,
+        "child_membership_captured_at": "2026-09-04T16:36:19.113000Z",
+        "child_name": "其他电池",
+        "child_thscode": "884312.TI",
+        "intersection_count_at_capture": 11,
+        "parent_constituent_set_hash_at_capture": "97c202a7408f19ce5db9c4e930cd6078630005e022c80e1a26048f5eeb803564",
+        "parent_member_count_at_capture": 107,
+        "parent_membership_captured_at": "2026-09-04T16:23:40.610000Z",
+        "parent_name": "电池",
+        "parent_thscode": "881281.TI"
+      },
+      "historical_taxonomy_authority": "NONE",
+      "human_attention_authority": "NONE",
+      "investment_authority": "NONE",
+      "mapping_hash": "0b0b73e17da9019e4ce15af263394f0aafc5c49442c99babefbf43d15b6c6f38",
+      "parent_member_count_changed_since_hint_capture": false,
+      "parent_membership_changed_since_hint_capture": true,
+      "revalidation_semantics": "CURRENT_CATALOG_AND_MEMBERSHIP_CONTAINMENT_REVALIDATED"
+    }
+  ],
+  "preparation_hash": "d0e9cac1494baf9f30e264c1e4e75c1b92f3e4681a004f8a0b562d3f25b2504c",
+  "produced_at": "2026-10-08T10:23:14.420415Z",
+  "qualified_snapshot_hash": "d06fd480df7a8d58eba9b7649f0f74a927a292bca740929ee775fcdc7e6861d0",
+  "result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4",
+  "schema_version": 1,
+  "state_update_status": "APPENDED_NEW_COMPLETED_SESSION"
+}
