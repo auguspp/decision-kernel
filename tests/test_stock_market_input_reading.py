@@ -320,24 +320,29 @@ def test_bounded_recovery_does_not_jump_past_corrupt_candidate(tmp_path, monkeyp
     assert reader.LAST_PATH not in collector.files
 
 
-
-def test_native_completed_no_source_marker_is_not_mistaken_for_input_failure(tmp_path, monkeypatch):
+def _no_source_pair(tmp_path, monkeypatch):
     collector, baseline, files, source_run, report = fixtures(tmp_path, monkeypatch)
-    from copy import deepcopy
+    stamp = (NOW+timedelta(minutes=10)).isoformat()
     skip_run = deepcopy(source_run)
-    skip_run.update(id=124, event='schedule',
-                    created_at=(NOW+timedelta(minutes=10)).isoformat())
+    skip_run.update(id=124, event='schedule', created_at=stamp,
+                    updated_at=stamp, run_started_at=stamp)
+    baseline['checks']['finished_at'] = stamp
     marker = {'version':'daily-stock-native-skip-v1', 'repository':model.REPOSITORY,
               'run_id':124,'head_sha':skip_run['head_sha'],
               'reason':'SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE','prior_run_id':123,
-              'source_requests':0,'recorded_at':(NOW+timedelta(minutes=10)).isoformat()}
-    skip_artifact = {'name':'stock-market-inputs-skip-124-1',
+              'source_requests':0,'recorded_at':stamp}
+    skip_artifact = {'name':'stock-market-inputs-skip-124-1', 'expired':False,
                      'expires_at':'2026-11-01T00:00:00Z'}
     regular_artifact = collector.artifacts(source_run)[0]
     collector.api.get = lambda _: {'workflow_runs':[skip_run,source_run],'total_count':2}
     collector.artifacts = lambda run: [skip_artifact] if run['id']==124 else [regular_artifact]
     collector.archive = lambda artifact, run: (({'skip.json':json.dumps(marker).encode('utf-8')}
             if run['id']==124 else files), {'artifact_id':run['id']})
+    return collector, baseline, skip_run, marker, skip_artifact, report
+
+
+def test_native_completed_no_source_marker_is_not_mistaken_for_input_failure(tmp_path, monkeypatch):
+    collector, baseline, _, _, _, report = _no_source_pair(tmp_path, monkeypatch)
     result = reader.read_current(collector, baseline)
     assert result['latest_attempt']['id']==123
     assert result['qualified_windows']==report['qualified_windows']
@@ -351,9 +356,33 @@ def test_conflicting_source_and_skip_artifact_fails_closed(tmp_path, monkeypatch
     collector, baseline, files, source_run, report = fixtures(tmp_path, monkeypatch)
     source_run['id']=124
     collector.api.get = lambda _: {'workflow_runs':[source_run],'total_count':1}
-    original=collector.artifacts(source_run)[0]
+    original={**collector.artifacts(source_run)[0], 'name':'stock-market-inputs-124-1'}
     collector.artifacts=lambda _: [original,{'name':'stock-market-inputs-skip-124-1',
-                                          'expires_at':'2026-11-01T00:00:00Z'}]
+                                'expired':False,'expires_at':'2026-11-01T00:00:00Z'}]
     result=reader.read_current(collector,baseline)
     assert result['status']=='DAILY_INPUT_READING_GAP_NOT_QUIET'
     assert reader.PATH not in collector.files
+
+
+@pytest.mark.parametrize('fault', ['expired_flag', 'expired_clock', 'wrong_head',
+                                  'foreign_repository', 'boolean_count', 'future_clock', 'self_reference'])
+def test_invalid_no_source_receipt_never_hides_missing_or_wrong_input(tmp_path, monkeypatch, fault):
+    collector, baseline, run, marker, artifact, _ = _no_source_pair(tmp_path, monkeypatch)
+    if fault == 'expired_flag':
+        del artifact['expired']
+    elif fault == 'expired_clock':
+        artifact['expires_at'] = NOW.isoformat()
+    elif fault == 'wrong_head':
+        marker['head_sha'] = 'b'*40
+    elif fault == 'foreign_repository':
+        run['head_repository'] = {'full_name':'foreign/repository'}
+    elif fault == 'boolean_count':
+        marker['source_requests'] = False
+    elif fault == 'self_reference':
+        marker['prior_run_id'] = 124
+    else:
+        marker['recorded_at'] = (NOW+timedelta(hours=1)).isoformat()
+    result = reader.read_current(collector, baseline)
+    assert result['status'] == 'DAILY_INPUT_READING_GAP_NOT_QUIET'
+    assert reader.PATH not in collector.files
+    assert 'source_capture_suppressed' not in result

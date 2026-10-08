@@ -1,7 +1,8 @@
 """Bounded native GitHub day gate for the existing dated stock input job.
 
-Preserves the current cron; a Sector completion is only a backup clock,
-not a price source, research gate, or new provider subscription.
+The existing job concurrency group supplies exclusion. Native job/step evidence
+separates queued or skipped source work from a consumed/uncertain source attempt.
+No source endpoint, new cron, credential, or durable coordination store is added.
 """
 from __future__ import annotations
 
@@ -10,20 +11,44 @@ from datetime import datetime, time, timezone
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
+import time as elapsed_time
 from zoneinfo import ZoneInfo
 
 REPOSITORY = "auguspp/decision-kernel"
 WORKFLOW = "stock-reading-after-sector.yml"
 SOURCE_TITLE = "stock-market-inputs"
+SOURCE_JOB = "daily-market-inputs"
+CAPTURE_STEP = "Capture current dated stock inputs"
 SECTOR_PATH = ".github/workflows/sector-radar-shadow.yml"
 ZONE = ZoneInfo("Asia/Shanghai")
+MAX_PRIOR_CHECKS = 6
+
+
+def _clock(value):
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError("CLOCK_ZONE")
+    return parsed.astimezone(timezone.utc)
+
+
+def _collection(payload, key):
+    rows, total = payload.get(key), payload.get("total_count")
+    if (not isinstance(rows, list) or type(total) is not int
+            or total < len(rows) or len(rows) > 100):
+        raise ValueError("GITHUB_COLLECTION_SHAPE")
+    return rows, total
 
 
 def validate_trigger(env, event):
     if env.get("GITHUB_REPOSITORY") != REPOSITORY or env.get("GITHUB_REF") != "refs/heads/main":
         raise ValueError("SOURCE_REPOSITORY_REF")
-    if env.get("GITHUB_RUN_ATTEMPT") != "1" or not env.get("GITHUB_RUN_ID", "").isdigit():
+    if (env.get("GITHUB_RUN_ATTEMPT") != "1"
+            or re.fullmatch(r"[1-9][0-9]*", env.get("GITHUB_RUN_ID", "")) is None
+            or env.get("GITHUB_JOB") != SOURCE_JOB
+            or env.get("GITHUB_WORKFLOW_REF") != REPOSITORY+"/.github/workflows/"+WORKFLOW+"@refs/heads/main"
+            or re.fullmatch(r"[0-9a-f]{40}", env.get("GITHUB_SHA", "")) is None):
         raise ValueError("SOURCE_ATTEMPT_IDENTITY")
     kind = env.get("GITHUB_EVENT_NAME")
     if kind == "workflow_run":
@@ -43,43 +68,71 @@ def validate_trigger(env, event):
     return kind
 
 
+def _prior_source_state(api_get, run):
+    """Only native evidence of unstarted/skipped capture can release a date."""
+    if (run.get("path") != ".github/workflows/"+WORKFLOW or run.get("run_attempt") != 1
+            or run.get("head_branch") != "main"
+            or (run.get("repository") or {}).get("full_name") != REPOSITORY
+            or (run.get("head_repository") or {}).get("full_name") != REPOSITORY):
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    root = f"repos/{REPOSITORY}/actions/runs/{run['id']}"
+    artifacts, total = _collection(api_get(root+"/artifacts?per_page=100"), "artifacts")
+    # Even an expired or unverified source artifact means an attempt may have
+    # consumed the source budget. Its name is NOT data qualification.
+    if any(a.get("name") == f"stock-market-inputs-{run['id']}-1" for a in artifacts):
+        return "SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE"
+    if total != len(artifacts):
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    jobs, total = _collection(api_get(root+"/jobs?filter=latest&per_page=100"), "jobs")
+    source_jobs = [job for job in jobs if job.get("name") == SOURCE_JOB]
+    if total != len(jobs) or len(source_jobs) != 1:
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    job = source_jobs[0]
+    if job.get("run_id") != run['id']:
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    steps = job.get("steps")
+    if not isinstance(steps, list):
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    capture = [step for step in steps if step.get("name") == CAPTURE_STEP]
+    if len(capture) > 1:
+        return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+    if job.get("status") in ("queued", "waiting", "pending"):
+        if not capture or (capture[0].get("status") in ("queued", "pending")
+                           and not capture[0].get("started_at")):
+            return "NO_SOURCE_STARTED"
+    if (job.get("status") == "completed" and len(capture) == 1
+            and capture[0].get("status") == "completed"
+            and capture[0].get("conclusion") == "skipped"):
+        return "NO_SOURCE_STARTED"
+    return "OTHER_SOURCE_ATTEMPT_UNCERTAIN"
+
+
 def should_capture(env, event, now, api_get):
     kind = validate_trigger(env, event)
     if now.tzinfo is None or now.utcoffset() is None:
         raise ValueError("CLOCK_ZONE")
     local = now.astimezone(ZONE)
-    if kind != "workflow_dispatch" and (
-            local.weekday() >= 5 or local.time() < time(15, 30)):
+    if kind != "workflow_dispatch" and (local.weekday() >= 5 or local.time() < time(15, 30)):
         return False, "OUTSIDE_AUTHORIZED_AFTER_CLOSE_WINDOW", None
     cutoff = datetime.combine(local.date(), time(15, 30), ZONE).astimezone(timezone.utc)
-    run_info = api_get(f"repos/{REPOSITORY}/actions/workflows/{WORKFLOW}/runs?branch=main&per_page=100")
-    runs = run_info.get("workflow_runs")
-    if not isinstance(runs, list) or len(runs) > 100:
-        raise ValueError("RUN_QUERY_SHAPE")
-    parsed = sorted(runs, key=lambda x: (x["created_at"], x["id"]), reverse=True)
-    if len(parsed) >= 100 and datetime.fromisoformat(
-            parsed[-1]["created_at"].replace("Z", "+00:00")) >= cutoff:
+    runs, total = _collection(api_get(
+        f"repos/{REPOSITORY}/actions/workflows/{WORKFLOW}/runs?branch=main&per_page=100"),
+        "workflow_runs")
+    parsed = sorted(runs, key=lambda x: (_clock(x["created_at"]), x["id"]), reverse=True)
+    if total > len(parsed) and (not parsed or _clock(parsed[-1]["created_at"]) >= cutoff):
         return False, "RUN_QUERY_SCOPE_INCOMPLETE", None
+    checked = 0
     for old in parsed:
         if str(old.get("id")) == env["GITHUB_RUN_ID"] or old.get("display_title") != SOURCE_TITLE:
             continue
-        stamp = datetime.fromisoformat(old["created_at"].replace("Z", "+00:00"))
-        if stamp < cutoff:
+        if _clock(old["created_at"]) < cutoff:
             break
-        if old.get("head_branch") != "main":
-            continue
-        if old.get("status") != "completed":
-            return False, "OTHER_SOURCE_ATTEMPT_UNCERTAIN", old["id"]
-        found = api_get(f"repos/{REPOSITORY}/actions/runs/{old['id']}/artifacts?per_page=100")
-        artifacts = found.get("artifacts")
-        if not isinstance(artifacts, list):
-            raise ValueError("ARTIFACT_QUERY_SHAPE")
-        if any(item.get("name") == f"stock-market-inputs-{old['id']}-1"
-               and not item.get("expired", False) for item in artifacts):
-            return False, "SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE", old["id"]
-        # The prior workflow may have attempted source I/O before upload failed,
-        # or may itself be a qualified no-source skip. Neither authorizes a retry.
-        return False, "OTHER_SOURCE_ATTEMPT_UNCERTAIN", old["id"]
+        if checked == MAX_PRIOR_CHECKS:
+            return False, "RUN_QUERY_SCOPE_INCOMPLETE", None
+        checked += 1
+        state = _prior_source_state(api_get, old)
+        if state != "NO_SOURCE_STARTED":
+            return False, state, old["id"]
     return True, "FIRST_QUALIFIED_SOURCE_ATTEMPT", None
 
 
@@ -88,24 +141,28 @@ def main():
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+    deadline = elapsed_time.monotonic() + 45
     def api_get(path):
+        remaining = deadline - elapsed_time.monotonic()
+        if remaining <= 0:
+            raise ValueError("GITHUB_READ_BUDGET_EXHAUSTED")
         response = subprocess.run(["gh", "api", path], check=True, text=True,
-                                  capture_output=True, timeout=30)
+                                  capture_output=True, timeout=min(10, remaining))
         return json.loads(response.stdout)
     now = datetime.now(timezone.utc)
     allowed, reason, prior = should_capture(os.environ, event, now, api_get)
-    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fp:
-        fp.write(f"capture={'true' if allowed else 'false'}\n")
+    # Complete the zero-source receipt BEFORE exporting false to the workflow.
+    # A write failure remains a gate failure, never a success without evidence.
     if not allowed:
         root = Path(args.output)
         root.mkdir(parents=True, exist_ok=False)
         marker = {"version": "daily-stock-native-skip-v1", "repository": REPOSITORY,
-                  "run_id": int(os.environ["GITHUB_RUN_ID"]),
-                  "head_sha": os.environ["GITHUB_SHA"],
-                  "reason": reason, "prior_run_id": prior,
-                  "source_requests": 0, "recorded_at": now.isoformat()}
-        (root/"skip.json").write_text(json.dumps(marker, sort_keys=True)+"\n",
-                                      encoding="utf-8")
+                  "run_id": int(os.environ["GITHUB_RUN_ID"]), "head_sha": os.environ["GITHUB_SHA"],
+                  "reason": reason, "prior_run_id": prior, "source_requests": 0,
+                  "recorded_at": now.isoformat()}
+        (root/"skip.json").write_text(json.dumps(marker, sort_keys=True)+"\n", encoding="utf-8")
+    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fp:
+        fp.write(f"capture={'true' if allowed else 'false'}\n")
     print("source_capture_gate="+("ALLOW" if allowed else reason))
     return 0
 

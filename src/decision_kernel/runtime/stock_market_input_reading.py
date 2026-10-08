@@ -15,7 +15,6 @@ LAST_PATH = 'details/stock/last-qualified-market-inputs.json'
 ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, OSError, RuntimeError, BadZipFile)
 
 
-
 def _factor_coverage_attention(report):
     """Read-only row-count contrast, not a diagnosis of the upstream cause."""
     coverage = report.get('source_row_coverage') or {}
@@ -33,15 +32,15 @@ def _factor_coverage_attention(report):
     return gaps
 
 
-
 SKIP_REASONS = frozenset({'SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE',
                           'OTHER_SOURCE_ATTEMPT_UNCERTAIN',
                           'OUTSIDE_AUTHORIZED_AFTER_CLOSE_WINDOW',
                           'RUN_QUERY_SCOPE_INCOMPLETE'})
 
 
-def _declared_no_source_skip(collector, run):
-    """Distinguish a signed-by-originated-workflow no-source artifact from missing data."""
+def _declared_no_source_skip(collector, run, baseline):
+    """Validate a run/archive-bound zero-source receipt, not a self-signed claim."""
+    _identity(run)
     if run['status'] != 'completed':
         return None
     artifacts = collector.artifacts(run)
@@ -52,23 +51,27 @@ def _declared_no_source_skip(collector, run):
     model.check(not any(item['name'] == source_name for item in artifacts),
                 'source and skip artifact conflict')
     artifact = model.select_artifact(artifacts, skip_name)
+    read_at = model.clock(baseline['checks']['finished_at'])
+    model.check(model.clock(artifact['expires_at']) > read_at, 'no-source receipt expired')
     previous_files, previous_cache = dict(collector.files), dict(collector.archive_cache)
     try:
         files, _ = collector.archive(artifact, run)
-        model.check(set(files) == {'skip.json'} and len(files['skip.json']) <= 2048,
+        model.check(set(files) == {'skip.json'} and 0 < len(files['skip.json']) <= 2048,
                     'invalid no-source receipt inventory')
-        obj = json.loads(files['skip.json'])
+        obj = json.loads(files['skip.json'], object_pairs_hook=inputs.unique)
         model.check(
             isinstance(obj, dict)
             and obj.get('version') == 'daily-stock-native-skip-v1'
             and obj.get('repository') == model.REPOSITORY
-            and obj.get('run_id') == run['id']
+            and type(obj.get('run_id')) is int and obj['run_id'] == run['id']
             and obj.get('head_sha') == run['head_sha']
             and obj.get('reason') in SKIP_REASONS
-            and obj.get('source_requests') == 0
+            and type(obj.get('source_requests')) is int and obj['source_requests'] == 0
             and (obj.get('prior_run_id') is None
-                 or type(obj['prior_run_id']) is int and obj['prior_run_id'] > 0)
-            and model.clock(obj['recorded_at']) is not None,
+                 or type(obj['prior_run_id']) is int and 0 < obj['prior_run_id'] != run['id'])
+            and model.clock(run['created_at']) <= model.clock(obj['recorded_at'])
+                <= model.clock(run['updated_at'])
+            and model.clock(obj['recorded_at']) <= read_at,
             'invalid declared no-source receipt identity')
     finally:
         collector.files, collector.archive_cache = previous_files, previous_cache
@@ -100,7 +103,7 @@ def _read_current_prices(collector, baseline):
             return result
         suppressed = []
         for possible in matches[:6]:
-            marker = _declared_no_source_skip(collector, possible)
+            marker = _declared_no_source_skip(collector, possible, baseline)
             if marker is not None:
                 suppressed.append(marker)
                 continue
