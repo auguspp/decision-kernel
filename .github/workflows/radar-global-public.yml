@@ -1,9 +1,10 @@
 name: radar-global-public
-run-name: "B1 public · ${{ inputs.family || (github.event.schedule == '57 0 * * *' && 'treasury') || (github.event.schedule == '17 1 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }} · ${{ inputs.as-of-date }}"
+run-name: "B1 public · ${{ inputs.family || (github.event.schedule == '7 23 * * *' && 'treasury') || (github.event.schedule == '27 23 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }} · ${{ inputs.as-of-date }}"
 on:
   schedule:
-    - cron: '57 0 * * *'
-    - cron: '17 1 * * *'
+    # 07:07/07:27 UTC+08 reference releases; keep completed-day families later.
+    - cron: '7 23 * * *'
+    - cron: '27 23 * * *'
     - cron: '37 1 * * *'
     - cron: '57 1 * * *'
   workflow_dispatch:
@@ -18,7 +19,7 @@ on:
         type: choice
         options: [treasury, fx, commodities, crypto]
       as-of-date:
-        description: 'Optional YYYY-MM-DD, last 31 days and at most yesterday UTC'
+        description: 'Optional YYYY-MM-DD within 31 days; source-specific date ceiling, never a release guarantee'
         required: false
         type: string
 permissions:
@@ -67,7 +68,7 @@ jobs:
       - name: Capture selected public family without source credentials
         id: capture
         env:
-          FAMILY: ${{ inputs.family || (github.event.schedule == '57 0 * * *' && 'treasury') || (github.event.schedule == '17 1 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }}
+          FAMILY: ${{ inputs.family || (github.event.schedule == '7 23 * * *' && 'treasury') || (github.event.schedule == '27 23 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }}
           AS_OF: ${{ inputs.as-of-date }}
         run: |
           args=()
@@ -91,7 +92,7 @@ jobs:
         if: always() && steps.capture.outcome != 'skipped' && steps.capture.outcome != ''
         uses: actions/upload-artifact@v7.0.1
         with:
-          name: global-public-${{ inputs.family || (github.event.schedule == '57 0 * * *' && 'treasury') || (github.event.schedule == '17 1 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: global-public-${{ inputs.family || (github.event.schedule == '7 23 * * *' && 'treasury') || (github.event.schedule == '27 23 * * *' && 'fx') || (github.event.schedule == '37 1 * * *' && 'commodities') || (github.event.schedule == '57 1 * * *' && 'crypto') }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/global-public/
           retention-days: 30
           if-no-files-found: warn
