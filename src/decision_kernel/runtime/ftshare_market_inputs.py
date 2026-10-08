@@ -91,6 +91,10 @@ def request(route, params):
     elif route in history.ROUTES:
         history.validate_request(route, params)
         endpoint = history.ROUTES[route]
+    elif route == 'yinquan_ftshare_56':
+        from . import yinquan_ftshare_56 as study
+        study.validate_request(params)
+        endpoint = history.ROUTES['history_candles']
     else:
         validate_request(route, params)
         endpoint = BASE + ROUTES[route]
@@ -100,7 +104,7 @@ def request(route, params):
     req = Request(endpoint + '?' + urlencode(params, doseq=route == 'auction_minutes'), headers={
         'FTSHARE_API_KEY': key, 'Accept': 'application/json', 'Accept-Encoding': 'identity',
         'User-Agent': 'decision-kernel/' + VERSION})
-    if route == pilot.ROUTE:
+    if route in (pilot.ROUTE, 'yinquan_ftshare_56'):
         req.add_header('X-Client-Name', 'ft-claw')
         req.add_header('Content-Type', 'application/json')
     try:
