@@ -27,7 +27,7 @@ SYMBOLS = (
     "603551.SH", "603580.SH",
 )
 START, END, LIMIT = "20230101", "20260930", "1800"
-DAILY = "ts_code,trade_date,open,high,low,close,vol,amount"
+DAILY = "ts_code,trade_date,open,high,low,close,pre_close,vol,amount"
 BASIC = "ts_code,trade_date,turnover_rate"
 MAX_CALLS, MAX_TOTAL_BYTES = 28, 24 * 1024 * 1024
 REQUIRED = {
@@ -67,6 +67,15 @@ def decimal(raw, *, positive=False, nullable=False):
             (v > 0 if positive else v >= 0), "NUM_RANGE")
     return str(v)
 
+def timestamp(value):
+    require(isinstance(value, str), "CLOCK_FORMAT")
+    try:
+        instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError("CLOCK_FORMAT") from exc
+    require(instant.tzinfo is not None and instant.utcoffset() is not None, "CLOCK_UNZONED")
+    return instant
+
 def rows(raw, spec):
     obj = relay.decode(raw)
     require(obj.get("code") == 0 and obj.get("ok") is not False and
@@ -93,8 +102,8 @@ def rows(raw, spec):
         require(entry.get("ts_code") == spec["params"]["ts_code"], "SYMBOL_MISMATCH")
         d = day(entry.get("trade_date"))
         require(d not in out, "DUPLICATE_DATE")
-        keys = ("open", "high", "low", "close", "vol", "amount") if spec["api"] == "daily" else ("turnover_rate",)
-        row = {k: decimal(entry.get(k), positive=k in ("open", "high", "low", "close"),
+        keys = ("open", "high", "low", "close", "pre_close", "vol", "amount") if spec["api"] == "daily" else ("turnover_rate",)
+        row = {k: decimal(entry.get(k), positive=k in ("open", "high", "low", "close", "pre_close"),
                          nullable=k == "turnover_rate") for k in keys}
         if spec["api"] == "daily":
             lo, hi, o, c = (Decimal(row[k]) for k in ("low", "high", "open", "close"))
@@ -111,15 +120,18 @@ def normalized(raw_by_index):
         require(set(hsl) <= set(bars), "UNMATCHED_BASIC_DATE")
         out = io.StringIO(newline="")
         writer = csv.writer(out, lineterminator="\n")
-        writer.writerow(("date", "open", "high", "low", "close", "turnover_rate", "code"))
+        writer.writerow(("date", "open", "high", "low", "close", "pre_close", "vol", "amount", "turnover_rate", "code"))
         for d in sorted(bars):
             bar = bars[d]
             writer.writerow((d, bar["open"], bar["high"], bar["low"], bar["close"],
+                             bar["pre_close"], bar["vol"], bar["amount"],
                              hsl.get(d, {}).get("turnover_rate") or "", symbol))
         csvs[symbol[:6] + ".csv"] = out.getvalue().encode("utf-8")
         summary.append({"symbol": symbol, "price_rows": len(bars), "hsl_rows": len(hsl),
                         "matched_hsl": sum(hsl.get(d, {}).get("turnover_rate") is not None for d in bars),
+                        "missing_hsl": sum(hsl.get(d, {}).get("turnover_rate") is None for d in bars),
                         "first": min(bars) if bars else None, "last": max(bars) if bars else None,
+                        "session_coverage": "OBSERVED_ROWS_ONLY_NOT_CALENDAR_CERTIFIED",
                         "empty_is_no_trading": False})
     return csvs, summary
 
@@ -158,7 +170,7 @@ def capture(root, env, *, transport=None):
               "automatic_retry": False, "fallback": False,
               "source_historical_pit": "NOT_ESTABLISHED", "investment_authority": "NONE"}
     _write(root / "receipt.json", report)
-    total, raw_map = 0, {}
+    total, raw_map, last_received = 0, {}, None
     for i, spec in enumerate(plan()):
         record = {"index": i, **spec, "status": "REQUEST_STARTED", "raw_file": None}
         report["calls"].append(record)
@@ -168,6 +180,10 @@ def capture(root, env, *, transport=None):
             response = transport(spec["api"], p, credential)
             require(isinstance(response, dict) and
                     set(response) == {"http_status", "raw", "requested_at", "received_at", "headers"}, "TRANSPORT_SHAPE")
+            requested, received = timestamp(response["requested_at"]), timestamp(response["received_at"])
+            require(requested <= received and (last_received is None or last_received <= requested),
+                    "SOURCE_CLOCK_ORDER")
+            last_received = received
             raw = response["raw"]
             require(isinstance(raw, bytes) and 0 < len(raw) <= relay.MAX_BODY and
                     total + len(raw) <= MAX_TOTAL_BYTES, "SOURCE_BYTE_BUDGET")
@@ -178,7 +194,10 @@ def capture(root, env, *, transport=None):
                           bytes=len(raw), http_status=response["http_status"],
                           requested_at=response["requested_at"], received_at=response["received_at"])
             require(response["http_status"] == 200, "HTTP_NOT_SUCCESS")
-            rows(raw, spec)
+            checked = rows(raw, spec)
+            if spec["api"] == "daily_basic":
+                prices = rows(raw_map[i-1], plan()[i-1])
+                require(set(checked) <= set(prices), "UNMATCHED_BASIC_DATE")
             raw_map[i] = raw
             record["status"] = "VALIDATED"
         except Exception as exc:
@@ -208,7 +227,7 @@ def verify(root):
             report["max_calls"] == MAX_CALLS and report["max_raw_bytes"] == MAX_TOTAL_BYTES and
             report["automatic_retry"] is False and report["fallback"] is False,
             "RECEIPT_SCOPE")
-    calls, collected, total = report["calls"], {}, 0
+    calls, collected, total, last_received = report["calls"], {}, 0, None
     require(1 <= len(calls) <= MAX_CALLS, "CALL_COUNT")
     for i, item in enumerate(calls):
         require(item["index"] == i and {k: item[k] for k in ("api", "params")} == plan()[i],
@@ -220,6 +239,9 @@ def verify(root):
         path = item["raw_file"]
         require(path == "raw/" + str(i + 1).zfill(2) + "-" + item["api"] + "-" +
                 item["params"]["ts_code"] + ".json", "RAW_PATH")
+        req, got = timestamp(item["requested_at"]), timestamp(item["received_at"])
+        require(req <= got and (last_received is None or last_received <= req), "RECEIPT_CLOCK_ORDER")
+        last_received = got
         raw = (root / path).read_bytes()
         total += len(raw)
         require(len(raw) == item["bytes"] and sha256(raw).hexdigest() == item["sha256"] and

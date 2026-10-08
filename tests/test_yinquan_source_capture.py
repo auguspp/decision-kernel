@@ -1,6 +1,6 @@
 """No network or secrets: scoped source, failure, replay, and non-PIT tests."""
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import pytest
 from decision_kernel.runtime import yinquan_source_capture as s
@@ -15,7 +15,7 @@ def env():
 def body(api, code, bad=False):
     fields = s.DAILY.split(",") if api == "daily" else s.BASIC.split(",")
     if api == "daily":
-        row = [code, "20260930", "10", "11", "9", "10.5", "10000", "100000"]
+        row = [code, "20260930", "10", "11", "9", "10.5", "10", "10000", "100000"]
     else:
         row = [code, "20260930", "2.5"]
     return json.dumps({"code": 0, "api_name": api,
@@ -24,9 +24,11 @@ def body(api, code, bad=False):
 
 def fake(api, params, key):
     assert key == "fake-test-only"
+    slot = s.SYMBOLS.index(params["ts_code"]) * 2 + (api == "daily_basic")
+    now = datetime(2026, 10, 8, 1, tzinfo=timezone.utc) + timedelta(seconds=slot * 2)
     return {"http_status": 200, "raw": body(api, params["ts_code"]),
-            "requested_at": "2026-10-08T01:00:00Z",
-            "received_at": "2026-10-08T01:00:01Z", "headers": {}}
+            "requested_at": now.isoformat(),
+            "received_at": (now + timedelta(seconds=1)).isoformat(), "headers": {}}
 
 def test_complete_and_replay(tmp_path):
     root = tmp_path / "research"
@@ -89,5 +91,24 @@ def test_missing_hsl_remains_blank():
         else:
             raw[i] = body(spec["api"], spec["params"]["ts_code"])
     csvs, coverage = s.normalized(raw)
-    assert "10.5,,000151.SZ" in csvs["000151.csv"].decode()
+    assert "100000,,000151.SZ" in csvs["000151.csv"].decode()
     assert all(x["matched_hsl"] == 0 for x in coverage)
+
+
+def test_clock_must_be_ordered_and_replay_checks_it(tmp_path):
+    def backwards(api, params, key):
+        r = fake(api, params, key)
+        if params["ts_code"] == "000002.SZ":
+            r["requested_at"] = "2026-10-08T00:00:00Z"
+        return r
+    root = tmp_path / "clock"
+    r = s.capture(root, env(), transport=backwards)
+    assert r["status"] == "STOPPED_AT_2"
+    assert s.verify(root)["capture_status"] == r["status"]
+    good = tmp_path / "good"
+    s.capture(good, env(), transport=fake)
+    receipt = json.loads((good / "receipt.json").read_text())
+    receipt["calls"][1]["received_at"] = "2026-10-08T00:00:00Z"
+    (good / "receipt.json").write_text(json.dumps(receipt))
+    with pytest.raises(ValueError, match="RECEIPT_CLOCK_ORDER"):
+        s.verify(good)

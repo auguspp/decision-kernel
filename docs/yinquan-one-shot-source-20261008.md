@@ -22,8 +22,9 @@ At most 28 HTTPS requests: daily and daily_basic for 14 exact names; one
 attempt each; hard stop on first refusal, unknown response or timeout. No
 source retry, no FTShare/HiThink fallback, no all-market call.
 
-Save exact raw responses, query identities, hash, clocks, failure checkpoint,
-normalized CSV and coverage only to one 30-day Actions artifact, never
+Save exact raw responses, query identities, hash, ordered clocks, failure checkpoint,
+normalized CSV (OHLC, pre_close, volume, amount, daily turnover_rate) and per-name
+coverage counts only to one 30-day Actions artifact, never
 the read-model, Git source tree, Brief, News, Quick, Watch or Sites. Verify
 the artifact from retained bytes with no credentials and no network requests.
 Raw vendor data are retained only under the existing source-use boundaries;
