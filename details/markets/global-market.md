@@ -151,7 +151,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3.zip)
 
 ## Coinbase BTC / ETH 日线
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：37747235131
 # Coinbase BTC / ETH 日线
