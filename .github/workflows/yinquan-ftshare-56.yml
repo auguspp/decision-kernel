@@ -54,7 +54,7 @@ jobs:
           recent=max(eligible,key=lambda x:(x['created_at'],x['id']))
           assert recent['status']=='completed' and recent['conclusion']=='success', 'MAIN_CI_NOT_SUCCESS'
           PY
-          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/yinquan-ftshare-56-study.yml/runs" \
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/yinquan-ftshare-56.yml/runs" \
             -f per_page=100 -f page=1 > "$RUNNER_TEMP/yinquan-runs.json"
           python - <<'PY'
           import json, os
