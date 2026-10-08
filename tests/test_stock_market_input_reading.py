@@ -22,13 +22,20 @@ IDENTITY = {'GITHUB_REPOSITORY':'auguspp/decision-kernel', 'GITHUB_REF':'refs/he
     'GITHUB_SHA':'a'*40, 'GITHUB_RUN_ID':'123'}
 
 
-def fixtures(tmp_path, monkeypatch, *, live=True, run_id=123, at=NOW, fail=None):
+def fixtures(tmp_path, monkeypatch, *, live=True, run_id=123, at=NOW, fail=None, sparse_60_factor=False):
     root = tmp_path/f'capture-{run_id}'
     # Simulated native client only: these tests never access a real source.
     fetch = make_request(at, fail=fail)
     def native_request(api, params, *, retry_waits, deadline):
         assert retry_waits == (30, 90) and isinstance(deadline, float)
-        return fetch(api, params)
+        response = fetch(api, params)
+        if sparse_60_factor and api == 'adj_factor':
+            base = inputs.calendar(calendar_body(at), at)['bases']['60']
+            if params['trade_date'] == base:
+                original = json.loads(response['attempts'][-1]['raw'])
+                original['data']['items'] = []
+                response['attempts'][-1]['raw'] = inputs.dumps(original)
+        return response
     monkeypatch.setattr(relay, 'request', native_request)
     identity = {**IDENTITY, 'GITHUB_RUN_ID': str(run_id)}
     report = inputs.capture(root, observed_at=at, workflow=identity,
@@ -152,7 +159,8 @@ def two_runs(tmp_path, monkeypatch, *, latest_state='failed', saved_live=True):
     old = fixtures(tmp_path, monkeypatch, live=saved_live)
     end = inputs.calendar(calendar_body(), NOW)['end_date']
     latest = fixtures(tmp_path, monkeypatch, run_id=124, at=NOW+timedelta(hours=1),
-                      fail=('daily', end) if latest_state == 'failed' else None)
+                      fail=('daily', end) if latest_state == 'failed' else None,
+                      sparse_60_factor=latest_state == 'sparse_60_factor')
     collector, baseline, files, run, report = latest
     if latest_state == 'failed':
         run['conclusion'] = 'failure'
@@ -226,3 +234,34 @@ def test_usable_latest_never_replaced_to_improve_coverage(tmp_path, monkeypatch)
     assert result['qualified_windows'] == latest[4]['qualified_windows']
     assert 'last_qualified_result' not in result and reader.LAST_PATH not in collector.files
     assert reads == [124]
+
+
+def test_sparse_60day_factor_can_show_separate_qualified_old_window(tmp_path, monkeypatch):
+    collector, baseline, latest, old, _, reads = two_runs(
+        tmp_path, monkeypatch, latest_state='sparse_60_factor')
+    result = reader.read_current(collector, baseline)
+    base = inputs.calendar(calendar_body(), NOW)['bases']['60']
+    assert result['qualified_windows'] == {'5': 1, '20': 1, '60': 0}
+    assert result['source_coverage_attention'] == [{
+        'window': '60', 'base_date': base, 'price_rows': 1, 'factor_rows': 0,
+        'status': 'FACTOR_ROWS_FEWER_THAN_DATE_PRICE_ROWS'}]
+    saved = result['last_qualified_result']
+    assert saved['qualified_windows'] == {'5': 1, '20': 1, '60': 1}
+    assert saved['selection_reason'] == 'SAME_SESSION_WINDOW_COVERAGE_IMPROVEMENT'
+    assert saved['origin_run']['id'] == 123 and result['latest_attempt']['id'] == 124
+    assert json.loads(collector.files[reader.PATH]) == latest[4]
+    assert json.loads(collector.files[reader.LAST_PATH]) == old[4]
+    assert reads == [124, 123]
+    assert '两批证券/因子不拼接' in result['summary']
+
+
+def test_partial_factor_bad_saved_candidate_is_not_masked(tmp_path, monkeypatch):
+    collector, baseline, latest, old, _, _ = two_runs(
+        tmp_path, monkeypatch, latest_state='sparse_60_factor')
+    old[2]['report.json'] = b'{}'
+    result = reader.read_current(collector, baseline)
+    assert result['qualified_windows'] == {'5': 1, '20': 1, '60': 0}
+    assert 'last_qualified_result' not in result
+    assert result['last_qualified_reading_gap']['status'] == 'SAVED_INPUT_UNAVAILABLE'
+    assert json.loads(collector.files[reader.PATH]) == latest[4]
+    assert reader.LAST_PATH not in collector.files

@@ -69,3 +69,12 @@
 候选不合格时保留latest结果，记录last_qualified_reading_gap并回滚候选留存；有限查询完整性另记run_query_complete。保存副本是只读历史输入，不是生产恢复、自动Research或投资授权。自然后续运行/分析消费仍按C原责任验收；artifact过期后的历史阅读副本继续按原固定R读取，不升级当前来源资格。
 
 Reuse Decision: THIN_ADAPTER。内部复用current-state.md既有最近尝试/最后合格结果语义、Collector.archive/retain与stock_market_inputs.verify。施工前检索并读[requests-cache 1.3.3 stale_if_error实现](https://requests-cache.readthedocs.io/en/stable/_modules/requests_cache/session.html)和[过期合同](https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html)，并核[GitHub artifact API](https://docs.github.com/en/rest/actions/artifacts?apiVersion=2022-11-28)。HTTP缓存可提供旧响应，但本处输入是已保存的run/artifact，并须同时展示最新失败与完整旧报告身份；给来源客户端引入持久缓存会新增存储且不能替代现有原件回放。故不安装/复制外部代码、不新增许可/运行成本，薄适配既有读取消费者即可；退出时同改该reader、正文链接及专属反例，旧报告/失败保留。
+
+
+## 2026-10-08 因子返回条数异常与同日历史资格连续性（有限消费者修复）
+
+在R=ee173b793bcdedb1d9d6463b5735e05cdba2b3b8，9月30日输入的7月7日基期日线返回5517条，复权因子仅5条；60日可比5/5561。相同市场终点的旧合格保存批复权因子返回5536条、60日可比5502/5561。成功HTTP/成功原件验证不是足额证券因子覆盖证明；上游具体原因仍UNKNOWN。
+
+复用原日常reader/Collector与一次候选恢复限制，不增加任何来源API调用或重试。当前已保存原报告的每个比较基期，若同日因子返回行数小于价格行数，新增只读source_coverage_attention；最新合格的5/20日继续有效。原有最近100条内仅审一个较早completed/success日常run，严格校验原artifact身份、原响应重建、日期/版本和有效期限；只有同一市场日、受影响期限的已验证可比数确实更高，才把旧批完整单独刊为last_qualified_result，同时保留两批run/cutoff/分母，不拼接端点、证券名单或因子。候选不改善则回滚它的留存，不为填补覆盖率向更早批次无限倒找；旧“最新没有任何可比期限”的原有回退资格不改。发布说明不得把此阅读连续性说成因子源已修好。
+
+本后继属于数据资格可见性/消费者不静默失明的修复。**尚未补到10月8日市场日的整表多期限输入**，也未修复供应商7月7日真实因子覆盖；无新日程、源请求、费用、研究、Watch/Odds、交易。既有正常输入时钟下一自然运行与同R publisher/Brief实际使用分别验收，不提前签成功。
