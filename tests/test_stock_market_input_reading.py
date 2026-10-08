@@ -318,3 +318,42 @@ def test_bounded_recovery_does_not_jump_past_corrupt_candidate(tmp_path, monkeyp
     assert result['last_qualified_checks'][1]['status'] == 'SAVED_INPUT_UNAVAILABLE_STOP'
     assert 'last_qualified_result' not in result
     assert reader.LAST_PATH not in collector.files
+
+
+
+def test_native_completed_no_source_marker_is_not_mistaken_for_input_failure(tmp_path, monkeypatch):
+    collector, baseline, files, source_run, report = fixtures(tmp_path, monkeypatch)
+    from copy import deepcopy
+    skip_run = deepcopy(source_run)
+    skip_run.update(id=124, event='schedule',
+                    created_at=(NOW+timedelta(minutes=10)).isoformat())
+    marker = {'version':'daily-stock-native-skip-v1', 'repository':model.REPOSITORY,
+              'run_id':124,'head_sha':skip_run['head_sha'],
+              'reason':'SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE','prior_run_id':123,
+              'source_requests':0,'recorded_at':(NOW+timedelta(minutes=10)).isoformat()}
+    skip_artifact = {'name':'stock-market-inputs-skip-124-1',
+                     'expires_at':'2026-11-01T00:00:00Z'}
+    regular_artifact = collector.artifacts(source_run)[0]
+    collector.api.get = lambda _: {'workflow_runs':[skip_run,source_run],'total_count':2}
+    collector.artifacts = lambda run: [skip_artifact] if run['id']==124 else [regular_artifact]
+    collector.archive = lambda artifact, run: (({'skip.json':json.dumps(marker).encode('utf-8')}
+            if run['id']==124 else files), {'artifact_id':run['id']})
+    result = reader.read_current(collector, baseline)
+    assert result['latest_attempt']['id']==123
+    assert result['qualified_windows']==report['qualified_windows']
+    assert result['source_capture_suppressed']==[{
+        'run_id':124,'reason':'SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE',
+        'prior_run_id':123,'source_requests':0}]
+    assert json.loads(collector.files[reader.PATH])==report
+
+
+def test_conflicting_source_and_skip_artifact_fails_closed(tmp_path, monkeypatch):
+    collector, baseline, files, source_run, report = fixtures(tmp_path, monkeypatch)
+    source_run['id']=124
+    collector.api.get = lambda _: {'workflow_runs':[source_run],'total_count':1}
+    original=collector.artifacts(source_run)[0]
+    collector.artifacts=lambda _: [original,{'name':'stock-market-inputs-skip-124-1',
+                                          'expires_at':'2026-11-01T00:00:00Z'}]
+    result=reader.read_current(collector,baseline)
+    assert result['status']=='DAILY_INPUT_READING_GAP_NOT_QUIET'
+    assert reader.PATH not in collector.files

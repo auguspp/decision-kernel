@@ -1,6 +1,7 @@
 """Read the daily stock artifact through the existing Collector; no source I/O."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from zipfile import BadZipFile
@@ -32,6 +33,49 @@ def _factor_coverage_attention(report):
     return gaps
 
 
+
+SKIP_REASONS = frozenset({'SOURCE_ALREADY_RETAINED_THIS_CLOSE_DATE',
+                          'OTHER_SOURCE_ATTEMPT_UNCERTAIN',
+                          'OUTSIDE_AUTHORIZED_AFTER_CLOSE_WINDOW',
+                          'RUN_QUERY_SCOPE_INCOMPLETE'})
+
+
+def _declared_no_source_skip(collector, run):
+    """Distinguish a signed-by-originated-workflow no-source artifact from missing data."""
+    if run['status'] != 'completed':
+        return None
+    artifacts = collector.artifacts(run)
+    source_name = f'{inputs.TITLE}-{run["id"]}-1'
+    skip_name = f'{inputs.TITLE}-skip-{run["id"]}-1'
+    if not any(item['name'] == skip_name for item in artifacts):
+        return None
+    model.check(not any(item['name'] == source_name for item in artifacts),
+                'source and skip artifact conflict')
+    artifact = model.select_artifact(artifacts, skip_name)
+    previous_files, previous_cache = dict(collector.files), dict(collector.archive_cache)
+    try:
+        files, _ = collector.archive(artifact, run)
+        model.check(set(files) == {'skip.json'} and len(files['skip.json']) <= 2048,
+                    'invalid no-source receipt inventory')
+        obj = json.loads(files['skip.json'])
+        model.check(
+            isinstance(obj, dict)
+            and obj.get('version') == 'daily-stock-native-skip-v1'
+            and obj.get('repository') == model.REPOSITORY
+            and obj.get('run_id') == run['id']
+            and obj.get('head_sha') == run['head_sha']
+            and obj.get('reason') in SKIP_REASONS
+            and obj.get('source_requests') == 0
+            and (obj.get('prior_run_id') is None
+                 or type(obj['prior_run_id']) is int and obj['prior_run_id'] > 0)
+            and model.clock(obj['recorded_at']) is not None,
+            'invalid declared no-source receipt identity')
+    finally:
+        collector.files, collector.archive_cache = previous_files, previous_cache
+    return {'run_id': run['id'], 'reason': obj['reason'],
+            'prior_run_id': obj.get('prior_run_id'), 'source_requests': 0}
+
+
 def _read_current_prices(collector, baseline):
     old_files, old_cache = dict(collector.files), dict(collector.archive_cache)
     result = {'status': 'DAILY_INPUT_NOT_AVAILABLE_NOT_QUIET', 'source': inputs.SOURCE,
@@ -49,11 +93,27 @@ def _read_current_prices(collector, baseline):
         result['_run_query'] = query
         runs = query['workflow_runs']
         model.check(isinstance(runs, list) and len(runs) <= 100, 'daily stock run list')
-        matches = [r for r in runs if r.get('display_title') == inputs.TITLE]
+        matches = sorted((r for r in runs if r.get('display_title') == inputs.TITLE),
+                         key=lambda r: (model.clock(r['created_at']), r['id']), reverse=True)
         result['run_query_complete'] = query.get('total_count', len(runs)) <= len(runs)
         if not matches:
             return result
-        run = max(matches, key=lambda r: (model.clock(r['created_at']), r['id']))
+        suppressed = []
+        for possible in matches[:6]:
+            marker = _declared_no_source_skip(collector, possible)
+            if marker is not None:
+                suppressed.append(marker)
+                continue
+            run = possible
+            break
+        if suppressed:
+            result['source_capture_suppressed'] = suppressed
+            skipped_ids = {m['run_id'] for m in suppressed}
+            matches = [r for r in matches if r['id'] not in skipped_ids]
+        if run is None:
+            result.update(status='SOURCE_ATTEMPT_NOT_FOUND_AFTER_BOUNDED_SKIP_RESOLUTION',
+                summary='原收盘时钟出现无来源请求回执；本次至多六条跳过记录后未取得实际输入。')
+            return result
         result['latest_attempt'] = model.concise_run(run)
         _identity(run)
         if run['status'] != 'completed':
@@ -161,7 +221,7 @@ def _read_current_prices(collector, baseline):
 
 def _identity(run):
     model.check(run['path'] == inputs.WORKFLOW and run['head_branch'] == 'main'
-                and run['event'] in ('schedule', 'workflow_dispatch') and run['run_attempt'] == 1
+                and run['event'] in ('schedule', 'workflow_dispatch', 'workflow_run') and run['run_attempt'] == 1
                 and model.SHA.fullmatch(run['head_sha']) is not None, 'daily stock run identity')
     for field in ('repository', 'head_repository'):
         model.check(run[field]['full_name'] == model.REPOSITORY, 'daily stock repository identity')
