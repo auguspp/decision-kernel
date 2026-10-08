@@ -1,11 +1,34 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "23.88",
-  "capture_hash": "c151da89bd140000689b628686d54ec186e9c2d0d902a9c5c75d02a855ed8387",
+  "capture_age_hours": "0.17",
+  "capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
   "current_reading": {
-    "control": null,
+    "control": {
+      "blockers": [],
+      "checked_at": "2026-10-08T16:37:44.234224+00:00",
+      "code_commit": "a71ec685f1c6bdeae49f7cde682b5305ed06de92",
+      "comparison_source_quota": "SEPARATE_EXPLICIT_TWELVE_CALL_CAP_NOT_FREE_OR_UNCOUNTED_BY_PROVIDER",
+      "decision": "RUN_INITIAL_OR_DAILY",
+      "event": "schedule",
+      "excluded_comparison_runs": [
+        37034506941,
+        36825109495,
+        36821818724
+      ],
+      "hithink_activity": "NO_VISIBLE_PEER",
+      "investment_authority": "NONE",
+      "pending_delivery_count": 6,
+      "pending_source_run_id": null,
+      "prior_read_status": "EXACT_PRIOR_STATE_READ",
+      "prior_reading": "506f56c256cd3c8e0b8c08fa02326426b14f0591",
+      "run_id": 37810254690,
+      "skip_hithink": false,
+      "target_date": "2026-10-09",
+      "today_invocations": 1,
+      "version": "smart-money-observation-v1"
+    },
     "latest_attempt": {
-      "conclusion": null,
+      "conclusion": "success",
       "created_at": "2026-10-08T16:37:32Z",
       "event": "schedule",
       "head_sha": "a71ec685f1c6bdeae49f7cde682b5305ed06de92",
@@ -15,60 +38,47 @@
       "path": ".github/workflows/radar-smart-money.yml",
       "run_attempt": 1,
       "run_started_at": "2026-10-08T16:37:32Z",
-      "status": "in_progress",
-      "updated_at": "2026-10-08T16:37:36Z"
+      "status": "completed",
+      "updated_at": "2026-10-08T16:52:26Z"
     },
-    "previous_status": "EXACT_PREVIOUS_506f56c256cd3c8e0b8c08fa02326426b14f0591",
-    "run_metadata_reads": [
-      {
-        "attempt": 1,
-        "attempt_status": "in_progress",
-        "attempt_updated_at": "2026-10-08T16:37:36Z",
-        "checked_at": "2026-10-08T16:39:30.960347+00:00",
-        "endpoint": "actions/runs/37810254690/attempts/1",
-        "meaning": "SAME_IDENTITY_ATTEMPT_READ_NOT_STATUS_INFERENCE_OR_RETRY",
-        "reads": 1,
-        "run_id": 37810254690,
-        "run_status": "in_progress",
-        "run_updated_at": "2026-10-08T16:37:35Z"
-      }
-    ],
-    "status": "AWAITING_CURRENT_CAPTURE",
-    "uses_prior_observation": true
+    "previous_status": "EXACT_PREVIOUS_088ee853048655ca35cf6cf7bd0e7283bdb0cdfe",
+    "run_metadata_reads": [],
+    "status": "PARTIAL_WITH_EXPLICIT_GAPS",
+    "uses_prior_observation": false
   },
-  "cutoff": "2026-10-07T16:46:35.501587+00:00",
+  "cutoff": "2026-10-08T16:44:25.493850+00:00",
   "families": {
     "activity": {
       "ambiguous_disclosure_groups": 2,
-      "companies": 3007,
+      "companies": 3002,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 5223,
+      "current_rows": 5149,
       "deferred": [],
       "earliest_period": "2026-01-01",
-      "event_groups": 5763,
+      "event_groups": 5735,
       "field_gap_rows": 0,
-      "known_institution_codes": 670,
-      "latest_period": "2026-09-30",
+      "known_institution_codes": 661,
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 2,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "activity",
           "field_gap_rows": 0,
-          "normalized_rows": 5223,
+          "normalized_rows": 5149,
           "partition": "disclosures",
           "provider_pages": 11,
-          "provider_total": 5225,
-          "returned_rows": 5225,
+          "provider_total": 5151,
+          "returned_rows": 5151,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 2,
@@ -76,89 +86,89 @@
         }
       ],
       "roster_coverage": "PROVIDER_EVENT_SUMMARIES_NOT_ALL_PARTICIPANT_ROWS",
-      "saved_records": 5763,
+      "saved_records": 5735,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "机构调研活动",
       "unidentified_event_rows": 0,
       "unresolved_partitions": 0,
-      "unresolved_roster_rows": 2605
+      "unresolved_roster_rows": 2610
     },
     "executives": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 660,
+      "companies": 656,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 2730,
+      "current_rows": 2739,
       "deferred": [],
-      "earliest_period": "2026-06-30",
+      "earliest_period": "2026-07-01",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "executives",
           "field_gap_rows": 0,
-          "normalized_rows": 2730,
+          "normalized_rows": 2739,
           "partition": "disclosures",
           "provider_pages": 14,
-          "provider_total": 2770,
-          "returned_rows": 2770,
+          "provider_total": 2780,
+          "returned_rows": 2780,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3311,
+      "saved_records": 3283,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "高管实际持股变动",
       "unresolved_partitions": 0
     },
     "forecasts": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 1573,
+      "companies": 1565,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 3223,
+      "current_rows": 3203,
       "deferred": [],
-      "earliest_period": "2026-06-30",
+      "earliest_period": "2026-07-01",
       "field_gap_rows": 0,
-      "latest_period": "2026-10-07",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "forecasts",
           "field_gap_rows": 0,
-          "normalized_rows": 3223,
+          "normalized_rows": 3203,
           "partition": "disclosures",
           "provider_pages": 33,
-          "provider_total": 3223,
-          "returned_rows": 3223,
+          "provider_total": 3203,
+          "returned_rows": 3203,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 3333,
+      "saved_records": 3319,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "研报与预期版本",
       "unresolved_partitions": 0
@@ -168,37 +178,37 @@
       "companies": 702,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 1188,
+      "current_rows": 1203,
       "deferred": [],
       "earliest_period": "2026-06-29",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "holder_changes",
           "field_gap_rows": 0,
-          "normalized_rows": 1188,
+          "normalized_rows": 1203,
           "partition": "disclosures",
           "provider_pages": 3,
-          "provider_total": 1188,
-          "returned_rows": 1188,
+          "provider_total": 1203,
+          "returned_rows": 1203,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 1464,
+      "saved_records": 1487,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "股东披露增减持区间",
       "unresolved_partitions": 0
@@ -206,13 +216,13 @@
     "holdings": {
       "ambiguous_disclosure_groups": 0,
       "companies": 5609,
-      "complete_partitions": 0,
+      "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 0,
+      "current_rows": 10,
       "deferred": [
         {
-          "begin": "2026-07-10",
-          "end": "2026-10-08",
+          "begin": "2026-07-11",
+          "end": "2026-10-09",
           "family": "holdings",
           "partition": "2026-06-30",
           "previous_cutoff": "2026-10-02T17:59:19.489679+00:00",
@@ -221,78 +231,51 @@
       ],
       "earliest_period": "2026-06-30",
       "field_gap_rows": 0,
-      "latest_period": "2026-06-30",
-      "named_individual_provider_rows": 24346,
+      "latest_period": "2026-09-30",
+      "named_individual_provider_rows": 24353,
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
-          "complete": false,
+          "begin": "2026-07-11",
+          "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
-          "failure": "PROVIDER_DATA_UNAVAILABLE",
+          "failure": null,
           "family": "holdings",
           "field_gap_rows": 0,
-          "normalized_rows": 0,
+          "normalized_rows": 10,
           "partition": "2026-09-30",
-          "provider_pages": null,
-          "provider_total": null,
-          "returned_rows": 0,
+          "provider_pages": 1,
+          "provider_total": 10,
+          "returned_rows": 10,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
-          "status": "PARTIAL_OR_UNAVAILABLE"
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 56147,
-      "status": "PARTIAL_OR_UNAVAILABLE",
+      "saved_records": 56157,
+      "status": "CURRENT_SCOPES_AVAILABLE_WITH_HISTORICAL_GAPS",
       "title": "具名个人与机构报告期持股",
       "unresolved_partitions": 6,
       "verified_famous_investor_identity": "NOT_CERTIFIED_FROM_NAME_OR_TOP_TEN_APPEARANCE"
     },
     "hot_money": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 169,
+      "companies": 187,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 257,
+      "current_rows": 260,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-23",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-23",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "hot_money",
-          "field_gap_rows": 0,
-          "normalized_rows": 51,
-          "partition": "2026-09-23",
-          "provider_pages": 1,
-          "provider_total": 16,
-          "returned_rows": 16,
-          "row_errors": [],
-          "source_disclosure_counts": [
-            {
-              "count": 59,
-              "stock_count": 58
-            }
-          ],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-24",
@@ -400,52 +383,52 @@
           ],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-10-08",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-10-08",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "hot_money",
+          "field_gap_rows": 0,
+          "normalized_rows": 54,
+          "partition": "2026-10-08",
+          "provider_pages": 1,
+          "provider_total": 12,
+          "returned_rows": 12,
+          "row_errors": [],
+          "source_disclosure_counts": [
+            {
+              "count": 68,
+              "stock_count": 62
+            }
+          ],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 390,
+      "saved_records": 444,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "游资标签公开轨迹",
       "unresolved_partitions": 0
     },
     "institutional": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 149,
+      "companies": 176,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 179,
+      "current_rows": 189,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-23",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-23",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "institutional",
-          "field_gap_rows": 0,
-          "normalized_rows": 33,
-          "partition": "2026-09-23",
-          "provider_pages": 1,
-          "provider_total": 33,
-          "returned_rows": 33,
-          "row_errors": [],
-          "source_disclosure_counts": [
-            {
-              "count": 33,
-              "stock_count": 32
-            }
-          ],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-24",
@@ -553,9 +536,36 @@
           ],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-10-08",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-10-08",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "institutional",
+          "field_gap_rows": 0,
+          "normalized_rows": 43,
+          "partition": "2026-10-08",
+          "provider_pages": 1,
+          "provider_total": 43,
+          "returned_rows": 43,
+          "row_errors": [],
+          "source_disclosure_counts": [
+            {
+              "count": 43,
+              "stock_count": 41
+            }
+          ],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 290,
+      "saved_records": 333,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "龙虎榜机构席位",
       "unresolved_partitions": 0
@@ -574,12 +584,12 @@
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -596,12 +606,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -618,12 +628,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -640,12 +650,12 @@
         },
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "north_holdings",
@@ -675,31 +685,9 @@
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-23",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-23",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "northbound",
-          "field_gap_rows": 0,
-          "normalized_rows": 1,
-          "partition": "2026-09-23",
-          "provider_pages": 1,
-          "provider_total": 1,
-          "returned_rows": 1,
-          "row_errors": [],
-          "source_disclosure_counts": [],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-24",
@@ -787,9 +775,31 @@
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-10-08",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-10-08",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "northbound",
+          "field_gap_rows": 0,
+          "normalized_rows": 1,
+          "partition": "2026-10-08",
+          "provider_pages": 1,
+          "provider_total": 1,
+          "returned_rows": 1,
+          "row_errors": [],
+          "source_disclosure_counts": [],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 8,
+      "saved_records": 9,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "北向成交（非净流入）",
       "unresolved_partitions": 0
@@ -799,30 +809,30 @@
       "companies": 53,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 48,
+      "current_rows": 46,
       "deferred": [],
-      "earliest_period": "2026-06-30",
+      "earliest_period": "2026-07-01",
       "field_gap_rows": 0,
       "latest_period": "2026-09-15",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "placements",
           "field_gap_rows": 0,
-          "normalized_rows": 48,
+          "normalized_rows": 46,
           "partition": "disclosures",
           "provider_pages": 1,
-          "provider_total": 48,
-          "returned_rows": 48,
+          "provider_total": 46,
+          "returned_rows": 46,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
@@ -836,78 +846,56 @@
     },
     "repurchases": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 559,
+      "companies": 558,
       "complete_partitions": 1,
       "current_partitions": 1,
-      "current_rows": 546,
+      "current_rows": 547,
       "deferred": [],
       "earliest_period": "2026-04-30",
       "field_gap_rows": 1,
-      "latest_period": "2026-10-08",
+      "latest_period": "2026-10-09",
       "out_of_scope_rows": 0,
       "partitions": [
         {
           "ambiguous_disclosure_groups": 0,
-          "begin": "2026-07-10",
+          "begin": "2026-07-11",
           "complete": true,
           "conflicting_identities": 0,
           "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
           "duplicate_page_rows": 0,
-          "end": "2026-10-08",
+          "end": "2026-10-09",
           "excluded_rows": [],
           "failure": null,
           "family": "repurchases",
           "field_gap_rows": 1,
-          "normalized_rows": 546,
+          "normalized_rows": 547,
           "partition": "disclosures",
           "provider_pages": 2,
-          "provider_total": 546,
-          "returned_rows": 546,
+          "provider_total": 547,
+          "returned_rows": 547,
           "row_errors": [],
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 577,
+      "saved_records": 575,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "公司回购计划与执行",
       "unresolved_partitions": 0
     },
     "seats": {
       "ambiguous_disclosure_groups": 0,
-      "companies": 262,
+      "companies": 296,
       "complete_partitions": 5,
       "current_partitions": 5,
-      "current_rows": 2899,
+      "current_rows": 2880,
       "deferred": [],
       "earliest_period": "2026-09-18",
       "field_gap_rows": 0,
-      "latest_period": "2026-09-30",
+      "latest_period": "2026-10-08",
       "out_of_scope_rows": 0,
       "partitions": [
-        {
-          "ambiguous_disclosure_groups": 0,
-          "begin": "2026-09-23",
-          "complete": true,
-          "conflicting_identities": 0,
-          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
-          "duplicate_page_rows": 0,
-          "end": "2026-09-23",
-          "excluded_rows": [],
-          "failure": null,
-          "family": "seats",
-          "field_gap_rows": 0,
-          "normalized_rows": 619,
-          "partition": "2026-09-23",
-          "provider_pages": 1,
-          "provider_total": 67,
-          "returned_rows": 67,
-          "row_errors": [],
-          "source_disclosure_counts": [],
-          "source_version_conflicts": 0,
-          "status": "QUALIFIED_SOURCE_SCOPE"
-        },
         {
           "ambiguous_disclosure_groups": 0,
           "begin": "2026-09-24",
@@ -995,9 +983,31 @@
           "source_disclosure_counts": [],
           "source_version_conflicts": 0,
           "status": "QUALIFIED_SOURCE_SCOPE"
+        },
+        {
+          "ambiguous_disclosure_groups": 0,
+          "begin": "2026-10-08",
+          "complete": true,
+          "conflicting_identities": 0,
+          "coverage_meaning": "PROVIDER_RETURN_NOT_INDEPENDENT_EXCHANGE_EXHAUSTIVENESS",
+          "duplicate_page_rows": 0,
+          "end": "2026-10-08",
+          "excluded_rows": [],
+          "failure": null,
+          "family": "seats",
+          "field_gap_rows": 0,
+          "normalized_rows": 600,
+          "partition": "2026-10-08",
+          "provider_pages": 1,
+          "provider_total": 66,
+          "returned_rows": 66,
+          "row_errors": [],
+          "source_disclosure_counts": [],
+          "source_version_conflicts": 0,
+          "status": "QUALIFIED_SOURCE_SCOPE"
         }
       ],
-      "saved_records": 4508,
+      "saved_records": 5108,
       "status": "COMPLETE_PROVIDER_SCOPES",
       "title": "原始营业部席位",
       "unresolved_partitions": 0
@@ -1773,11 +1783,181 @@
       "revisions": [],
       "source_row": 92,
       "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-29"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 47,
+      "pdf_sha256": "f2395de3b7eeed393796cb66dc2e7f5be9477f491034f2fcb3763598af34f6be",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610081830214653",
+      "revisions": [],
+      "source_row": 90,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-10-08",
+        "2026-08-26"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 4,
+      "pdf_sha256": "6a8ccd4bc5cd989c16361218b0eb56f6687999af545a030131fdbb8cbb8036a2",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610081830208464",
+      "revisions": [],
+      "source_row": 91,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-08-26"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 4,
+      "pdf_sha256": "d4197b5ca9ce028a364670f14b47c2d1a2dead45c4980d75ebc0e194f160ed9a",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202608271828513234",
+      "revisions": [],
+      "source_row": 92,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-10-08",
+        "2026-09-19"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 28,
+      "pdf_sha256": "531d04c8cd7c721e0e905e8d41a143567eb7a97d136315d39d9d76bb305bbac8",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610081830203530",
+      "revisions": [],
+      "source_row": 93,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-10-07"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 35,
+      "pdf_sha256": "c151220f99660966c16c645239c24daf968ba1416124db079363229849024c36",
+      "publication_alignment": "TEXT_DATES_AND_LISTING_DIFFER_NOT_RECONCILED",
+      "report_id": "AP202610081830194556",
+      "revisions": [],
+      "source_row": 94,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-10-07"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "e015babd55b3f3de0d9895d63b8503bc8762328a1a9c79fe1962ec9409b625e3",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202610071830188451",
+      "revisions": [],
+      "source_row": 95,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-09-02"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 3,
+      "pdf_sha256": "37f47f4a1cea702fbc08293432c75bc3e933daff4aafd67333e730def580b952",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202609021828929728",
+      "revisions": [],
+      "source_row": 96,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
+    },
+    {
+      "layout_selected_text_dates": [
+        "2026-10-07"
+      ],
+      "meaning": "QUOTED_SOURCE_CLAIM_NOT_VERIFIED_PREVIOUS_VINTAGE_OR_INVESTMENT_EVIDENCE",
+      "origin_capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "origin_cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "pages_inspected": 3,
+      "pdf_pages": 6,
+      "pdf_sha256": "f93751c2252b91c7fd2aa564195c11997e03a88cdc46c2dee2d3bf1045d348d9",
+      "publication_alignment": "NOT_INDEPENDENTLY_CERTIFIED",
+      "report_id": "AP202610071830184892",
+      "revisions": [],
+      "source_row": 97,
+      "status": "NO_QUALIFIED_REVISION_PATTERN"
     }
   ],
   "holding_comparisons": {
-    "comparable_nonzero_pairs": 0,
-    "examples": [],
+    "comparable_nonzero_pairs": 3,
+    "examples": [
+      {
+        "actor": "国泰基金管理有限公司-社保基金2103组合",
+        "actor_id": "EM:HOLDER:70428600",
+        "change_shares": "-438500",
+        "company": "威尔药业",
+        "disclosed": "2026-10-09",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-09-30",
+        "previous_shares": "4343871",
+        "prior_period": "2026-06-30",
+        "shares": "3905371",
+        "ticker": "603351.SH"
+      },
+      {
+        "actor": "国泰佳泰股票专项型养老金产品-招商银行股份有限公司",
+        "actor_id": "EM:HOLDER:02Ac01",
+        "change_shares": "-483500",
+        "company": "威尔药业",
+        "disclosed": "2026-10-09",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-09-30",
+        "previous_shares": "2911523",
+        "prior_period": "2026-06-30",
+        "shares": "2428023",
+        "ticker": "603351.SH"
+      },
+      {
+        "actor": "吴荣文",
+        "actor_id": "EM:ISSUER_NAME:603351.SH:吴荣文",
+        "change_shares": "-5E+4",
+        "company": "威尔药业",
+        "disclosed": "2026-10-09",
+        "meaning": "REPORTED_HOLDING_CHANGE_NOT_PROVEN_TRADES_OR_CURRENT_POSITION",
+        "period": "2026-09-30",
+        "previous_shares": "2.98E+6",
+        "prior_period": "2026-06-30",
+        "shares": "2.93E+6",
+        "ticker": "603351.SH"
+      }
+    ],
     "not_inferred": [
       "TRADING_DATE",
       "CURRENT_HOLDING",
@@ -1786,12 +1966,12 @@
     ]
   },
   "increment_counts": {
-    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 38,
-    "SOURCE_VERSION_CHANGED": 9,
-    "UNCHANGED": 24867
+    "NEWLY_OBSERVED_NOT_NEWLY_OCCURRED": 908,
+    "SOURCE_VERSION_CHANGED": 150,
+    "UNCHANGED": 23789
   },
   "institutional_attention": {
-    "companies": 2822,
+    "companies": 2841,
     "examples": [
       {
         "company": "怡亚通",
@@ -2072,7 +2252,7 @@
         "company": "复旦微电",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
         "events_30d": 0,
-        "events_previous_60d": 2,
+        "events_previous_60d": 3,
         "known_distinct_org_codes_90d": 2,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
         "recent_vs_prior_monthly_rate": "0",
@@ -2093,22 +2273,22 @@
       {
         "company": "冰轮环境",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 6,
-        "events_previous_60d": 8,
+        "events_30d": 5,
+        "events_previous_60d": 9,
         "known_distinct_org_codes_90d": 12,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "1.5",
+        "recent_vs_prior_monthly_rate": "1.111111111111111111111111111",
         "ticker": "000811.SZ",
         "unresolved_roster_rows": 2
       },
       {
         "company": "电投绿能",
         "count_qualification": "COMPLETE_RETURN_WITH_DISCLOSURE_LAG_LIMITS",
-        "events_30d": 3,
-        "events_previous_60d": 1,
+        "events_30d": 2,
+        "events_previous_60d": 2,
         "known_distinct_org_codes_90d": 0,
         "meaning": "COUNTS_IN_CURRENT_RETRIEVED_SOURCE_NOT_COMPLETE_ORIGINAL_PUBLICATION_VINTAGE",
-        "recent_vs_prior_monthly_rate": "6",
+        "recent_vs_prior_monthly_rate": "2",
         "ticker": "000875.SZ",
         "unresolved_roster_rows": 4
       },
@@ -2665,6 +2845,51 @@
         "updated_at": "2026-09-26T03:08:37Z"
       }
     },
+    "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001": {
+      "archive": {
+        "artifact_id": 11565127403,
+        "artifact_name": "smart-money-37810254690-1",
+        "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37810254690/artifacts/11565127403",
+        "bytes": 11766842,
+        "expires_at": "2026-11-07T16:44:48Z",
+        "git_blob": "33ea625e75b180b2774ea248cc814635b537d4ef",
+        "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
+        "origin_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-08T16:37:32Z",
+          "event": "schedule",
+          "head_sha": "a71ec685f1c6bdeae49f7cde682b5305ed06de92",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37810254690",
+          "id": 37810254690,
+          "operation": null,
+          "path": ".github/workflows/radar-smart-money.yml",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-08T16:37:32Z",
+          "status": "completed",
+          "updated_at": "2026-10-08T16:52:26Z"
+        },
+        "read_path": "sources/artifacts/a786e5e64c2b92f5615afad35060c773ccb27af5b4fe2c86dcdc28d9a6684548.zip",
+        "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+        "sha256": "a786e5e64c2b92f5615afad35060c773ccb27af5b4fe2c86dcdc28d9a6684548"
+      },
+      "capture_hash": "77215be3909f86c6368e78553575f71c90961cba90bb14dba5cafab51e9ef001",
+      "cutoff": "2026-10-08T16:44:25.493850+00:00",
+      "reading_commit": null,
+      "run": {
+        "conclusion": "success",
+        "created_at": "2026-10-08T16:37:32Z",
+        "event": "schedule",
+        "head_sha": "a71ec685f1c6bdeae49f7cde682b5305ed06de92",
+        "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37810254690",
+        "id": 37810254690,
+        "operation": null,
+        "path": ".github/workflows/radar-smart-money.yml",
+        "run_attempt": 1,
+        "run_started_at": "2026-10-08T16:37:32Z",
+        "status": "completed",
+        "updated_at": "2026-10-08T16:52:26Z"
+      }
+    },
     "78d3c25bc8aa89d3403c6e4a09eb3630c123170125285e0e45bd3f1101653473": {
       "archive": {
         "artifact_id": 11178721537,
@@ -2848,16 +3073,16 @@
   },
   "reading_freshness": "RECENT_CAPTURE_NOT_EACH_SOURCE_FRESHNESS",
   "relay_reading": {
-    "current_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
+    "current_status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "diagnostics": {},
-    "previous_status": "EXACT_PREVIOUS_SUPPLEMENT"
+    "previous_status": "NOT_READ_CURRENT_SUPPLEMENT_AVAILABLE"
   },
   "relay_supplement": {
-    "current_run_status": "NOT_READ_WITHOUT_QUALIFIED_CURRENT_CONTEXT",
-    "cutoff": "2026-10-07T16:53:07.787999+00:00",
+    "current_run_status": "PARTIAL_WITH_EXPLICIT_GAPS",
+    "cutoff": "2026-10-08T16:52:21.392710+00:00",
     "family_coverage": {
       "hm_detail": {
-        "row_count": 279,
+        "row_count": 266,
         "status": "SUCCESS"
       },
       "hm_list": {
@@ -2865,35 +3090,57 @@
         "status": "SUCCESS"
       },
       "report_rc": {
-        "row_count": 27,
+        "row_count": 107,
         "status": "PARTIAL_DAILY_PAGES"
       },
       "top_inst": {
-        "row_count": 40,
+        "row_count": 66,
         "status": "SUCCESS"
       },
       "top_list": {
-        "row_count": 79,
+        "row_count": 74,
         "status": "SUCCESS"
       }
     },
-    "market_session": "2026-09-30",
+    "market_session": "2026-10-08",
     "meaning": "SECONDARY_RELAY_SUPPLEMENT_NOT_PRIMARY_OR_OFFICIAL_TUSHARE",
-    "reading_relation": "PRIOR_RETAINED_NO_CURRENT_SUPPLEMENT",
+    "reading_relation": "CURRENT_SOURCE_RUN",
     "relay_host": "https://pcd.mobcvb.cn/tushare/pro",
     "status": "PARTIAL_WITH_EXPLICIT_GAPS"
   },
   "seat_label_binding": "VENDOR_LABELS_AND_ORIGINAL_SEATS_SEPARATE; NO_UNPROVEN_PERSON_JOIN",
   "status": "PARTIAL_WITH_EXPLICIT_GAPS",
   "stock_price_gate_required": false,
-  "target_date": "2026-10-08",
+  "target_date": "2026-10-09",
   "top_ten_changes": {
-    "ambiguous_companies": [],
-    "departure_examples": [],
-    "departures": 0,
-    "entries": 0,
-    "entry_examples": [],
-    "status": "ABSENCE_COMPARISON_UNQUALIFIED"
+    "ambiguous_companies": [
+      "002012.SZ",
+      "002269.SZ"
+    ],
+    "departure_examples": [
+      {
+        "actor_id": "EM:ISSUER_NAME:603351.SH:雷立军",
+        "actor_name": "雷立军",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "ticker": "603351.SH"
+      }
+    ],
+    "departures": 1,
+    "entries": 1,
+    "entry_examples": [
+      {
+        "actor_id": "EM:ISSUER_NAME:603351.SH:胡志剑",
+        "actor_name": "胡志剑",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "shares": "2.2001E+6",
+        "ticker": "603351.SH"
+      }
+    ],
+    "status": "CONCURRENT_SNAPSHOT_VERSIONS_NOT_COMPARABLE"
   },
   "unresolved": [
     {
