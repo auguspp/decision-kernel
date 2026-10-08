@@ -116,20 +116,20 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/8edafe1301928558a8151cb3c13e935451d052bac17dc3c71776767935aeaf97.zip)
 
 ## 黄金与原油 · 供应商期货日线
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：37588840872
+最后可读批次run：37746623148
 # 黄金与原油 · 供应商期货日线
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-06；抓取截止：2026-10-07T07:41:16.781554+00:00
+窗口截止：2026-10-07；抓取截止：2026-10-08T07:57:15.369077+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| 黄金 · GC=F | 2026-10-06 | 4187.10009765625 | USD_PER_TROY_OUNCE | 2026-10-05 | UNKNOWN |
-| WTI原油 · CL=F | 2026-10-06 | 89.44000244140625 | USD_PER_BARREL | 2026-10-05 | UNKNOWN |
-| Brent原油 · BZ=F | 2026-10-06 | 100.58000183105469 | USD_PER_BARREL | 2026-10-05 | UNKNOWN |
+| 黄金 · GC=F | 2026-10-07 | 4140.7001953125 | USD_PER_TROY_OUNCE | 2026-10-06 | UNKNOWN |
+| WTI原油 · CL=F | 2026-10-07 | 88.27999877929688 | USD_PER_BARREL | 2026-10-06 | UNKNOWN |
+| Brent原油 · BZ=F | 2026-10-07 | 100.19999694824219 | USD_PER_BARREL | 2026-10-06 | UNKNOWN |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -141,7 +141,14 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - CL=F：ROWS_NORMALIZED
 - BZ=F：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/32bc3b56b89d0f2a245d96e428ceba6fc4ff7c2032dd6ae81b69c5d1c60c9ea8.zip)
+## 日期资格（不是实际发布时间）
+规则：PRIOR_UTC_DATE_ONLY_FUTURES_FINALITY_UNKNOWN；时区：UTC
+原采集开始时可请求日期上限：2026-10-07
+参考值机会门槛（来源当地）：不适用
+到达机会时钟不证明资料已发布；只展示实际返回日期，未返回不补值。
+参考利率/汇率不是全天价格线；期货终局性未知，UTC日桶未结束不得提前使用。
+
+[原始ZIP](../../sources/artifacts/6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3.zip)
 
 ## Coinbase BTC / ETH 日线
 本次读取：REUSED_RETAINED_CAPTURE
