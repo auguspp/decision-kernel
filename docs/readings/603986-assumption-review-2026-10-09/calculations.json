@@ -1,0 +1,90 @@
+{
+  "qualification": "BOUNDED_RESEARCH_ARITHMETIC_NOT_ODDS_NOT_FORECAST",
+  "security": "603986.SH",
+  "calculated_at": "2026-10-09T01:22:39.676178+00:00",
+  "units": {
+    "CNY": "yuan",
+    "CNY_100m": "100000000 yuan",
+    "percentage_point": "1/100 absolute margin"
+  },
+  "source_binding": {
+    "h1_values": {
+      "kind": "INHERITED_EXTRACTED_VALUES_PARTIAL",
+      "reading_commit": "c0f0f512aae49bd27deac8b6687eab825111bf59",
+      "path": "sources/git/b809dfb062232dee9b77db6184a9948a83b13fc7/603986-gigadevice-deep-research-v2.json",
+      "git_blob": "b809dfb062232dee9b77db6184a9948a83b13fc7",
+      "sha256": "9adf6a88d9903d7b1adaa812aee25d979ab9880a68c05235fd3531ee3e3990e7",
+      "evidence_id": "83ddbc90-717e-5741-a983-2f119dc04a4a",
+      "report_period_end": "2026-06-30",
+      "original_pdf_reacquired": false
+    },
+    "cash_capex": {
+      "kind": "APPROXIMATE_INHERITED_METHOD_VALUE",
+      "commit": "f763790ced6f605f690e58ca54a1f3c546ffcfe3",
+      "path": "docs/dogfood/gigadevice-specialty-memory-duration-underwriting-2026-09-03.md",
+      "section": "2 PRIMARY REALIZED / 7 Owner-cash treatment",
+      "approximate": true
+    },
+    "purchase_cap": {
+      "kind": "ANNOUNCEMENT_MIRROR_INDEX_AND_MEDIA_REPORT_NOT_RAW_ISSUER_PDF",
+      "announcement_date": "2026-09-28",
+      "urls": [
+        "https://www.cfi.net.cn/p20260928003387.html",
+        "https://www.caiwennews.com/article/1630290.shtml"
+      ],
+      "shareholder_approval_as_reported": "PENDING",
+      "not_unit_cost_change": true
+    }
+  },
+  "inputs": {
+    "cfo_cny": "6048341057.06",
+    "deducted_parent_profit_cny": "4883033478.93",
+    "cash_capex_approx_cny": "945000000",
+    "inventory_cny": "4184224748.31",
+    "storage_revenue_rounded_cny": "9827000000",
+    "storage_gross_margin_percent": "67.57",
+    "mcu_revenue_rounded_cny": "1430000000",
+    "mcu_gross_margin_percent": "38.49",
+    "old_procurement_cap_cny_100m": "57.11",
+    "proposed_procurement_cap_cny_100m": "78.54"
+  },
+  "assumptions": {
+    "inventory_cash_test": "Only a hypothetical ADDITIONAL future cash investment equal to 10% of the retained H1 inventory; all other profit, payable, receivable, capex and financing effects held fixed. Do not subtract the actual existing inventory from CFO a second time.",
+    "joint_gross_profit_test": "Storage revenue fixed, storage margin down an arbitrary 10 percentage points; MCU revenue doubles and its gross margin is fixed. No probability or claim of realistic forecast; excludes operating expenses, taxes, minority attribution and capital needs.",
+    "cash_proxy": "Group CFO less long-lived-asset cash capex is a simplified proxy, not verified distributable parent owner cash; denominator is deducted parent net profit. Scope and non-recurring/working-capital details remain unverified."
+  },
+  "formulas": {
+    "purchase_cap_increase_percent": "(78.54/57.11-1)*100",
+    "cash_proxy": "cfo_cny-cash_capex_approx_cny",
+    "headroom": "cash_proxy-deducted_parent_profit_cny",
+    "inventory_sensitivity": "cash_proxy-0.10*inventory_cny",
+    "joint_gross_profit_delta": "-0.10*storage_revenue_rounded_cny + mcu_revenue_rounded_cny*0.3849"
+  },
+  "results": {
+    "purchase_cap_delta_cny_100m": "21.43",
+    "purchase_cap_increase_percent": "37.524076343897741201190684643670",
+    "cfo_to_deducted_profit": "1.2386441918037697511813975180371",
+    "cfo_less_cash_capex_cny": "5103341057.06",
+    "cash_proxy_to_deducted_profit": "1.0451169501664516821371667719728",
+    "cash_proxy_less_deducted_profit_cny": "220307578.13",
+    "headroom_as_percent_h1_inventory": "5.2651946628579592863002761010501",
+    "hypothetical_incremental_inventory_cash_cny": "418422474.8310",
+    "cash_proxy_after_inventory_sensitivity_cny": "4684918582.2290",
+    "cash_proxy_ratio_after_inventory_sensitivity": "0.95942790530602461867155707930525",
+    "storage_gross_profit_cny": "6640103900.0000",
+    "mcu_gross_profit_cny": "550407000.0000",
+    "storage_gross_profit_loss_at_10pp_cny": "982700000.00",
+    "extra_mcu_gross_profit_at_revenue_double_cny": "550407000.0000",
+    "combined_gross_profit_delta_cny": "-432293000.0000"
+  },
+  "checks": {
+    "purchase_cap_old_plus_delta_equals_proposed": true,
+    "cash_proxy_plus_capex_equals_cfo": true,
+    "combined_delta_equals_component_sum": true,
+    "arithmetic_engine": "Python decimal.Decimal, precision 32; independent calculation in this interaction",
+    "repository_source_code_executed": false,
+    "kernel_validator_executed": false,
+    "numeric_odds_calculated": false
+  },
+  "presentation_precision": "Display money in CNY100m with 2 decimals and ratios with about 3 significant figures; inherited rounded segment and capex data do not gain precision from arithmetic."
+}
