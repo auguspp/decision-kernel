@@ -174,6 +174,7 @@
 - gigadevice-human：PURPOSE&#95;REFERENCE / RETAINED&#95;BYTES&#95;VERIFIED
   - 原用途说明：冻结的条件决定；历史分布 NON-DRIVING。Action 未执行状态只属于该 checkpoint，不能推断后续成交。
   - [原保存材料](../../sources/git/f803dc551dba69f0f39291b98353bc4e406a7710/603986-gigadevice-human-decision-2026-09-03.md)
+- [按需恢复：603986-human-assumption-review-20261009](https://github.com/auguspp/decision-kernel/blob/157515ae7a89052eb026f001139385cb6513e91a/docs/readings/603986-assumption-review-2026-10-09/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：d-mu-gigadevice-economic-bridge-20261005](https://github.com/auguspp/decision-kernel/blob/ec95b9ca6156e3ee83f4157675bad7881279ccfd/docs/readings/d-mu-gigadevice-economic-bridge-2026-10-05/README.md)；只有定位，本页没有恢复正文。
 - [按需恢复：d-mu-gigadevice-horizons-20261004](https://github.com/auguspp/decision-kernel/blob/9ec1a0a4f22d70d9fdf71cedf57a719aaa8cb830/docs/readings/d-mu-gigadevice-horizons-2026-10-04/README.md)；只有定位，本页没有恢复正文。
 - 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-09-18；[原观察](../radar/company-reading.json)。不是新事件。
