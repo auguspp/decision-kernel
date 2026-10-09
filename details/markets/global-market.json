@@ -10,50 +10,50 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-09T06:42:39.190069+00:00",
+    "checked_at": "2026-10-09T07:59:23.921185+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11535564342,
-          "artifact_name": "global-public-commodities-37746623148-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148/artifacts/11535564342",
-          "bytes": 7753,
-          "expires_at": "2026-11-07T07:57:15Z",
-          "git_blob": "2e02257bf8697f71de3a397b829d8a51e77a4458",
+          "artifact_id": 11603011131,
+          "artifact_name": "global-public-commodities-37902006881-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881/artifacts/11603011131",
+          "bytes": 7755,
+          "expires_at": "2026-11-08T07:57:31Z",
+          "git_blob": "6dac28eb0ac697c2b0a1a428e909603c60cad336",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-08T07:56:58Z",
+            "created_at": "2026-10-09T07:57:20Z",
             "event": "schedule",
-            "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148",
-            "id": 37746623148,
+            "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881",
+            "id": 37902006881,
             "operation": null,
             "path": ".github/workflows/radar-global-public.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-08T07:56:58Z",
+            "run_started_at": "2026-10-09T07:57:20Z",
             "status": "completed",
-            "updated_at": "2026-10-08T07:57:18Z"
+            "updated_at": "2026-10-09T07:57:35Z"
           },
-          "read_path": "sources/artifacts/6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3.zip",
+          "read_path": "sources/artifacts/8e54dd9a3018defd28073ed1e2f121ff5ddef13e6218851e8b6ba92eae0aa30a.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3"
+          "sha256": "8e54dd9a3018defd28073ed1e2f121ff5ddef13e6218851e8b6ba92eae0aa30a"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-08T07:56:58Z",
+          "created_at": "2026-10-09T07:57:20Z",
           "event": "schedule",
-          "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148",
-          "id": 37746623148,
+          "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881",
+          "id": 37902006881,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-08T07:56:58Z",
+          "run_started_at": "2026-10-09T07:57:20Z",
           "status": "completed",
-          "updated_at": "2026-10-08T07:57:18Z"
+          "updated_at": "2026-10-09T07:57:35Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -76,56 +76,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11535564342,
-            "artifact_name": "global-public-commodities-37746623148-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148/artifacts/11535564342",
-            "bytes": 7753,
-            "expires_at": "2026-11-07T07:57:15Z",
-            "git_blob": "2e02257bf8697f71de3a397b829d8a51e77a4458",
+            "artifact_id": 11603011131,
+            "artifact_name": "global-public-commodities-37902006881-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881/artifacts/11603011131",
+            "bytes": 7755,
+            "expires_at": "2026-11-08T07:57:31Z",
+            "git_blob": "6dac28eb0ac697c2b0a1a428e909603c60cad336",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-08T07:56:58Z",
+              "created_at": "2026-10-09T07:57:20Z",
               "event": "schedule",
-              "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148",
-              "id": 37746623148,
+              "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881",
+              "id": 37902006881,
               "operation": null,
               "path": ".github/workflows/radar-global-public.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-08T07:56:58Z",
+              "run_started_at": "2026-10-09T07:57:20Z",
               "status": "completed",
-              "updated_at": "2026-10-08T07:57:18Z"
+              "updated_at": "2026-10-09T07:57:35Z"
             },
-            "read_path": "sources/artifacts/6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3.zip",
+            "read_path": "sources/artifacts/8e54dd9a3018defd28073ed1e2f121ff5ddef13e6218851e8b6ba92eae0aa30a.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3"
+            "sha256": "8e54dd9a3018defd28073ed1e2f121ff5ddef13e6218851e8b6ba92eae0aa30a"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11535564342/zip",
-            "created_at": "2026-10-08T07:57:16Z",
-            "digest": "sha256:6ea0f81ba17baa8352ea6cf8fbfd5a3982a3e137dab4e66fdc90a681070d79a3",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11603011131/zip",
+            "created_at": "2026-10-09T07:57:32Z",
+            "digest": "sha256:8e54dd9a3018defd28073ed1e2f121ff5ddef13e6218851e8b6ba92eae0aa30a",
             "expired": false,
-            "expires_at": "2026-11-07T07:57:15Z",
-            "id": 11535564342,
-            "name": "global-public-commodities-37746623148-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTUzNTU2NDM0Mg==",
-            "size_in_bytes": 7753,
-            "updated_at": "2026-10-08T07:57:16Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11535564342",
+            "expires_at": "2026-11-08T07:57:31Z",
+            "id": 11603011131,
+            "name": "global-public-commodities-37902006881-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTYwMzAxMTEzMQ==",
+            "size_in_bytes": 7755,
+            "updated_at": "2026-10-09T07:57:32Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11603011131",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
-              "id": 37746623148,
+              "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+              "id": 37902006881,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-07",
+            "as_of_date": "2026-10-08",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -137,12 +137,12 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 3,
-            "capture_hash": "01621f83f550ec8839b4341c0c6a99157a3981865c89a24bdf76e96b8cd5c6f4",
-            "captured_from": "2026-10-08T07:57:15.071600+00:00",
-            "captured_through": "2026-10-08T07:57:15.369077+00:00",
+            "capture_hash": "e6b1db9fe15a333474834a1c5afd2c11dbc04ec00f8b9a8e6ba8a8ad3a31838f",
+            "captured_from": "2026-10-09T07:57:30.950263+00:00",
+            "captured_through": "2026-10-09T07:57:31.503992+00:00",
             "coverage": "SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS",
             "date_policy": {
-              "max_as_of_date": "2026-10-07",
+              "max_as_of_date": "2026-10-08",
               "meaning": "REQUEST_CEILING_NOT_ACTUAL_PUBLICATION_OR_SESSION_PROOF",
               "not_before_local": null,
               "rule": "PRIOR_UTC_DATE_ONLY_FUTURES_FINALITY_UNKNOWN",
@@ -151,11 +151,11 @@
             "family": "commodities",
             "identity": {
               "attempt": 1,
-              "code_commit": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
+              "code_commit": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 37746623148,
+              "run_id": 37902006881,
               "workflow": ".github/workflows/radar-global-public.yml"
             },
             "observations": [
@@ -166,14 +166,14 @@
                 "change_unit": null,
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "黄金 · GC=F",
-                "previous_date": "2026-10-06",
-                "previous_value": "4187.10009765625",
+                "previous_date": "2026-10-07",
+                "previous_value": "4140.7001953125",
                 "price_kind": "VENDOR_FUTURE_DAILY_CLOSE_NOT_SPOT_OR_SETTLEMENT",
                 "publication_time": null,
-                "source_date": "2026-10-07",
+                "source_date": "2026-10-08",
                 "symbol": "GC=F",
                 "unit": "USD_PER_TROY_OUNCE",
-                "value": "4140.7001953125"
+                "value": "4157.0"
               },
               {
                 "calendar_age_at_requested_end": 0,
@@ -182,14 +182,14 @@
                 "change_unit": null,
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "WTI原油 · CL=F",
-                "previous_date": "2026-10-06",
-                "previous_value": "89.44000244140625",
+                "previous_date": "2026-10-07",
+                "previous_value": "88.27999877929688",
                 "price_kind": "VENDOR_FUTURE_DAILY_CLOSE_NOT_SPOT_OR_SETTLEMENT",
                 "publication_time": null,
-                "source_date": "2026-10-07",
+                "source_date": "2026-10-08",
                 "symbol": "CL=F",
                 "unit": "USD_PER_BARREL",
-                "value": "88.27999877929688"
+                "value": "91.48999786376953"
               },
               {
                 "calendar_age_at_requested_end": 0,
@@ -198,14 +198,14 @@
                 "change_unit": null,
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "Brent原油 · BZ=F",
-                "previous_date": "2026-10-06",
-                "previous_value": "100.58000183105469",
+                "previous_date": "2026-10-07",
+                "previous_value": "100.19999694824219",
                 "price_kind": "VENDOR_FUTURE_DAILY_CLOSE_NOT_SPOT_OR_SETTLEMENT",
                 "publication_time": null,
-                "source_date": "2026-10-07",
+                "source_date": "2026-10-08",
                 "symbol": "BZ=F",
                 "unit": "USD_PER_BARREL",
-                "value": "100.19999694824219"
+                "value": "104.27999877929688"
               }
             ],
             "outcomes": [
@@ -213,25 +213,25 @@
                 "http_status": 200,
                 "id": "GC=F",
                 "metadata": {
-                  "chartPreviousClose": "4376.4",
+                  "chartPreviousClose": "4318.4",
                   "currency": "USD",
                   "currentTradingPeriod": {
                     "post": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791518340,
+                      "start": 1791604740,
                       "timezone": "EDT"
                     },
                     "pre": {
-                      "end": 1791432000,
+                      "end": 1791518400,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     },
                     "regular": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     }
                   },
@@ -242,20 +242,20 @@
                   "fiftyTwoWeekLow": "3901.3",
                   "firstTradeDate": 967608000,
                   "fullExchangeName": "COMEX",
-                  "fulldayChange": "3.4",
-                  "fulldayChangePercent": "0.082",
-                  "fulldayPrice": "4144.1",
+                  "fulldayChange": "60.9",
+                  "fulldayChangePercent": "1.465",
+                  "fulldayPrice": "4217.9",
                   "gmtoffset": -14400,
                   "hasPrePostMarketData": false,
                   "instrumentType": "FUTURE",
                   "priceHint": 2,
                   "range": "",
-                  "regularMarketChangePercent": "0.082",
-                  "regularMarketDayHigh": "4166.8",
-                  "regularMarketDayLow": "4128.1",
-                  "regularMarketPrice": "4144.1",
-                  "regularMarketTime": 1791445630,
-                  "regularMarketVolume": 40823,
+                  "regularMarketChangePercent": "1.465",
+                  "regularMarketDayHigh": "4232.7",
+                  "regularMarketDayLow": "4156.1",
+                  "regularMarketPrice": "4217.9",
+                  "regularMarketTime": 1791532047,
+                  "regularMarketVolume": 45768,
                   "shortName": "Gold Dec 26",
                   "symbol": "GC=F",
                   "timezone": "EDT",
@@ -276,32 +276,32 @@
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 10,
                 "source_rows": 12,
-                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1790121600&period2=1791504000&interval=1d&includePrePost=false",
+                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1790208000&period2=1791590400&interval=1d&includePrePost=false",
                 "status": "ROWS_NORMALIZED"
               },
               {
                 "http_status": 200,
                 "id": "CL=F",
                 "metadata": {
-                  "chartPreviousClose": "94.59",
+                  "chartPreviousClose": "92.16",
                   "currency": "USD",
                   "currentTradingPeriod": {
                     "post": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791518340,
+                      "start": 1791604740,
                       "timezone": "EDT"
                     },
                     "pre": {
-                      "end": 1791432000,
+                      "end": 1791518400,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     },
                     "regular": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     }
                   },
@@ -312,20 +312,20 @@
                   "fiftyTwoWeekLow": "54.98",
                   "firstTradeDate": 967003200,
                   "fullExchangeName": "NY Mercantile",
-                  "fulldayChange": "3.38",
-                  "fulldayChangePercent": "3.829",
-                  "fulldayPrice": "91.66",
+                  "fulldayChange": "-0.81",
+                  "fulldayChangePercent": "-0.885",
+                  "fulldayPrice": "90.68",
                   "gmtoffset": -14400,
                   "hasPrePostMarketData": false,
                   "instrumentType": "FUTURE",
                   "priceHint": 2,
                   "range": "",
-                  "regularMarketChangePercent": "3.829",
-                  "regularMarketDayHigh": "91.73",
-                  "regularMarketDayLow": "88.77",
-                  "regularMarketPrice": "91.66",
-                  "regularMarketTime": 1791445630,
-                  "regularMarketVolume": 36757,
+                  "regularMarketChangePercent": "-0.885",
+                  "regularMarketDayHigh": "91.41",
+                  "regularMarketDayLow": "90.19",
+                  "regularMarketPrice": "90.68",
+                  "regularMarketTime": 1791532042,
+                  "regularMarketVolume": 24703,
                   "shortName": "Crude Oil Nov 26",
                   "symbol": "CL=F",
                   "timezone": "EDT",
@@ -346,32 +346,32 @@
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 10,
                 "source_rows": 12,
-                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1790121600&period2=1791504000&interval=1d&includePrePost=false",
+                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1790208000&period2=1791590400&interval=1d&includePrePost=false",
                 "status": "ROWS_NORMALIZED"
               },
               {
                 "http_status": 200,
                 "id": "BZ=F",
                 "metadata": {
-                  "chartPreviousClose": "99.25",
+                  "chartPreviousClose": "103.08",
                   "currency": "USD",
                   "currentTradingPeriod": {
                     "post": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791518340,
+                      "start": 1791604740,
                       "timezone": "EDT"
                     },
                     "pre": {
-                      "end": 1791432000,
+                      "end": 1791518400,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     },
                     "regular": {
-                      "end": 1791518340,
+                      "end": 1791604740,
                       "gmtoffset": -14400,
-                      "start": 1791432000,
+                      "start": 1791518400,
                       "timezone": "EDT"
                     }
                   },
@@ -382,21 +382,21 @@
                   "fiftyTwoWeekLow": "58.72",
                   "firstTradeDate": 1185768000,
                   "fullExchangeName": "NY Mercantile",
-                  "fulldayChange": "3.93",
-                  "fulldayChangePercent": "3.922",
-                  "fulldayPrice": "104.13",
+                  "fulldayChange": "-1.04",
+                  "fulldayChangePercent": "-0.997",
+                  "fulldayPrice": "103.24",
                   "gmtoffset": -14400,
                   "hasPrePostMarketData": false,
                   "instrumentType": "FUTURE",
                   "longName": "Brent Crude Oil Last Day Financial Futures",
                   "priceHint": 2,
                   "range": "",
-                  "regularMarketChangePercent": "3.922",
-                  "regularMarketDayHigh": "104.19",
-                  "regularMarketDayLow": "100.75",
-                  "regularMarketPrice": "104.13",
-                  "regularMarketTime": 1791445630,
-                  "regularMarketVolume": 8625,
+                  "regularMarketChangePercent": "-0.997",
+                  "regularMarketDayHigh": "104.09",
+                  "regularMarketDayLow": "102.71",
+                  "regularMarketPrice": "103.24",
+                  "regularMarketTime": 1791532039,
+                  "regularMarketVolume": 4356,
                   "shortName": "Brent Crude Oil Last Day Financ",
                   "symbol": "BZ=F",
                   "timezone": "EDT",
@@ -417,7 +417,7 @@
                 "request_state": "HTTP_RESPONSE",
                 "selected_rows": 10,
                 "source_rows": 12,
-                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1790121600&period2=1791504000&interval=1d&includePrePost=false",
+                "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?period1=1790208000&period2=1791590400&interval=1d&includePrePost=false",
                 "status": "ROWS_NORMALIZED"
               }
             ],
@@ -426,10 +426,10 @@
             "version": "global-public-context-v2",
             "vintage": "CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE"
           },
-          "retained_at": "2026-10-08T07:59:35.760292+00:00",
+          "retained_at": "2026-10-09T07:59:23.737636+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-08T07:56:58Z",
+            "created_at": "2026-10-09T07:57:20Z",
             "display_title": "B1 public · commodities · ",
             "event": "schedule",
             "head_branch": "main",
@@ -501,9 +501,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "e6ae587c49bc95016b688808cd8a60e86ce7de21",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37746623148",
-            "id": 37746623148,
+            "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37902006881",
+            "id": 37902006881,
             "path": ".github/workflows/radar-global-public.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -574,9 +574,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-08T07:56:58Z",
+            "run_started_at": "2026-10-09T07:57:20Z",
             "status": "completed",
-            "updated_at": "2026-10-08T07:57:18Z"
+            "updated_at": "2026-10-09T07:57:35Z"
           }
         }
       },
@@ -2623,7 +2623,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 44,
+      "total_count": 45,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2636,5 +2636,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "726578a34e5716f4bf101a8df451334d440e11e9e938593313350455b122fa52"
+  "projection_hash": "cb30850f1d20bacbf6a452e94d2390886c654f7bac652952e21cfe8409791e30"
 }
