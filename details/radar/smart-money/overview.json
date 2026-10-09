@@ -1,6 +1,6 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "0.68",
+  "capture_age_hours": "0.96",
   "capture_hash": "744aaef0435a5ec8fc34198ddf88a9d59c547a98ef2ef6b9e281e0251ef6830e",
   "current_reading": {
     "control": {
@@ -41,7 +41,7 @@
       "status": "completed",
       "updated_at": "2026-10-09T16:38:25Z"
     },
-    "previous_status": "EXACT_PREVIOUS_dde6362395e5ed2d4982124358e913cfd8b64a10",
+    "previous_status": "EXACT_PREVIOUS_7c3dc3eea9188198f64e8f54a2772c79ed9d8389",
     "run_metadata_reads": [],
     "status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "uses_prior_observation": false
@@ -3576,14 +3576,6 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:陈长江",
-        "actor_name": "陈长江",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-09-30",
-        "prior_period": "2026-06-30",
-        "ticker": "002107.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:002107.SZ:陈仕秋",
         "actor_name": "陈仕秋",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
@@ -3592,16 +3584,24 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:王浩英",
-        "actor_name": "王浩英",
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:李军",
+        "actor_name": "李军",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:李军",
-        "actor_name": "李军",
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:陈长江",
+        "actor_name": "陈长江",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "ticker": "002107.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:王浩英",
+        "actor_name": "王浩英",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
@@ -3629,24 +3629,6 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:傅丽平",
-        "actor_name": "傅丽平",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-09-30",
-        "prior_period": "2026-06-30",
-        "shares": "1.4E+6",
-        "ticker": "002107.SZ"
-      },
-      {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:王国伟",
-        "actor_name": "王国伟",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-09-30",
-        "prior_period": "2026-06-30",
-        "shares": "2.2155E+6",
-        "ticker": "002107.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:002107.SZ:张军",
         "actor_name": "张军",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -3662,6 +3644,24 @@
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
         "shares": "1522683",
+        "ticker": "002107.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:傅丽平",
+        "actor_name": "傅丽平",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "shares": "1.4E+6",
+        "ticker": "002107.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:王国伟",
+        "actor_name": "王国伟",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "shares": "2.2155E+6",
         "ticker": "002107.SZ"
       },
       {
