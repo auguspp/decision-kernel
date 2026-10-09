@@ -1012,125 +1012,14 @@
   "signal_transition_authority": "NONE",
   "stock_review_scope": {
     "automatic_research_execution": false,
-    "batch_id": "3fd7c6e9dfbdfd6893ab7fe81d126e1527d0817ff2f3511d3a1d57f2df2c2c84",
+    "batch_id": "832c1a2d2b231acaf197248c2fbfc5a83e865169884e318476b83c41e1c1e4aa",
     "data_unavailable_count": 0,
     "existing_baseline_gap_count": 0,
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "items": [
       {
-        "company_name": "雄塑科技",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-00d61cc6aca5c381b63453daadaab94fc2be9f4434f285e3123f996a86dad976",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "GRANULAR_884",
-            "name": "管材",
-            "thscode": "884064.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“管材”中，雄塑科技的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "雄塑科技",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "300599.SZ"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "300599.SZ"
-      },
-      {
-        "company_name": "中远海能",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-1be0609685365fe2d64cc74016fb4f0572593e4c544771a6d3e55dd641281682",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "BROAD_881",
-            "name": "港口航运",
-            "thscode": "881148.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“港口航运”中，中远海能的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "中远海能",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "600026.SH"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "600026.SH"
-      },
-      {
-        "company_name": "安泰集团",
-        "distinct_question_assessment": "NOT_PERFORMED",
-        "economic_question_assessed": false,
-        "existing_research_relation": {
-          "execution_id": "stock-business-0ad32551dea7d918276f9b9bd1b86e226e3bfb12d081449424d1ee35f9f8690a",
-          "question_kind": "FIRST_BUSINESS_BASELINE",
-          "sources": {},
-          "status": "NOT_STARTED",
-          "terminal_state": null
-        },
-        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
-        "origin_directions": [
-          {
-            "family": "GRANULAR_884",
-            "name": "焦炭加工",
-            "thscode": "884015.TI"
-          }
-        ],
-        "origin_question_prompts": [
-          "来源方向“焦炭加工”中，安泰集团的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
-        ],
-        "original_stock_disposition": {
-          "business_benefit_status": "NOT_ESTABLISHED",
-          "business_linkage_status": "UNKNOWN",
-          "company_name": "安泰集团",
-          "excluded_reasons": [],
-          "input_failure": null,
-          "market_expression_status": "OBSERVED",
-          "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "600408.SH"
-        },
-        "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "600408.SH"
-      },
-      {
-        "company_name": "伟星新材",
+        "company_name": "力王股份",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
@@ -1138,36 +1027,34 @@
         "origin_directions": [
           {
             "family": "GRANULAR_884",
-            "name": "管材",
-            "thscode": "884064.TI"
+            "name": "其他电池",
+            "thscode": "884312.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“管材”中，伟星新材的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“其他电池”中，力王股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "伟星新材",
-          "excluded_reasons": [
-            "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
-          ],
+          "company_name": "力王股份",
+          "excluded_reasons": [],
           "input_failure": null,
-          "market_expression_status": "NOT_ESTABLISHED",
-          "status": "CONDITIONS_NOT_MET",
-          "thscode": "002372.SZ"
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "920627.BJ"
         },
         "research_execution_allowed": false,
-        "research_scope_supported": true,
-        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "thscode": "002372.SZ"
+        "research_scope_supported": false,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "920627.BJ"
       },
       {
-        "company_name": "招商南油",
+        "company_name": "华人健康",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": {
-          "execution_id": "stock-business-2acb9504e981eae4a4bcb88a3d21a6b22aa6faa047465ebaf3543913146fb0dc",
+          "execution_id": "stock-business-48b72f3f92216690a14060e17b254afcd099d5f2929e91651a41f39ecf24020f",
           "question_kind": "FIRST_BUSINESS_BASELINE",
           "sources": {},
           "status": "NOT_STARTED",
@@ -1176,31 +1063,105 @@
         "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
         "origin_directions": [
           {
-            "family": "BROAD_881",
-            "name": "港口航运",
-            "thscode": "881148.TI"
+            "family": "GRANULAR_884",
+            "name": "药店",
+            "thscode": "884300.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“港口航运”中，招商南油的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“药店”中，华人健康的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "招商南油",
+          "company_name": "华人健康",
           "excluded_reasons": [],
           "input_failure": null,
           "market_expression_status": "OBSERVED",
           "status": "CONTRACT_CHECKED_RAW_READING",
-          "thscode": "601975.SH"
+          "thscode": "301408.SZ"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
         "review_status": "QUESTION_REVIEW_REQUIRED",
-        "thscode": "601975.SH"
+        "thscode": "301408.SZ"
       },
       {
-        "company_name": "陕西黑猫",
+        "company_name": "中国电信",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-879ef016d946652c2d83bf842af433d608ceaa8423bffb3d69b14b1b8a31e029",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "电信运营商",
+            "thscode": "884313.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“电信运营商”中，中国电信的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "中国电信",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "601728.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "601728.SH"
+      },
+      {
+        "company_name": "雄韬股份",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": {
+          "execution_id": "stock-business-8fdeb4447fc062bba7bfb68efa81bdc85c2882b7fbd73e1b0bfc4db36f0e105a",
+          "question_kind": "FIRST_BUSINESS_BASELINE",
+          "sources": {},
+          "status": "NOT_STARTED",
+          "terminal_state": null
+        },
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "其他电池",
+            "thscode": "884312.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“其他电池”中，雄韬股份的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "雄韬股份",
+          "excluded_reasons": [],
+          "input_failure": null,
+          "market_expression_status": "OBSERVED",
+          "status": "CONTRACT_CHECKED_RAW_READING",
+          "thscode": "002733.SZ"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "QUESTION_REVIEW_REQUIRED",
+        "thscode": "002733.SZ"
+      },
+      {
+        "company_name": "一心堂",
         "distinct_question_assessment": "NOT_PERFORMED",
         "economic_question_assessed": false,
         "existing_research_relation": null,
@@ -1208,32 +1169,65 @@
         "origin_directions": [
           {
             "family": "GRANULAR_884",
-            "name": "焦炭加工",
-            "thscode": "884015.TI"
+            "name": "药店",
+            "thscode": "884300.TI"
           }
         ],
         "origin_question_prompts": [
-          "来源方向“焦炭加工”中，陕西黑猫的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+          "来源方向“药店”中，一心堂的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
         ],
         "original_stock_disposition": {
           "business_benefit_status": "NOT_ESTABLISHED",
           "business_linkage_status": "UNKNOWN",
-          "company_name": "陕西黑猫",
+          "company_name": "一心堂",
           "excluded_reasons": [
             "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
           ],
           "input_failure": null,
           "market_expression_status": "NOT_ESTABLISHED",
           "status": "CONDITIONS_NOT_MET",
-          "thscode": "601015.SH"
+          "thscode": "002727.SZ"
         },
         "research_execution_allowed": false,
         "research_scope_supported": true,
         "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
-        "thscode": "601015.SH"
+        "thscode": "002727.SZ"
+      },
+      {
+        "company_name": "中国联通",
+        "distinct_question_assessment": "NOT_PERFORMED",
+        "economic_question_assessed": false,
+        "existing_research_relation": null,
+        "observation_context_status": "SAME_READING_STOCK_OBSERVATIONS",
+        "origin_directions": [
+          {
+            "family": "GRANULAR_884",
+            "name": "电信运营商",
+            "thscode": "884313.TI"
+          }
+        ],
+        "origin_question_prompts": [
+          "来源方向“电信运营商”中，中国联通的真实业务联系、收入/利润/现金暴露是否成立？哪些公开证据可以推翻这一联系？"
+        ],
+        "original_stock_disposition": {
+          "business_benefit_status": "NOT_ESTABLISHED",
+          "business_linkage_status": "UNKNOWN",
+          "company_name": "中国联通",
+          "excluded_reasons": [
+            "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
+          ],
+          "input_failure": null,
+          "market_expression_status": "NOT_ESTABLISHED",
+          "status": "CONDITIONS_NOT_MET",
+          "thscode": "600050.SH"
+        },
+        "research_execution_allowed": false,
+        "research_scope_supported": true,
+        "review_status": "ORIGINAL_PRICE_DISPOSITION_ONLY",
+        "thscode": "600050.SH"
       }
     ],
-    "market_session": "2026-10-08",
+    "market_session": "2026-10-09",
     "meaning": "OBSERVATION_PROMPTS_AND_EXISTING_RELATIONS_NOT_FORMAL_QUESTION_OR_EXECUTION",
     "original_coverage": {
       "conditions_not_met_issuers": 2,
@@ -1250,8 +1244,8 @@
     "research_authority": "NONE",
     "reviewed_question_count": 0,
     "signal_transition_authority": "NONE",
-    "source_run_id": 37763233292,
+    "source_run_id": 37917508312,
     "status": "SAVED_STOCK_SCOPE_WITH_RESEARCH_RELATIONS_NOT_FORMAL_QUESTION_REVIEW",
-    "stock_lane_health": "IN_PROGRESS"
+    "stock_lane_health": "LATEST_ATTEMPT_SUCCEEDED"
   }
 }
