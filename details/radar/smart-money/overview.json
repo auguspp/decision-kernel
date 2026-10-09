@@ -1,50 +1,50 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "0.96",
+  "capture_age_hours": "1.84",
   "capture_hash": "744aaef0435a5ec8fc34198ddf88a9d59c547a98ef2ef6b9e281e0251ef6830e",
   "current_reading": {
     "control": {
       "blockers": [],
-      "checked_at": "2026-10-09T16:21:09.675428+00:00",
+      "checked_at": "2026-10-09T18:19:27.902724+00:00",
       "code_commit": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
       "comparison_source_quota": "SEPARATE_EXPLICIT_TWELVE_CALL_CAP_NOT_FREE_OR_UNCOUNTED_BY_PROVIDER",
-      "decision": "RUN_INITIAL_OR_DAILY",
+      "decision": "SKIP_NONTRANSIENT_GAPS",
       "event": "schedule",
       "excluded_comparison_runs": [
         37034506941,
         36825109495,
         36821818724
       ],
-      "hithink_activity": "NO_VISIBLE_PEER",
+      "hithink_activity": "NOT_CHECKED_NO_CAPTURE",
       "investment_authority": "NONE",
       "pending_delivery_count": 6,
       "pending_source_run_id": null,
       "prior_read_status": "EXACT_PRIOR_STATE_READ",
-      "prior_reading": "0bbe5e61f94f9bc6ec3ba9d1eb824ea762f11b3b",
-      "run_id": 37958459630,
+      "prior_reading": "a51d788f9fd4464029422a3c6ad6d7ff4970f939",
+      "run_id": 37972442557,
       "skip_hithink": false,
       "target_date": "2026-10-10",
-      "today_invocations": 1,
+      "today_invocations": 2,
       "version": "smart-money-observation-v1"
     },
     "latest_attempt": {
-      "conclusion": "failure",
-      "created_at": "2026-10-09T16:20:57Z",
+      "conclusion": "success",
+      "created_at": "2026-10-09T18:19:14Z",
       "event": "schedule",
       "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37958459630",
-      "id": 37958459630,
+      "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37972442557",
+      "id": 37972442557,
       "operation": null,
       "path": ".github/workflows/radar-smart-money.yml",
       "run_attempt": 1,
-      "run_started_at": "2026-10-09T16:20:57Z",
+      "run_started_at": "2026-10-09T18:19:14Z",
       "status": "completed",
-      "updated_at": "2026-10-09T16:38:25Z"
+      "updated_at": "2026-10-09T18:19:33Z"
     },
-    "previous_status": "EXACT_PREVIOUS_7c3dc3eea9188198f64e8f54a2772c79ed9d8389",
+    "previous_status": "EXACT_PREVIOUS_a51d788f9fd4464029422a3c6ad6d7ff4970f939",
     "run_metadata_reads": [],
-    "status": "PARTIAL_WITH_EXPLICIT_GAPS",
-    "uses_prior_observation": false
+    "status": "CAPTURE_NOT_SAVED_NOT_QUIET",
+    "uses_prior_observation": true
   },
   "cutoff": "2026-10-09T16:30:37.252567+00:00",
   "families": {
@@ -3276,7 +3276,7 @@
       },
       "capture_hash": "744aaef0435a5ec8fc34198ddf88a9d59c547a98ef2ef6b9e281e0251ef6830e",
       "cutoff": "2026-10-09T16:30:37.252567+00:00",
-      "reading_commit": null,
+      "reading_commit": "a51d788f9fd4464029422a3c6ad6d7ff4970f939",
       "run": {
         "conclusion": "failure",
         "created_at": "2026-10-09T16:20:57Z",
@@ -3520,14 +3520,12 @@
   },
   "reading_freshness": "RECENT_CAPTURE_NOT_EACH_SOURCE_FRESHNESS",
   "relay_reading": {
-    "current_status": "CURRENT_RELAY_READING_GAP",
-    "diagnostics": {
-      "current_error_type": "SourceError"
-    },
+    "current_status": "NOT_RUN_WITHOUT_PRIMARY_CAPTURE",
+    "diagnostics": {},
     "previous_status": "EXACT_PREVIOUS_SUPPLEMENT"
   },
   "relay_supplement": {
-    "current_run_status": "CURRENT_RELAY_READING_GAP",
+    "current_run_status": "NOT_RUN_WITHOUT_PRIMARY_CAPTURE",
     "cutoff": "2026-10-08T16:52:21.392710+00:00",
     "family_coverage": {
       "hm_detail": {
