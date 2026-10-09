@@ -57,25 +57,25 @@ Shibor 不代表美债收益率。美债、黄金原油、外汇、加密资产�
 [原始ZIP](../../sources/artifacts/4defb698037e5cb6dcc17b04dd82f53a977d36b1445ea46ce66d0f7a0208ce40.zip)
 
 ## 美国国债期限利率
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：CAPTURE_READ
 
-最后可读批次run：37583447099
+最后可读批次run：37876796678
 # 美国国债期限利率
 
 来源观察，不是研究解释、实时交易报价或投资信号。
-窗口截止：2026-10-06；抓取截止：2026-10-07T06:47:23.850768+00:00
+窗口截止：2026-10-08；抓取截止：2026-10-09T02:54:52.321401+00:00
 状态：AVAILABLE；来源日期不替代抓取/发布时间。
 
 | 对象 | 来源日期 | 数值 | 单位 | 上一返回日期 | 变化 |
 |---|---|---|---|---|---|
-| 美国国债 1MONTH | 2026-10-06 | 4.06 | ANNUAL_PERCENT | 2026-10-05 | 1.00 bp |
-| 美国国债 3MONTH | 2026-10-06 | 4.21 | ANNUAL_PERCENT | 2026-10-05 | -1.00 bp |
-| 美国国债 6MONTH | 2026-10-06 | 4.28 | ANNUAL_PERCENT | 2026-10-05 | -2.00 bp |
-| 美国国债 1YEAR | 2026-10-06 | 4.46 | ANNUAL_PERCENT | 2026-10-05 | -1.00 bp |
-| 美国国债 2YEAR | 2026-10-06 | 4.79 | ANNUAL_PERCENT | 2026-10-05 | -5.00 bp |
-| 美国国债 5YEAR | 2026-10-06 | 5.03 | ANNUAL_PERCENT | 2026-10-05 | -3.00 bp |
-| 美国国债 10YEAR | 2026-10-06 | 5.27 | ANNUAL_PERCENT | 2026-10-05 | -4.00 bp |
-| 美国国债 30YEAR | 2026-10-06 | 5.64 | ANNUAL_PERCENT | 2026-10-05 | -2.00 bp |
+| 美国国债 1MONTH | 2026-10-08 | 4.14 | ANNUAL_PERCENT | 2026-10-07 | 7.00 bp |
+| 美国国债 3MONTH | 2026-10-08 | 4.23 | ANNUAL_PERCENT | 2026-10-07 | 1.00 bp |
+| 美国国债 6MONTH | 2026-10-08 | 4.30 | ANNUAL_PERCENT | 2026-10-07 | 2.00 bp |
+| 美国国债 1YEAR | 2026-10-08 | 4.44 | ANNUAL_PERCENT | 2026-10-07 | 2.00 bp |
+| 美国国债 2YEAR | 2026-10-08 | 4.75 | ANNUAL_PERCENT | 2026-10-07 | -2.00 bp |
+| 美国国债 5YEAR | 2026-10-08 | 4.99 | ANNUAL_PERCENT | 2026-10-07 | -4.00 bp |
+| 美国国债 10YEAR | 2026-10-08 | 5.22 | ANNUAL_PERCENT | 2026-10-07 | -6.00 bp |
+| 美国国债 30YEAR | 2026-10-08 | 5.60 | ANNUAL_PERCENT | 2026-10-07 | -7.00 bp |
 
 变化只比较两个实际返回日期，不猜相邻交易日。失败/空值不是市场无变化。
 美债为年化par yield而非债券回报；ECB为每欧元信息参考价；Coinbase仅代表该场所。
@@ -86,7 +86,14 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 - 202609：ROWS_NORMALIZED
 - 202610：ROWS_NORMALIZED
 
-[原始ZIP](../../sources/artifacts/0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec.zip)
+## 日期资格（不是实际发布时间）
+规则：DATED_REFERENCE_RELEASE_OPPORTUNITY_V1；时区：America/New_York
+原采集开始时可请求日期上限：2026-10-08
+参考值机会门槛（来源当地）：18:00
+到达机会时钟不证明资料已发布；只展示实际返回日期，未返回不补值。
+参考利率/汇率不是全天价格线；期货终局性未知，UTC日桶未结束不得提前使用。
+
+[原始ZIP](../../sources/artifacts/caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7.zip)
 
 ## ECB 外汇参考价
 本次读取：REUSED_RETAINED_CAPTURE

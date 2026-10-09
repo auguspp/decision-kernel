@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-09T01:59:31.347528+00:00",
+    "checked_at": "2026-10-09T02:56:47.188472+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -2198,44 +2198,44 @@
       "treasury": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11465541371,
-          "artifact_name": "global-public-treasury-37583447099-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099/artifacts/11465541371",
-          "bytes": 6380,
-          "expires_at": "2026-11-06T06:47:24Z",
-          "git_blob": "219d41c8db292c2e0f6253ba7a27945de7d1e600",
+          "artifact_id": 11593021003,
+          "artifact_name": "global-public-treasury-37876796678-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678/artifacts/11593021003",
+          "bytes": 7059,
+          "expires_at": "2026-11-08T02:54:52Z",
+          "git_blob": "495912dd7f597e8f597eb8ff2092cd2739b712b7",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-07T06:47:10Z",
+            "created_at": "2026-10-09T02:54:36Z",
             "event": "schedule",
-            "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099",
-            "id": 37583447099,
+            "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678",
+            "id": 37876796678,
             "operation": null,
             "path": ".github/workflows/radar-global-public.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-07T06:47:10Z",
+            "run_started_at": "2026-10-09T02:54:36Z",
             "status": "completed",
-            "updated_at": "2026-10-07T06:47:27Z"
+            "updated_at": "2026-10-09T02:54:57Z"
           },
-          "read_path": "sources/artifacts/0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec.zip",
+          "read_path": "sources/artifacts/caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec"
+          "sha256": "caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-07T06:47:10Z",
+          "created_at": "2026-10-09T02:54:36Z",
           "event": "schedule",
-          "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099",
-          "id": 37583447099,
+          "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678",
+          "id": 37876796678,
           "operation": null,
           "path": ".github/workflows/radar-global-public.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-07T06:47:10Z",
+          "run_started_at": "2026-10-09T02:54:36Z",
           "status": "completed",
-          "updated_at": "2026-10-07T06:47:27Z"
+          "updated_at": "2026-10-09T02:54:57Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -2252,56 +2252,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11465541371,
-            "artifact_name": "global-public-treasury-37583447099-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099/artifacts/11465541371",
-            "bytes": 6380,
-            "expires_at": "2026-11-06T06:47:24Z",
-            "git_blob": "219d41c8db292c2e0f6253ba7a27945de7d1e600",
+            "artifact_id": 11593021003,
+            "artifact_name": "global-public-treasury-37876796678-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678/artifacts/11593021003",
+            "bytes": 7059,
+            "expires_at": "2026-11-08T02:54:52Z",
+            "git_blob": "495912dd7f597e8f597eb8ff2092cd2739b712b7",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-07T06:47:10Z",
+              "created_at": "2026-10-09T02:54:36Z",
               "event": "schedule",
-              "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099",
-              "id": 37583447099,
+              "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678",
+              "id": 37876796678,
               "operation": null,
               "path": ".github/workflows/radar-global-public.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-07T06:47:10Z",
+              "run_started_at": "2026-10-09T02:54:36Z",
               "status": "completed",
-              "updated_at": "2026-10-07T06:47:27Z"
+              "updated_at": "2026-10-09T02:54:57Z"
             },
-            "read_path": "sources/artifacts/0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec.zip",
+            "read_path": "sources/artifacts/caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec"
+            "sha256": "caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11465541371/zip",
-            "created_at": "2026-10-07T06:47:24Z",
-            "digest": "sha256:0ceea68c2700dc19da7f17abb9fb2fe96a7bf34efaad7c6643031689a38918ec",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11593021003/zip",
+            "created_at": "2026-10-09T02:54:53Z",
+            "digest": "sha256:caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7",
             "expired": false,
-            "expires_at": "2026-11-06T06:47:24Z",
-            "id": 11465541371,
-            "name": "global-public-treasury-37583447099-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTQ2NTU0MTM3MQ==",
-            "size_in_bytes": 6380,
-            "updated_at": "2026-10-07T06:47:24Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11465541371",
+            "expires_at": "2026-11-08T02:54:52Z",
+            "id": 11593021003,
+            "name": "global-public-treasury-37876796678-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTU5MzAyMTAwMw==",
+            "size_in_bytes": 7059,
+            "updated_at": "2026-10-09T02:54:53Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11593021003",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
-              "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
-              "id": 37583447099,
+              "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+              "id": 37876796678,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-06",
+            "as_of_date": "2026-10-08",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -2313,52 +2313,91 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 8,
-            "capture_hash": "b77132251a79f86e78b83fdb723739dee4aa84e4cb3027a6673db2671e820b53",
-            "captured_from": "2026-10-07T06:47:23.491165+00:00",
-            "captured_through": "2026-10-07T06:47:23.850768+00:00",
+            "capture_hash": "49bf85b334e6d4a8992283fc37cbb9f25b514a4396622bb5b3d2334c52e30856",
+            "captured_from": "2026-10-09T02:54:51.591029+00:00",
+            "captured_through": "2026-10-09T02:54:52.321401+00:00",
             "coverage": "SELECTED_SOURCE_DATES_NOT_FULL_GLOBAL_MARKETS",
+            "date_policy": {
+              "max_as_of_date": "2026-10-08",
+              "meaning": "REQUEST_CEILING_NOT_ACTUAL_PUBLICATION_OR_SESSION_PROOF",
+              "not_before_local": "18:00",
+              "rule": "DATED_REFERENCE_RELEASE_OPPORTUNITY_V1",
+              "timezone": "America/New_York"
+            },
             "family": "treasury",
             "identity": {
               "attempt": 1,
-              "code_commit": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
+              "code_commit": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 37583447099,
+              "run_id": 37876796678,
               "workflow": ".github/workflows/radar-global-public.yml"
             },
             "observations": [
+              {
+                "calendar_age_at_requested_end": 0,
+                "change": "7.00",
+                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
+                "change_unit": "bp",
+                "market_status": "UNKNOWN_NOT_INFERRED",
+                "name": "美国国债 1MONTH",
+                "previous_date": "2026-10-07",
+                "previous_value": "4.07",
+                "price_kind": "DATED_SOURCE_OBSERVATION",
+                "publication_time": null,
+                "source_date": "2026-10-08",
+                "symbol": "UST:1MONTH",
+                "unit": "ANNUAL_PERCENT",
+                "value": "4.14"
+              },
               {
                 "calendar_age_at_requested_end": 0,
                 "change": "1.00",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "bp",
                 "market_status": "UNKNOWN_NOT_INFERRED",
-                "name": "美国国债 1MONTH",
-                "previous_date": "2026-10-05",
-                "previous_value": "4.05",
-                "price_kind": "DATED_SOURCE_OBSERVATION",
-                "publication_time": null,
-                "source_date": "2026-10-06",
-                "symbol": "UST:1MONTH",
-                "unit": "ANNUAL_PERCENT",
-                "value": "4.06"
-              },
-              {
-                "calendar_age_at_requested_end": 0,
-                "change": "-1.00",
-                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
-                "change_unit": "bp",
-                "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "美国国债 3MONTH",
-                "previous_date": "2026-10-05",
+                "previous_date": "2026-10-07",
                 "previous_value": "4.22",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-06",
+                "source_date": "2026-10-08",
                 "symbol": "UST:3MONTH",
                 "unit": "ANNUAL_PERCENT",
-                "value": "4.21"
+                "value": "4.23"
+              },
+              {
+                "calendar_age_at_requested_end": 0,
+                "change": "2.00",
+                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
+                "change_unit": "bp",
+                "market_status": "UNKNOWN_NOT_INFERRED",
+                "name": "美国国债 6MONTH",
+                "previous_date": "2026-10-07",
+                "previous_value": "4.28",
+                "price_kind": "DATED_SOURCE_OBSERVATION",
+                "publication_time": null,
+                "source_date": "2026-10-08",
+                "symbol": "UST:6MONTH",
+                "unit": "ANNUAL_PERCENT",
+                "value": "4.30"
+              },
+              {
+                "calendar_age_at_requested_end": 0,
+                "change": "2.00",
+                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
+                "change_unit": "bp",
+                "market_status": "UNKNOWN_NOT_INFERRED",
+                "name": "美国国债 1YEAR",
+                "previous_date": "2026-10-07",
+                "previous_value": "4.42",
+                "price_kind": "DATED_SOURCE_OBSERVATION",
+                "publication_time": null,
+                "source_date": "2026-10-08",
+                "symbol": "UST:1YEAR",
+                "unit": "ANNUAL_PERCENT",
+                "value": "4.44"
               },
               {
                 "calendar_age_at_requested_end": 0,
@@ -2366,63 +2405,15 @@
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "bp",
                 "market_status": "UNKNOWN_NOT_INFERRED",
-                "name": "美国国债 6MONTH",
-                "previous_date": "2026-10-05",
-                "previous_value": "4.30",
-                "price_kind": "DATED_SOURCE_OBSERVATION",
-                "publication_time": null,
-                "source_date": "2026-10-06",
-                "symbol": "UST:6MONTH",
-                "unit": "ANNUAL_PERCENT",
-                "value": "4.28"
-              },
-              {
-                "calendar_age_at_requested_end": 0,
-                "change": "-1.00",
-                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
-                "change_unit": "bp",
-                "market_status": "UNKNOWN_NOT_INFERRED",
-                "name": "美国国债 1YEAR",
-                "previous_date": "2026-10-05",
-                "previous_value": "4.47",
-                "price_kind": "DATED_SOURCE_OBSERVATION",
-                "publication_time": null,
-                "source_date": "2026-10-06",
-                "symbol": "UST:1YEAR",
-                "unit": "ANNUAL_PERCENT",
-                "value": "4.46"
-              },
-              {
-                "calendar_age_at_requested_end": 0,
-                "change": "-5.00",
-                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
-                "change_unit": "bp",
-                "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "美国国债 2YEAR",
-                "previous_date": "2026-10-05",
-                "previous_value": "4.84",
+                "previous_date": "2026-10-07",
+                "previous_value": "4.77",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-06",
+                "source_date": "2026-10-08",
                 "symbol": "UST:2YEAR",
                 "unit": "ANNUAL_PERCENT",
-                "value": "4.79"
-              },
-              {
-                "calendar_age_at_requested_end": 0,
-                "change": "-3.00",
-                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
-                "change_unit": "bp",
-                "market_status": "UNKNOWN_NOT_INFERRED",
-                "name": "美国国债 5YEAR",
-                "previous_date": "2026-10-05",
-                "previous_value": "5.06",
-                "price_kind": "DATED_SOURCE_OBSERVATION",
-                "publication_time": null,
-                "source_date": "2026-10-06",
-                "symbol": "UST:5YEAR",
-                "unit": "ANNUAL_PERCENT",
-                "value": "5.03"
+                "value": "4.75"
               },
               {
                 "calendar_age_at_requested_end": 0,
@@ -2430,31 +2421,47 @@
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "bp",
                 "market_status": "UNKNOWN_NOT_INFERRED",
-                "name": "美国国债 10YEAR",
-                "previous_date": "2026-10-05",
-                "previous_value": "5.31",
+                "name": "美国国债 5YEAR",
+                "previous_date": "2026-10-07",
+                "previous_value": "5.03",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-06",
-                "symbol": "UST:10YEAR",
+                "source_date": "2026-10-08",
+                "symbol": "UST:5YEAR",
                 "unit": "ANNUAL_PERCENT",
-                "value": "5.27"
+                "value": "4.99"
               },
               {
                 "calendar_age_at_requested_end": 0,
-                "change": "-2.00",
+                "change": "-6.00",
+                "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
+                "change_unit": "bp",
+                "market_status": "UNKNOWN_NOT_INFERRED",
+                "name": "美国国债 10YEAR",
+                "previous_date": "2026-10-07",
+                "previous_value": "5.28",
+                "price_kind": "DATED_SOURCE_OBSERVATION",
+                "publication_time": null,
+                "source_date": "2026-10-08",
+                "symbol": "UST:10YEAR",
+                "unit": "ANNUAL_PERCENT",
+                "value": "5.22"
+              },
+              {
+                "calendar_age_at_requested_end": 0,
+                "change": "-7.00",
                 "change_scope": "TWO_RETURNED_DATES_NOT_ASSERTED_CONSECUTIVE_SESSIONS",
                 "change_unit": "bp",
                 "market_status": "UNKNOWN_NOT_INFERRED",
                 "name": "美国国债 30YEAR",
-                "previous_date": "2026-10-05",
-                "previous_value": "5.66",
+                "previous_date": "2026-10-07",
+                "previous_value": "5.67",
                 "price_kind": "DATED_SOURCE_OBSERVATION",
                 "publication_time": null,
-                "source_date": "2026-10-06",
+                "source_date": "2026-10-08",
                 "symbol": "UST:30YEAR",
                 "unit": "ANNUAL_PERCENT",
-                "value": "5.64"
+                "value": "5.60"
               }
             ],
             "outcomes": [
@@ -2463,7 +2470,7 @@
                 "id": "202609",
                 "metadata": {},
                 "request_state": "HTTP_RESPONSE",
-                "selected_rows": 6,
+                "selected_rows": 4,
                 "source_rows": 21,
                 "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value_month=202609",
                 "status": "ROWS_NORMALIZED"
@@ -2473,21 +2480,21 @@
                 "id": "202610",
                 "metadata": {},
                 "request_state": "HTTP_RESPONSE",
-                "selected_rows": 4,
-                "source_rows": 4,
+                "selected_rows": 6,
+                "source_rows": 6,
                 "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value_month=202610",
                 "status": "ROWS_NORMALIZED"
               }
             ],
             "source_calls_during_replay": 0,
             "status": "AVAILABLE",
-            "version": "global-public-context-v1",
+            "version": "global-public-context-v2",
             "vintage": "CURRENT_RETRIEVAL_OF_DATED_ROWS_NOT_HISTORICAL_AS_KNOWN_VINTAGE"
           },
-          "retained_at": "2026-10-07T06:50:33.786111+00:00",
+          "retained_at": "2026-10-09T02:56:46.583438+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-07T06:47:10Z",
+            "created_at": "2026-10-09T02:54:36Z",
             "display_title": "B1 public · treasury · ",
             "event": "schedule",
             "head_branch": "main",
@@ -2559,9 +2566,9 @@
               "trees_url": "https://api.github.com/repos/auguspp/decision-kernel/git/trees{/sha}",
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
-            "head_sha": "c9efefdb0a9ebc867155aef4109cd3b77c5709fe",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37583447099",
-            "id": 37583447099,
+            "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37876796678",
+            "id": 37876796678,
             "path": ".github/workflows/radar-global-public.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -2632,9 +2639,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-07T06:47:10Z",
+            "run_started_at": "2026-10-09T02:54:36Z",
             "status": "completed",
-            "updated_at": "2026-10-07T06:47:27Z"
+            "updated_at": "2026-10-09T02:54:57Z"
           }
         }
       }
@@ -2645,7 +2652,7 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 42,
+      "total_count": 43,
       "unattributed_run_ids": []
     },
     "query": {
@@ -2658,5 +2665,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "2368f632bf0757b52194d77402325b2e1b1ac3c0ba5af689e55c00862109bc16"
+  "projection_hash": "ae0110bf5b5a520e85103ca952657abfb17cbe89550d2eed50db75b168da7033"
 }
