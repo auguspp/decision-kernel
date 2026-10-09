@@ -1,6 +1,6 @@
 {
   "automatic_full": false,
-  "capture_age_hours": "0.18",
+  "capture_age_hours": "0.68",
   "capture_hash": "744aaef0435a5ec8fc34198ddf88a9d59c547a98ef2ef6b9e281e0251ef6830e",
   "current_reading": {
     "control": {
@@ -41,7 +41,7 @@
       "status": "completed",
       "updated_at": "2026-10-09T16:38:25Z"
     },
-    "previous_status": "EXACT_PREVIOUS_53a15f29e4f052fddb097684e49902ac1fc28181",
+    "previous_status": "EXACT_PREVIOUS_dde6362395e5ed2d4982124358e913cfd8b64a10",
     "run_metadata_reads": [],
     "status": "PARTIAL_WITH_EXPLICIT_GAPS",
     "uses_prior_observation": false
@@ -3568,14 +3568,6 @@
     ],
     "departure_examples": [
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:陈长江",
-        "actor_name": "陈长江",
-        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
-        "period": "2026-09-30",
-        "prior_period": "2026-06-30",
-        "ticker": "002107.SZ"
-      },
-      {
         "actor_id": "EM:HOLDER:159647",
         "actor_name": "中信证券股份有限公司-鹏华中证中药交易型开放式指数证券投资基金",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
@@ -3584,8 +3576,8 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:王浩英",
-        "actor_name": "王浩英",
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:陈长江",
+        "actor_name": "陈长江",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
@@ -3594,6 +3586,14 @@
       {
         "actor_id": "EM:ISSUER_NAME:002107.SZ:陈仕秋",
         "actor_name": "陈仕秋",
+        "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "ticker": "002107.SZ"
+      },
+      {
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:王浩英",
+        "actor_name": "王浩英",
         "meaning": "ABSENT_FROM_DISCLOSED_TOP_TEN_NOT_PROVEN_SALE_OR_ZERO",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
@@ -3620,12 +3620,12 @@
     "entries": 6,
     "entry_examples": [
       {
-        "actor_id": "EM:HOLDER:10429689",
-        "actor_name": "高盛公司有限责任公司",
+        "actor_id": "EM:HOLDER:563300",
+        "actor_name": "招商银行股份有限公司-华泰柏瑞中证2000交易型开放式指数证券投资基金",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
-        "shares": "1522683",
+        "shares": "1.3607E+6",
         "ticker": "002107.SZ"
       },
       {
@@ -3638,15 +3638,6 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:ISSUER_NAME:002107.SZ:张军",
-        "actor_name": "张军",
-        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
-        "period": "2026-09-30",
-        "prior_period": "2026-06-30",
-        "shares": "1.7883E+6",
-        "ticker": "002107.SZ"
-      },
-      {
         "actor_id": "EM:ISSUER_NAME:002107.SZ:王国伟",
         "actor_name": "王国伟",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
@@ -3656,12 +3647,21 @@
         "ticker": "002107.SZ"
       },
       {
-        "actor_id": "EM:HOLDER:563300",
-        "actor_name": "招商银行股份有限公司-华泰柏瑞中证2000交易型开放式指数证券投资基金",
+        "actor_id": "EM:ISSUER_NAME:002107.SZ:张军",
+        "actor_name": "张军",
         "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
         "period": "2026-09-30",
         "prior_period": "2026-06-30",
-        "shares": "1.3607E+6",
+        "shares": "1.7883E+6",
+        "ticker": "002107.SZ"
+      },
+      {
+        "actor_id": "EM:HOLDER:10429689",
+        "actor_name": "高盛公司有限责任公司",
+        "meaning": "NEW_IN_DISCLOSED_TOP_TEN_NOT_PROVEN_NEW_PURCHASE",
+        "period": "2026-09-30",
+        "prior_period": "2026-06-30",
+        "shares": "1522683",
         "ticker": "002107.SZ"
       },
       {
