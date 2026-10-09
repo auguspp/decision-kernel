@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-09T02:59:34.156944+00:00",
+    "checked_at": "2026-10-09T03:02:08.059445+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -995,7 +995,7 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "CAPTURE_READ",
+        "latest_read_status": "REUSED_RETAINED_CAPTURE",
         "snapshot": {
           "archive": {
             "artifact_id": 11593215420,
@@ -2672,5 +2672,5 @@
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "939af17aef13f4dfed2140f6559cc299953d8ecbbdf74a2d65e5dc2914a50864"
+  "projection_hash": "91c5fde9eeaebd1ab6fa5429443e25ac3f7c704d95901cbb0b3b507defd0a0ce"
 }

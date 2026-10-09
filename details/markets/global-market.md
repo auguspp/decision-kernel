@@ -96,7 +96,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/caf23078d32f6d8f018add885aea5769c23471fe7836cec9c51885332a0826c7.zip)
 
 ## ECB 外汇参考价
-本次读取：CAPTURE_READ
+本次读取：REUSED_RETAINED_CAPTURE
 
 最后可读批次run：37877136479
 # ECB 外汇参考价
