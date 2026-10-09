@@ -241,3 +241,16 @@ def test_capture_budget_stop_retains_completed_windows_and_no_fake_response(tmp_
     assert len(calls)==8 and m.verify(root)==report
     receipt=json.loads((root/"receipt.json").read_bytes())
     assert receipt["calls"][-1]["attempts"]==[]
+
+
+
+def test_original_workflow_identity_can_replay_main_sector_completion_source():
+    env={'GITHUB_REPOSITORY':'auguspp/decision-kernel', 'GITHUB_REF':'refs/heads/main',
+         'GITHUB_RUN_ATTEMPT':'1','GITHUB_JOB':'daily-market-inputs',
+         'GITHUB_EVENT_NAME':'workflow_run',
+         'GITHUB_WORKFLOW_REF':'auguspp/decision-kernel/'+m.WORKFLOW+'@refs/heads/main',
+         'GITHUB_SHA':'a'*40,'GITHUB_RUN_ID':'876'}
+    assert m.workflow_identity(env)['GITHUB_EVENT_NAME']=='workflow_run'
+    env['GITHUB_EVENT_NAME']='repository_dispatch'
+    with pytest.raises(ValueError, match='EXECUTION_IDENTITY'):
+        m.workflow_identity(env)

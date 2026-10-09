@@ -404,7 +404,7 @@ def workflow_identity(env):
     require(env.get('GITHUB_REPOSITORY') == 'auguspp/decision-kernel'
         and env.get('GITHUB_REF') == 'refs/heads/main' and env.get('GITHUB_RUN_ATTEMPT') == '1'
         and env.get('GITHUB_JOB') == 'daily-market-inputs'
-        and env.get('GITHUB_EVENT_NAME') in ('schedule', 'workflow_dispatch')
+        and env.get('GITHUB_EVENT_NAME') in ('schedule', 'workflow_dispatch', 'workflow_run')
         and env.get('GITHUB_WORKFLOW_REF') == 'auguspp/decision-kernel/'+WORKFLOW+'@refs/heads/main'
         and re.fullmatch(r'[0-9a-f]{40}', env.get('GITHUB_SHA', '')) is not None
         and re.fullmatch(r'[1-9][0-9]*', env.get('GITHUB_RUN_ID', '')) is not None, 'EXECUTION_IDENTITY')
