@@ -1,7 +1,7 @@
 {
   "projection": {
     "automatic_research_routing": false,
-    "base_reading_hash": "7a409ce22763c4e4be3abc60b922e4b49047e81aeb80f94e32f14031f96e4a62",
+    "base_reading_hash": "1f9ba8f99d31167cf484242d3533353d1f4035f880b16a2d9289ceb12bcf0970",
     "companies": [
       {
         "automatic_admission": false,
@@ -10,492 +10,29 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881115.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.097183098591549295774647887",
-              "name": "雄塑科技",
-              "thscode": "300599.SZ",
-              "ticker": "300599",
-              "turnover": "499214230"
-            },
-            "sector_name": "管材",
-            "sector_thscode": "884064.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“管材”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "SAVED_CONTEXT_PRESENT",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": [
-            {
-              "record": {
-                "candidate_output_prefix": "research_runs/candidates/stock-business/00d61cc6aca5c381b63453daadaab94fc2be9f4434f285e3123f996a86dad976/",
-                "execution_id": "stock-business-00d61cc6aca5c381b63453daadaab94fc2be9f4434f285e3123f996a86dad976",
-                "human_attention_authority": "NONE",
-                "investment_authority": "NONE",
-                "question_kind": "FIRST_BUSINESS_BASELINE",
-                "registered_current_handoff": false,
-                "research_authority": "NONE",
-                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
-                "signal_transition_authority": "NONE",
-                "sources": {},
-                "status": "NOT_STARTED",
-                "terminal_state": null,
-                "thscode": "300599.SZ"
-              },
-              "role": "ROOT"
-            }
-          ]
-        },
-        "source_names": [
-          "雄塑科技"
-        ],
-        "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "雄塑科技",
-              "excluded_reasons": [],
-              "input_failure": null,
-              "market_expression_status": "OBSERVED",
-              "status": "CONTRACT_CHECKED_RAW_READING",
-              "thscode": "300599.SZ"
-            }
-          ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "SAVED_DISPOSITION"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "300599.SZ"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "BROAD_881",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.100194552529182879377431907",
-              "name": "中远海能",
-              "thscode": "600026.SH",
-              "ticker": "600026",
-              "turnover": "870079410"
-            },
-            "sector_name": "港口航运",
-            "sector_thscode": "881148.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          },
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
-            "is_primary": false,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.100194552529182879377431907",
-              "name": "中远海能",
-              "thscode": "600026.SH",
-              "ticker": "600026",
-              "turnover": "870079410"
-            },
-            "sector_name": "航运",
-            "sector_thscode": "884191.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“港口航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "SAVED_CONTEXT_PRESENT",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": [
-            {
-              "record": {
-                "candidate_output_prefix": "research_runs/candidates/stock-business/1be0609685365fe2d64cc74016fb4f0572593e4c544771a6d3e55dd641281682/",
-                "execution_id": "stock-business-1be0609685365fe2d64cc74016fb4f0572593e4c544771a6d3e55dd641281682",
-                "human_attention_authority": "NONE",
-                "investment_authority": "NONE",
-                "question_kind": "FIRST_BUSINESS_BASELINE",
-                "registered_current_handoff": false,
-                "research_authority": "NONE",
-                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
-                "signal_transition_authority": "NONE",
-                "sources": {},
-                "status": "NOT_STARTED",
-                "terminal_state": null,
-                "thscode": "600026.SH"
-              },
-              "role": "ROOT"
-            }
-          ]
-        },
-        "source_names": [
-          "中远海能"
-        ],
-        "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "中远海能",
-              "excluded_reasons": [],
-              "input_failure": null,
-              "market_expression_status": "OBSERVED",
-              "status": "CONTRACT_CHECKED_RAW_READING",
-              "thscode": "600026.SH"
-            }
-          ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "SAVED_DISPOSITION"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600026.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881105.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.099041533546325878594249201",
-              "name": "安泰集团",
-              "thscode": "600408.SH",
-              "ticker": "600408",
-              "turnover": "217813850"
-            },
-            "sector_name": "焦炭加工",
-            "sector_thscode": "884015.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“焦炭加工”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "SAVED_CONTEXT_PRESENT",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": [
-            {
-              "record": {
-                "candidate_output_prefix": "research_runs/candidates/stock-business/0ad32551dea7d918276f9b9bd1b86e226e3bfb12d081449424d1ee35f9f8690a/",
-                "execution_id": "stock-business-0ad32551dea7d918276f9b9bd1b86e226e3bfb12d081449424d1ee35f9f8690a",
-                "human_attention_authority": "NONE",
-                "investment_authority": "NONE",
-                "question_kind": "FIRST_BUSINESS_BASELINE",
-                "registered_current_handoff": false,
-                "research_authority": "NONE",
-                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
-                "signal_transition_authority": "NONE",
-                "sources": {},
-                "status": "NOT_STARTED",
-                "terminal_state": null,
-                "thscode": "600408.SH"
-              },
-              "role": "ROOT"
-            }
-          ]
-        },
-        "source_names": [
-          "安泰集团"
-        ],
-        "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "安泰集团",
-              "excluded_reasons": [],
-              "input_failure": null,
-              "market_expression_status": "OBSERVED",
-              "status": "CONTRACT_CHECKED_RAW_READING",
-              "thscode": "600408.SH"
-            }
-          ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "SAVED_DISPOSITION"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600408.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881118.TI",
-            "group_on_homepage": false,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.099942229924898902368573079",
-              "name": "快意电梯",
-              "thscode": "002774.SZ",
-              "ticker": "002774",
-              "turnover": "134655120"
-            },
-            "sector_name": "楼宇设备",
-            "sector_thscode": "884083.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          },
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "物联网",
-            "concept_thscode": "885312.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-            "membership_request_index": 3,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:09.149291Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“楼宇设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
-          "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "快意电梯"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002774.SZ"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881280.TI",
-            "group_on_homepage": false,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.004531722054380664652567976",
-              "name": "三一重能",
-              "thscode": "688349.SH",
-              "ticker": "688349",
-              "turnover": "108936065"
-            },
-            "sector_name": "风电整机",
-            "sector_thscode": "884307.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“风电整机”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "三一重能"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "688349.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
             "group_key": "881281.TI",
-            "group_on_homepage": false,
+            "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.299562682215743440233236152",
+              "daily_return": "0.241166573191250701065619742",
               "name": "力王股份",
               "thscode": "920627.BJ",
               "ticker": "920627",
-              "turnover": "213939190"
+              "turnover": "357229400"
             },
             "sector_name": "其他电池",
             "sector_thscode": "884312.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
@@ -537,34 +74,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881115.TI",
+            "group_key": "881143.TI",
             "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.020594965675057208237986270",
-              "name": "伟星新材",
-              "thscode": "002372.SZ",
-              "ticker": "002372",
-              "turnover": "187983120"
+              "daily_return": "0.031313818924438393464942138",
+              "name": "华人健康",
+              "thscode": "301408.SZ",
+              "ticker": "301408",
+              "turnover": "230990940"
             },
-            "sector_name": "管材",
-            "sector_thscode": "884064.TI",
+            "sector_name": "药店",
+            "sector_thscode": "884300.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“管材”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“药店”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -575,23 +112,10 @@
           "stock_business_states": []
         },
         "source_names": [
-          "伟星新材"
+          "华人健康"
         ],
         "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "伟星新材",
-              "excluded_reasons": [
-                "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
-              ],
-              "input_failure": null,
-              "market_expression_status": "NOT_ESTABLISHED",
-              "status": "CONDITIONS_NOT_MET",
-              "thscode": "002372.SZ"
-            }
-          ],
+          "dispositions": [],
           "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
           "market_session": "2026-10-08",
           "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
@@ -602,131 +126,10 @@
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
             "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
           },
-          "status": "SAVED_DISPOSITION"
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002372.SZ"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "BROAD_881",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.099557522123893805309734513",
-              "name": "招商南油",
-              "thscode": "601975.SH",
-              "ticker": "601975",
-              "turnover": "1466802800"
-            },
-            "sector_name": "港口航运",
-            "sector_thscode": "881148.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          },
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
-            "is_primary": false,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.099557522123893805309734513",
-              "name": "招商南油",
-              "thscode": "601975.SH",
-              "ticker": "601975",
-              "turnover": "1466802800"
-            },
-            "sector_name": "航运",
-            "sector_thscode": "884191.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“港口航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "SAVED_CONTEXT_PRESENT",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": [
-            {
-              "record": {
-                "candidate_output_prefix": "research_runs/candidates/stock-business/2acb9504e981eae4a4bcb88a3d21a6b22aa6faa047465ebaf3543913146fb0dc/",
-                "execution_id": "stock-business-2acb9504e981eae4a4bcb88a3d21a6b22aa6faa047465ebaf3543913146fb0dc",
-                "human_attention_authority": "NONE",
-                "investment_authority": "NONE",
-                "question_kind": "FIRST_BUSINESS_BASELINE",
-                "registered_current_handoff": false,
-                "research_authority": "NONE",
-                "semantic_acceptance": "NOT_ESTABLISHED_BY_READER",
-                "signal_transition_authority": "NONE",
-                "sources": {},
-                "status": "NOT_STARTED",
-                "terminal_state": null,
-                "thscode": "601975.SH"
-              },
-              "role": "ROOT"
-            }
-          ]
-        },
-        "source_names": [
-          "招商南油"
-        ],
-        "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "招商南油",
-              "excluded_reasons": [],
-              "input_failure": null,
-              "market_expression_status": "OBSERVED",
-              "status": "CONTRACT_CHECKED_RAW_READING",
-              "thscode": "601975.SH"
-            }
-          ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "SAVED_DISPOSITION"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601975.SH"
+        "thscode": "301408.SZ"
       },
       {
         "automatic_admission": false,
@@ -735,106 +138,29 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881105.TI",
+            "group_key": "881162.TI",
             "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.069832402234636871508379888",
-              "name": "陕西黑猫",
-              "thscode": "601015.SH",
-              "ticker": "601015",
-              "turnover": "535073880"
+              "daily_return": "0.010903426791277258566978193",
+              "name": "中国电信",
+              "thscode": "601728.SH",
+              "ticker": "601728",
+              "turnover": "830955230"
             },
-            "sector_name": "焦炭加工",
-            "sector_thscode": "884015.TI",
+            "sector_name": "电信运营商",
+            "sector_thscode": "884313.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“焦炭加工”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "陕西黑猫"
-        ],
-        "stock": {
-          "dispositions": [
-            {
-              "business_benefit_status": "NOT_ESTABLISHED",
-              "business_linkage_status": "UNKNOWN",
-              "company_name": "陕西黑猫",
-              "excluded_reasons": [
-                "TWENTY_DAY_PATH_DOES_NOT_BEAT_ANY_ROUTED_SECTOR"
-              ],
-              "input_failure": null,
-              "market_expression_status": "NOT_ESTABLISHED",
-              "status": "CONDITIONS_NOT_MET",
-              "thscode": "601015.SH"
-            }
-          ],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "SAVED_DISPOSITION"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601015.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881118.TI",
-            "group_on_homepage": false,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.037037037037037037037037037",
-              "name": "通用电梯",
-              "thscode": "300931.SZ",
-              "ticker": "300931",
-              "turnover": "305880040"
-            },
-            "sector_name": "楼宇设备",
-            "sector_thscode": "884083.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           },
           {
             "acquisition_kind": "SUPPLEMENTAL_DETAIL",
@@ -863,7 +189,7 @@
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“楼宇设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "来源方向“电信运营商”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
           "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
           "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
         ],
@@ -876,7 +202,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "通用电梯"
+          "中国电信"
         ],
         "stock": {
           "dispositions": [],
@@ -893,7 +219,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "300931.SZ"
+        "thscode": "601728.SH"
       },
       {
         "automatic_admission": false,
@@ -901,35 +227,35 @@
         "new_research_execution": "NOT_EXECUTED",
         "origins": [
           {
-            "family": "GRANULAR_884",
-            "group_key": "881280.TI",
+            "family": "BROAD_881",
+            "group_key": "881274.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "-0.0154867256637168141592920354",
-              "name": "电气风电",
-              "thscode": "688660.SH",
-              "ticker": "688660",
-              "turnover": "246235130"
+              "daily_return": "0.109780439121756487025948104",
+              "name": "捷成股份",
+              "thscode": "300182.SZ",
+              "ticker": "300182",
+              "turnover": "1780322400"
             },
-            "sector_name": "风电整机",
-            "sector_thscode": "884307.TI",
+            "sector_name": "影视院线",
+            "sector_thscode": "881274.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“风电整机”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“影视院线”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -940,7 +266,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "电气风电"
+          "捷成股份"
         ],
         "stock": {
           "dispositions": [],
@@ -957,7 +283,290 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "688660.SH"
+        "thscode": "300182.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.201360544217687074829931973",
+              "name": "流金科技",
+              "thscode": "920021.BJ",
+              "ticker": "920021",
+              "turnover": "410490500"
+            },
+            "sector_name": "文化传媒",
+            "sector_thscode": "881164.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": false,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.201360544217687074829931973",
+              "name": "流金科技",
+              "thscode": "920021.BJ",
+              "ticker": "920021",
+              "turnover": "410490500"
+            },
+            "sector_name": "电视广播",
+            "sector_thscode": "884172.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“文化传媒”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "来源方向“电视广播”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "流金科技"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
+        "thscode": "920021.BJ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881102.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.052307692307692307692307692",
+              "name": "中水渔业",
+              "thscode": "000798.SZ",
+              "ticker": "000798",
+              "turnover": "259376870"
+            },
+            "sector_name": "海洋捕捞",
+            "sector_thscode": "884005.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“海洋捕捞”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中水渔业"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000798.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881101.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.032986111111111111111111111",
+              "name": "福建金森",
+              "thscode": "002679.SZ",
+              "ticker": "002679",
+              "turnover": "281210260"
+            },
+            "sector_name": "林业",
+            "sector_thscode": "884004.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“林业”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "福建金森"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002679.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881272.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.200230149597238204833141542",
+              "name": "绿盟科技",
+              "thscode": "300369.SZ",
+              "ticker": "300369",
+              "turnover": "1006656810"
+            },
+            "sector_name": "横向通用软件",
+            "sector_thscode": "884296.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“横向通用软件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "绿盟科技"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300369.SZ"
       },
       {
         "automatic_admission": false,
@@ -967,28 +576,28 @@
           {
             "family": "GRANULAR_884",
             "group_key": "881281.TI",
-            "group_on_homepage": false,
+            "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.100174723354688410017472335",
+              "daily_return": "0.100052938062466913710958179",
               "name": "雄韬股份",
               "thscode": "002733.SZ",
               "ticker": "002733",
-              "turnover": "304284350"
+              "turnover": "434396750"
             },
             "sector_name": "其他电池",
             "sector_thscode": "884312.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
@@ -1030,34 +639,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881115.TI",
+            "group_key": "881143.TI",
             "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.015030946065428824049513705",
-              "name": "青龙管业",
-              "thscode": "002457.SZ",
-              "ticker": "002457",
-              "turnover": "230763730"
+              "daily_return": "0.022325581395348837209302326",
+              "name": "一心堂",
+              "thscode": "002727.SZ",
+              "ticker": "002727",
+              "turnover": "99608536"
             },
-            "sector_name": "管材",
-            "sector_thscode": "884064.TI",
+            "sector_name": "药店",
+            "sector_thscode": "884300.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“管材”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“药店”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1068,7 +677,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "青龙管业"
+          "一心堂"
         ],
         "stock": {
           "dispositions": [],
@@ -1085,7 +694,122 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002457.SZ"
+        "thscode": "002727.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881162.TI",
+            "group_on_homepage": true,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.007025761124121779859484778",
+              "name": "中国联通",
+              "thscode": "600050.SH",
+              "ticker": "600050",
+              "turnover": "538313700"
+            },
+            "sector_name": "电信运营商",
+            "sector_thscode": "884313.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "物联网",
+            "concept_thscode": "885312.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+            "membership_request_index": 3,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:09.149291Z"
+          },
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "移动支付",
+            "concept_thscode": "885333.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:52.299000Z",
+            "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
+            "membership_request_index": 5,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:52.651149Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“电信运营商”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
+          "概念“移动支付”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
+          "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中国联通"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "600050.SH"
       },
       {
         "automatic_admission": false,
@@ -1094,148 +818,34 @@
         "origins": [
           {
             "family": "BROAD_881",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
+            "group_key": "881274.TI",
+            "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.093300248138957816377171216",
-              "name": "招商轮船",
-              "thscode": "601872.SH",
-              "ticker": "601872",
-              "turnover": "5013475000"
+              "daily_return": "0.108465608465608465608465608",
+              "name": "华策影视",
+              "thscode": "300133.SZ",
+              "ticker": "300133",
+              "turnover": "1502148400"
             },
-            "sector_name": "港口航运",
-            "sector_thscode": "881148.TI",
+            "sector_name": "影视院线",
+            "sector_thscode": "881274.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          },
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
-            "is_primary": false,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.093300248138957816377171216",
-              "name": "招商轮船",
-              "thscode": "601872.SH",
-              "ticker": "601872",
-              "turnover": "5013475000"
-            },
-            "sector_name": "航运",
-            "sector_thscode": "884191.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“港口航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "on_demand_archives": [
-            {
-              "archive": {
-                "format": "RETAINED_FILES"
-              },
-              "body_materialized_in_reading": false,
-              "case": "601872.SH",
-              "id": "601872-cmes-full-conditional-odds-original-20261007",
-              "meaning": "REGISTERED_LOCATOR_ONLY_NOT_BODY_READ_RESEARCH_ACCEPTANCE_OR_CONTINUATION",
-              "purpose_note": "Human-direct Full/Odds original attachment, recovered through a same-blob ASCII filename map. Read the recovery README and original ARCHIVE-DELIVERY note: old NOT_SAVED statements are historical, and PR782 cash-equivalent study is a different model. Twelve original contents plus one recovery map; no new Research or source verification. Original 36 arithmetic checks are not source or method acceptance. Date-only context, no probability, typed COMMITTED/canonical Odds, Human acceptance, Watch or investment authority.",
-              "qualification": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-              "read_policy": "ON_DEMAND_ARCHIVE",
-              "source": {
-                "bytes": 3120,
-                "git_blob": "1093537bb5e754e18cac61b8330087eb1715efd5",
-                "path": "docs/readings/cmes-full-odds-2026-10-07-recovery/README.md",
-                "ref": "d1177a0f76d2680157df4a27e741a048454f356b",
-                "repository": "auguspp/decision-kernel",
-                "sha256": "e464ad61a4725d5ec3676b1b6e50cfc1e91168e4cd2889f86e359b57548a9017"
-              },
-              "use": "RETAINED_RESEARCH_DOCUMENT"
-            }
-          ],
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "REGISTERED_ARCHIVE_NOT_MATERIALIZED",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "招商轮船"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601872.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881105.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.035714285714285714285714286",
-              "name": "云煤能源",
-              "thscode": "600792.SH",
-              "ticker": "600792",
-              "turnover": "505869600"
-            },
-            "sector_name": "焦炭加工",
-            "sector_thscode": "884015.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“焦炭加工”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“影视院线”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1246,7 +856,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "云煤能源"
+          "华策影视"
         ],
         "stock": {
           "dispositions": [],
@@ -1263,7 +873,162 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600792.SH"
+        "thscode": "300133.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.200098087297694948504168710",
+              "name": "中文在线",
+              "thscode": "300364.SZ",
+              "ticker": "300364",
+              "turnover": "1850122300"
+            },
+            "sector_name": "文化传媒",
+            "sector_thscode": "881164.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“文化传媒”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中文在线"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300364.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.130434782608695652173913043",
+              "name": "无线传媒",
+              "thscode": "301551.SZ",
+              "ticker": "301551",
+              "turnover": "489276590"
+            },
+            "sector_name": "文化传媒",
+            "sector_thscode": "881164.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": false,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.130434782608695652173913043",
+              "name": "无线传媒",
+              "thscode": "301551.SZ",
+              "ticker": "301551",
+              "turnover": "489276590"
+            },
+            "sector_name": "电视广播",
+            "sector_thscode": "884172.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“文化传媒”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "来源方向“电视广播”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "无线传媒"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "301551.SZ"
       },
       {
         "automatic_admission": false,
@@ -1272,29 +1037,619 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881118.TI",
+            "group_key": "881102.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.022324865280985373364126251",
-              "name": "森赫股份",
-              "thscode": "301056.SZ",
-              "ticker": "301056",
-              "turnover": "65768047"
+              "daily_return": "0.016286644951140065146579805",
+              "name": "开创国际",
+              "thscode": "600097.SH",
+              "ticker": "600097",
+              "turnover": "27833413"
             },
-            "sector_name": "楼宇设备",
-            "sector_thscode": "884083.TI",
+            "sector_name": "海洋捕捞",
+            "sector_thscode": "884005.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“海洋捕捞”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "开创国际"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "600097.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881101.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.016666666666666666666666667",
+              "name": "永安林业",
+              "thscode": "000663.SZ",
+              "ticker": "000663",
+              "turnover": "42089255"
+            },
+            "sector_name": "林业",
+            "sector_thscode": "884004.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“林业”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "永安林业"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000663.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881272.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.199947657681235278722847422",
+              "name": "麒麟信安",
+              "thscode": "688152.SH",
+              "ticker": "688152",
+              "turnover": "482931980"
+            },
+            "sector_name": "横向通用软件",
+            "sector_thscode": "884296.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "智能电网",
+            "concept_thscode": "885311.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:17:25.507000Z",
+            "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
+            "membership_request_index": 1,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:17:25.907438Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“横向通用软件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "概念“智能电网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
+          "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "麒麟信安"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "688152.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881281.TI",
+            "group_on_homepage": true,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.098631429919773478055686645",
+              "name": "长虹能源",
+              "thscode": "920239.BJ",
+              "ticker": "920239",
+              "turnover": "133011939"
+            },
+            "sector_name": "其他电池",
+            "sector_thscode": "884312.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“其他电池”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "长虹能源"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
+        "thscode": "920239.BJ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881143.TI",
+            "group_on_homepage": true,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.022099447513812154696132597",
+              "name": "益丰药房",
+              "thscode": "603939.SH",
+              "ticker": "603939",
+              "turnover": "421241320"
+            },
+            "sector_name": "药店",
+            "sector_thscode": "884300.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“药店”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "益丰药房"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "603939.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881162.TI",
+            "group_on_homepage": true,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.000204164965291955900367497",
+              "name": "中国移动",
+              "thscode": "600941.SH",
+              "ticker": "600941",
+              "turnover": "1262727750"
+            },
+            "sector_name": "电信运营商",
+            "sector_thscode": "884313.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "移动支付",
+            "concept_thscode": "885333.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:52.299000Z",
+            "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
+            "membership_request_index": 5,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:52.651149Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“电信运营商”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "概念“移动支付”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
+          "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "中国移动"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "600941.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881274.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.100044464206313917296576256",
+              "name": "上海电影",
+              "thscode": "601595.SH",
+              "ticker": "601595",
+              "turnover": "295094660"
+            },
+            "sector_name": "影视院线",
+            "sector_thscode": "881274.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“影视院线”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "上海电影"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "601595.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.199791340636411058946270214",
+              "name": "芒果超媒",
+              "thscode": "300413.SZ",
+              "ticker": "300413",
+              "turnover": "2384983300"
+            },
+            "sector_name": "文化传媒",
+            "sector_thscode": "881164.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“文化传媒”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "芒果超媒"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300413.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "BROAD_881",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.101321585903083700440528634",
+              "name": "吉视传媒",
+              "thscode": "601929.SH",
+              "ticker": "601929",
+              "turnover": "475031390"
+            },
+            "sector_name": "文化传媒",
+            "sector_thscode": "881164.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
+            "is_primary": false,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.101321585903083700440528634",
+              "name": "吉视传媒",
+              "thscode": "601929.SH",
+              "ticker": "601929",
+              "turnover": "475031390"
+            },
+            "sector_name": "电视广播",
+            "sector_thscode": "884172.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           },
           {
             "acquisition_kind": "SUPPLEMENTAL_DETAIL",
@@ -1323,7 +1678,8 @@
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“楼宇设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "来源方向“文化传媒”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "来源方向“电视广播”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
           "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
           "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
         ],
@@ -1336,7 +1692,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "森赫股份"
+          "吉视传媒"
         ],
         "stock": {
           "dispositions": [],
@@ -1353,7 +1709,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "301056.SZ"
+        "thscode": "601929.SH"
       },
       {
         "automatic_admission": false,
@@ -1362,34 +1718,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881280.TI",
+            "group_key": "881101.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "-0.0202429149797570850202429150",
-              "name": "运达股份",
-              "thscode": "300772.SZ",
-              "ticker": "300772",
-              "turnover": "176414910"
+              "daily_return": "0.014084507042253521126760563",
+              "name": "丰林集团",
+              "thscode": "601996.SH",
+              "ticker": "601996",
+              "turnover": "56398554"
             },
-            "sector_name": "风电整机",
-            "sector_thscode": "884307.TI",
+            "sector_name": "林业",
+            "sector_thscode": "884004.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“风电整机”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“林业”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1400,7 +1756,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "运达股份"
+          "丰林集团"
         ],
         "stock": {
           "dispositions": [],
@@ -1417,7 +1773,71 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "300772.SZ"
+        "thscode": "601996.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "family": "GRANULAR_884",
+            "group_key": "881272.TI",
+            "group_on_homepage": false,
+            "is_primary": true,
+            "kind": "SECTOR_LEADER",
+            "market_session": "2026-10-09",
+            "retained_leader": {
+              "daily_return": "0.162227602905569007263922518",
+              "name": "永信至诚",
+              "thscode": "688244.SH",
+              "ticker": "688244",
+              "turnover": "496980440"
+            },
+            "sector_name": "横向通用软件",
+            "sector_thscode": "884296.TI",
+            "source": {
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
+            },
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“横向通用软件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "永信至诚"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "688244.SH"
       },
       {
         "automatic_admission": false,
@@ -1427,28 +1847,28 @@
           {
             "family": "GRANULAR_884",
             "group_key": "881281.TI",
-            "group_on_homepage": false,
+            "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.1",
+              "daily_return": "0.046902142443543717429067748",
               "name": "野马电池",
               "thscode": "605378.SH",
               "ticker": "605378",
-              "turnover": "271600140"
+              "turnover": "520790920"
             },
             "sector_name": "其他电池",
             "sector_thscode": "884312.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
@@ -1490,34 +1910,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881115.TI",
+            "group_key": "881143.TI",
             "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.009377664109121909633418585",
-              "name": "东宏股份",
-              "thscode": "603856.SH",
-              "ticker": "603856",
-              "turnover": "30213606"
+              "daily_return": "0.021786492374727668845315904",
+              "name": "大参林",
+              "thscode": "603233.SH",
+              "ticker": "603233",
+              "turnover": "253555020"
             },
-            "sector_name": "管材",
-            "sector_thscode": "884064.TI",
+            "sector_name": "药店",
+            "sector_thscode": "884300.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“管材”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“药店”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1528,7 +1948,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "东宏股份"
+          "大参林"
         ],
         "stock": {
           "dispositions": [],
@@ -1545,7 +1965,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "603856.SH"
+        "thscode": "603233.SH"
       },
       {
         "automatic_admission": false,
@@ -1554,61 +1974,98 @@
         "origins": [
           {
             "family": "BROAD_881",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
+            "group_key": "881274.TI",
+            "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.035276073619631901840490798",
-              "name": "海通发展",
-              "thscode": "603162.SH",
-              "ticker": "603162",
-              "turnover": "569207800"
+              "daily_return": "0.1",
+              "name": "文投控股",
+              "thscode": "600715.SH",
+              "ticker": "600715",
+              "turnover": "213668560"
             },
-            "sector_name": "港口航运",
-            "sector_thscode": "881148.TI",
+            "sector_name": "影视院线",
+            "sector_thscode": "881274.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“影视院线”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "文投控股"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
           },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "600715.SH"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
             "is_primary": false,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.035276073619631901840490798",
-              "name": "海通发展",
-              "thscode": "603162.SH",
-              "ticker": "603162",
-              "turnover": "569207800"
+              "daily_return": "0.098583234946871310507674144",
+              "name": "新媒股份",
+              "thscode": "300770.SZ",
+              "ticker": "300770",
+              "turnover": "488116540"
             },
-            "sector_name": "航运",
-            "sector_thscode": "884191.TI",
+            "sector_name": "电视广播",
+            "sector_thscode": "884172.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“港口航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“电视广播”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1619,7 +2076,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "海通发展"
+          "新媒股份"
         ],
         "stock": {
           "dispositions": [],
@@ -1636,7 +2093,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "603162.SH"
+        "thscode": "300770.SZ"
       },
       {
         "automatic_admission": false,
@@ -1645,98 +2102,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881105.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.008547008547008547008547009",
-              "name": "美锦能源",
-              "thscode": "000723.SZ",
-              "ticker": "000723",
-              "turnover": "204600720"
-            },
-            "sector_name": "焦炭加工",
-            "sector_thscode": "884015.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“焦炭加工”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "美锦能源"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "000723.SZ"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881118.TI",
+            "group_key": "881101.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.014084507042253521126760563",
-              "name": "同力天启",
-              "thscode": "605286.SH",
-              "ticker": "605286",
-              "turnover": "51765412"
+              "daily_return": "0.011047282368537339814405656",
+              "name": "*ST景谷",
+              "thscode": "600265.SH",
+              "ticker": "600265",
+              "turnover": "17298263"
             },
-            "sector_name": "楼宇设备",
-            "sector_thscode": "884083.TI",
+            "sector_name": "林业",
+            "sector_thscode": "884004.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“楼宇设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“林业”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1747,7 +2140,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "同力天启"
+          "*ST景谷"
         ],
         "stock": {
           "dispositions": [],
@@ -1764,7 +2157,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "605286.SH"
+        "thscode": "600265.SH"
       },
       {
         "automatic_admission": false,
@@ -1773,34 +2166,60 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881280.TI",
+            "group_key": "881272.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "-0.0214943705220061412487205732",
-              "name": "明阳智能",
-              "thscode": "601615.SH",
-              "ticker": "601615",
-              "turnover": "380175080"
+              "daily_return": "0.112065878983172216254923022",
+              "name": "奇安信-U",
+              "thscode": "688561.SH",
+              "ticker": "688561",
+              "turnover": "667023180"
             },
-            "sector_name": "风电整机",
-            "sector_thscode": "884307.TI",
+            "sector_name": "横向通用软件",
+            "sector_thscode": "884296.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          },
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "物联网",
+            "concept_thscode": "885312.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+            "membership_request_index": 3,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:09.149291Z"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“风电整机”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“横向通用软件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
+          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
+          "多种发现来路落在同一公司：分别核对日期和业务事实，不把来源重叠当成独立投资确认。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1811,7 +2230,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "明阳智能"
+          "奇安信-U"
         ],
         "stock": {
           "dispositions": [],
@@ -1828,7 +2247,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601615.SH"
+        "thscode": "688561.SH"
       },
       {
         "automatic_admission": false,
@@ -1838,28 +2257,28 @@
           {
             "family": "GRANULAR_884",
             "group_key": "881281.TI",
-            "group_on_homepage": false,
+            "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.094262295081967213114754098",
-              "name": "圣阳股份",
-              "thscode": "002580.SZ",
-              "ticker": "002580",
-              "turnover": "2546677500"
+              "daily_return": "0.021448999046711153479504290",
+              "name": "天能股份",
+              "thscode": "688819.SH",
+              "ticker": "688819",
+              "turnover": "83533954"
             },
             "sector_name": "其他电池",
             "sector_thscode": "884312.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
@@ -1875,7 +2294,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "圣阳股份"
+          "天能股份"
         ],
         "stock": {
           "dispositions": [],
@@ -1892,7 +2311,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002580.SZ"
+        "thscode": "688819.SH"
       },
       {
         "automatic_admission": false,
@@ -1901,34 +2320,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881115.TI",
+            "group_key": "881143.TI",
             "group_on_homepage": true,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0",
-              "name": "公元股份",
-              "thscode": "002641.SZ",
-              "ticker": "002641",
-              "turnover": "26145884"
+              "daily_return": "0.018825301204819277108433735",
+              "name": "老百姓",
+              "thscode": "603883.SH",
+              "ticker": "603883",
+              "turnover": "163273960"
             },
-            "sector_name": "管材",
-            "sector_thscode": "884064.TI",
+            "sector_name": "药店",
+            "sector_thscode": "884300.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“管材”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“药店”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -1939,7 +2358,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "公元股份"
+          "老百姓"
         ],
         "stock": {
           "dispositions": [],
@@ -1956,7 +2375,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002641.SZ"
+        "thscode": "603883.SH"
       },
       {
         "automatic_admission": false,
@@ -1965,61 +2384,98 @@
         "origins": [
           {
             "family": "BROAD_881",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
+            "group_key": "881274.TI",
+            "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.029249011857707509881422925",
-              "name": "锦江航运",
-              "thscode": "601083.SH",
-              "ticker": "601083",
-              "turnover": "170817810"
+              "daily_return": "0.099773242630385487528344671",
+              "name": "欢瑞世纪",
+              "thscode": "000892.SZ",
+              "ticker": "000892",
+              "turnover": "611067240"
             },
-            "sector_name": "港口航运",
-            "sector_thscode": "881148.TI",
+            "sector_name": "影视院线",
+            "sector_thscode": "881274.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "来源方向“影视院线”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "欢瑞世纪"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
           },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "000892.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881148.TI",
-            "group_on_homepage": true,
+            "group_key": "881164.TI",
+            "group_on_homepage": false,
             "is_primary": false,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.029249011857707509881422925",
-              "name": "锦江航运",
-              "thscode": "601083.SH",
-              "ticker": "601083",
-              "turnover": "170817810"
+              "daily_return": "0.056547619047619047619047619",
+              "name": "广电网络",
+              "thscode": "600831.SH",
+              "ticker": "600831",
+              "turnover": "84816394"
             },
-            "sector_name": "航运",
-            "sector_thscode": "884191.TI",
+            "sector_name": "电视广播",
+            "sector_thscode": "884172.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“港口航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。",
-          "来源方向“航运”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“电视广播”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -2030,7 +2486,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "锦江航运"
+          "广电网络"
         ],
         "stock": {
           "dispositions": [],
@@ -2047,7 +2503,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601083.SH"
+        "thscode": "600831.SH"
       },
       {
         "automatic_admission": false,
@@ -2056,98 +2512,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881105.TI",
-            "group_on_homepage": true,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.007978723404255319148936170",
-              "name": "山西焦化",
-              "thscode": "600740.SH",
-              "ticker": "600740",
-              "turnover": "113353208"
-            },
-            "sector_name": "焦炭加工",
-            "sector_thscode": "884015.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“焦炭加工”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "山西焦化"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600740.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881118.TI",
+            "group_key": "881101.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "0.006825938566552901023890785",
-              "name": "ST远智",
-              "thscode": "002689.SZ",
-              "ticker": "002689",
-              "turnover": "18958297"
+              "daily_return": "0.006188118811881188118811881",
+              "name": "平潭发展",
+              "thscode": "000592.SZ",
+              "ticker": "000592",
+              "turnover": "2155660600"
             },
-            "sector_name": "楼宇设备",
-            "sector_thscode": "884083.TI",
+            "sector_name": "林业",
+            "sector_thscode": "884004.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“楼宇设备”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“林业”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -2158,7 +2550,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "ST远智"
+          "平潭发展"
         ],
         "stock": {
           "dispositions": [],
@@ -2175,7 +2567,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "002689.SZ"
+        "thscode": "000592.SZ"
       },
       {
         "automatic_admission": false,
@@ -2184,34 +2576,34 @@
         "origins": [
           {
             "family": "GRANULAR_884",
-            "group_key": "881280.TI",
+            "group_key": "881272.TI",
             "group_on_homepage": false,
             "is_primary": true,
             "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
+            "market_session": "2026-10-09",
             "retained_leader": {
-              "daily_return": "-0.0237113402061855670103092784",
-              "name": "中船科技",
-              "thscode": "600072.SH",
-              "ticker": "600072",
-              "turnover": "678812320"
+              "daily_return": "0.108053691275167785234899329",
+              "name": "亚信安全",
+              "thscode": "688225.SH",
+              "ticker": "688225",
+              "turnover": "255640390"
             },
-            "sector_name": "风电整机",
-            "sector_thscode": "884307.TI",
+            "sector_name": "横向通用软件",
+            "sector_thscode": "884296.TI",
             "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
+              "bytes": 188359,
+              "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+              "read_path": "details/sector/37916233484/result.json",
               "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+              "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
             },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
+            "source_observed_at": "2026-10-09T10:24:27.313016Z",
+            "source_result_hash": "5a1faae748879bd9ab111db49f4f16af94e971715d11a25e9d4559ba3290e82a"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
         "questions": [
-          "来源方向“风电整机”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
+          "来源方向“横向通用软件”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
         ],
         "research": {
           "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
@@ -2222,7 +2614,7 @@
           "stock_business_states": []
         },
         "source_names": [
-          "中船科技"
+          "亚信安全"
         ],
         "stock": {
           "dispositions": [],
@@ -2239,71 +2631,7 @@
           "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600072.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "family": "GRANULAR_884",
-            "group_key": "881281.TI",
-            "group_on_homepage": false,
-            "is_primary": true,
-            "kind": "SECTOR_LEADER",
-            "market_session": "2026-10-08",
-            "retained_leader": {
-              "daily_return": "0.049529470034670629024269440",
-              "name": "长虹能源",
-              "thscode": "920239.BJ",
-              "ticker": "920239",
-              "turnover": "55835363"
-            },
-            "sector_name": "其他电池",
-            "sector_thscode": "884312.TI",
-            "source": {
-              "bytes": 155562,
-              "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-              "read_path": "details/sector/37762010026/result.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
-            },
-            "source_observed_at": "2026-10-08T10:23:14.420415Z",
-            "source_result_hash": "17dbe60b237dd0d976cb6d1b110edab6303bbbb50b663f45bedf4435470c4aa4"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "来源方向“其他电池”中，该公司为何值得核查？先核对业务联系、收入利润暴露及反证；当日突出不等于多日领先或业务受益。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "长虹能源"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "RESEARCH_SCOPE_UNSUPPORTED",
-        "thscode": "920239.BJ"
+        "thscode": "688225.SH"
       },
       {
         "automatic_admission": false,
@@ -34236,68 +34564,6 @@
               "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
             },
             "source_observed_at": "2026-09-18T14:17:25.907438Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“智能电网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "麒麟信安"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "688152.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "智能电网",
-            "concept_thscode": "885311.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:17:25.507000Z",
-            "membership_hash": "b7ed447fbfa0d8075886bee9e6728f0a6aec17e834bc82ba89457876b91a5ecc",
-            "membership_request_index": 1,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:17:25.907438Z"
           },
           {
             "acquisition_kind": "SUPPLEMENTAL_DETAIL",
@@ -43243,6 +43509,68 @@
               "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
             },
             "source_observed_at": "2026-09-18T14:18:09.149291Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "快意电梯"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "002774.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "物联网",
+            "concept_thscode": "885312.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+            "membership_request_index": 3,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:09.149291Z"
           },
           {
             "acquisition_kind": "SUPPLEMENTAL_DETAIL",
@@ -51259,6 +51587,68 @@
           "stock_business_states": []
         },
         "source_names": [
+          "通用电梯"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "300931.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "物联网",
+            "concept_thscode": "885312.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+            "membership_request_index": 3,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:09.149291Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
           "建工修复"
         ],
         "stock": {
@@ -51525,6 +51915,68 @@
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "301055.SZ"
+      },
+      {
+        "automatic_admission": false,
+        "name_status": "ONE_SOURCE_NAME",
+        "new_research_execution": "NOT_EXECUTED",
+        "origins": [
+          {
+            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
+            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
+            "business_linkage": "NOT_ESTABLISHED",
+            "concept_name": "物联网",
+            "concept_thscode": "885312.TI",
+            "historical_membership": "NOT_ESTABLISHED",
+            "history_status": "EXACT_WINDOW_CHECKED",
+            "kind": "CONCEPT_CURRENT_MEMBER",
+            "market_session": "2026-09-18",
+            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
+            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
+            "membership_request_index": 3,
+            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
+            "publication_time": "UNKNOWN",
+            "source": {
+              "bytes": 359430,
+              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
+              "read_path": "details/concept-detail/35355234987/observation.json",
+              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
+            },
+            "source_observed_at": "2026-09-18T14:18:09.149291Z"
+          }
+        ],
+        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
+        "questions": [
+          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
+        ],
+        "research": {
+          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
+          "references": [],
+          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
+          "status": "UNKNOWN_WITHIN_READ_SCOPE",
+          "stock_business_read_status": "READ_OK",
+          "stock_business_states": []
+        },
+        "source_names": [
+          "森赫股份"
+        ],
+        "stock": {
+          "dispositions": [],
+          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+          "market_session": "2026-10-08",
+          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
+          "source": {
+            "bytes": 103270,
+            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
+            "read_path": "details/stock/37763233292/reading/stock-reading.json",
+            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
+            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
+          },
+          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
+        },
+        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
+        "thscode": "301056.SZ"
       },
       {
         "automatic_admission": false,
@@ -53898,93 +54350,6 @@
               "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
             },
             "source_observed_at": "2026-09-18T14:18:09.149291Z"
-          },
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "移动支付",
-            "concept_thscode": "885333.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:52.299000Z",
-            "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
-            "membership_request_index": 5,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:52.651149Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。",
-          "概念“移动支付”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "中国联通"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600050.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "物联网",
-            "concept_thscode": "885312.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-            "membership_request_index": 3,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:09.149291Z"
           }
         ],
         "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
@@ -55388,130 +55753,6 @@
         },
         "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
         "thscode": "601360.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "物联网",
-            "concept_thscode": "885312.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-            "membership_request_index": 3,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:09.149291Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "中国电信"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601728.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "物联网",
-            "concept_thscode": "885312.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-            "membership_request_index": 3,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:09.149291Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
-          "吉视传媒"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "601929.SH"
       },
       {
         "automatic_admission": false,
@@ -59931,68 +60172,6 @@
           "stock_business_states": []
         },
         "source_names": [
-          "奇安信-U"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "688561.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "物联网",
-            "concept_thscode": "885312.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:08.715000Z",
-            "membership_hash": "4257b2cd646b94fa23b84da1129687f9e682f71d02890d244937d6195b657f92",
-            "membership_request_index": 3,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:09.149291Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“物联网”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
           "泰凌微"
         ],
         "stock": {
@@ -63887,68 +64066,6 @@
           "stock_business_states": []
         },
         "source_names": [
-          "中国移动"
-        ],
-        "stock": {
-          "dispositions": [],
-          "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
-          "market_session": "2026-10-08",
-          "meaning": "HISTORICAL_SAVED_DISPOSITION_NOT_A_NEW_CHECK; ABSENCE_IS_NOT_REJECTION",
-          "source": {
-            "bytes": 103270,
-            "git_blob": "7e1985ac8f766766b5482bf121eb08981a88d0e0",
-            "read_path": "details/stock/37763233292/reading/stock-reading.json",
-            "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "664b8635d71955128fade26f7e4105953958ba83d5790bb325e513f0d59686c5"
-          },
-          "status": "NOT_PRESENT_IN_SAVED_STOCK_SCOPE"
-        },
-        "stock_business_research_scope": "SUPPORTED_IDENTITY_ONLY_NOT_ADMITTED",
-        "thscode": "600941.SH"
-      },
-      {
-        "automatic_admission": false,
-        "name_status": "ONE_SOURCE_NAME",
-        "new_research_execution": "NOT_EXECUTED",
-        "origins": [
-          {
-            "acquisition_kind": "SUPPLEMENTAL_DETAIL",
-            "base_projection_hash": "093bd7b9570965a8944fc20141478dab39ac94e06f58bfad47c7bd0207544917",
-            "business_linkage": "NOT_ESTABLISHED",
-            "concept_name": "移动支付",
-            "concept_thscode": "885333.TI",
-            "historical_membership": "NOT_ESTABLISHED",
-            "history_status": "EXACT_WINDOW_CHECKED",
-            "kind": "CONCEPT_CURRENT_MEMBER",
-            "market_session": "2026-09-18",
-            "membership_captured_at": "2026-09-18T14:18:52.299000Z",
-            "membership_hash": "587aafb9a4f25f90a8653a4f61aa312d6d118104fe1af1be1aee76e91381ab7b",
-            "membership_request_index": 5,
-            "projection_hash": "0bec7f56ca60300377a70a9036673bdc83ac7ed5da5093b0ccad49132769d7ab",
-            "publication_time": "UNKNOWN",
-            "source": {
-              "bytes": 359430,
-              "git_blob": "2a3fcf607dd55d740b51022870c32e690d42c5c3",
-              "read_path": "details/concept-detail/35355234987/observation.json",
-              "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-              "sha256": "362eac72dd01d78dbf7ec14a892af8e7af283f742e868378a7685e828e2e4ace"
-            },
-            "source_observed_at": "2026-09-18T14:18:52.651149Z"
-          }
-        ],
-        "question_status": "OBSERVATION_QUESTIONS_NOT_PRE_OR_QUICK_RESULTS",
-        "questions": [
-          "概念“移动支付”中的当前成员身份是否有真实业务依据？先区分上市属性、市场标签与经济暴露；多个重叠概念不是独立受益证据。"
-        ],
-        "research": {
-          "meaning": "NO_RECORD_IS_NOT_NEVER_RESEARCHED; SAVED_STATE_IS_NOT_HUMAN_ACCEPTANCE",
-          "references": [],
-          "scope": "EXPLICIT_PURPOSE_REFERENCES_AND_STOCK_BUSINESS_ROOTS_NOT_ALL_RESEARCH",
-          "status": "UNKNOWN_WITHIN_READ_SCOPE",
-          "stock_business_read_status": "READ_OK",
-          "stock_business_states": []
-        },
-        "source_names": [
           "翠微股份"
         ],
         "stock": {
@@ -65069,31 +65186,31 @@
       "all_members": false,
       "complete_research_history": false,
       "concept_companies": 860,
-      "concept_only_companies": 844,
-      "concept_overlap_existing_companies": 16,
+      "concept_only_companies": 841,
+      "concept_overlap_existing_companies": 19,
       "concept_radar": true,
       "cumulative_all_batches": false,
-      "distinct_companies": 907,
+      "distinct_companies": 911,
       "full_concept_trend_radar": false,
       "institution_only_companies": 33,
       "institutional_companies": 33,
-      "multi_source_companies": 16,
+      "multi_source_companies": 19,
       "new_research_executions": 0,
       "ongoing_without_event": false,
       "overlap_companies": 0,
       "primary_concept_companies": 162,
-      "registered_archive_only_companies": 4,
-      "sector_companies": 30,
-      "supplement_only_companies": 689,
-      "supplement_overlap_existing_companies": 19,
+      "registered_archive_only_companies": 3,
+      "sector_companies": 37,
+      "supplement_only_companies": 686,
+      "supplement_overlap_existing_companies": 22,
       "supplemental_concept_companies": 708,
-      "unsupported_stock_business_research_companies": 103,
-      "with_registered_archive_locator": 6,
-      "with_saved_research_context": 9,
-      "with_saved_stock_disposition": 6
+      "unsupported_stock_business_research_companies": 104,
+      "with_registered_archive_locator": 5,
+      "with_saved_research_context": 5,
+      "with_saved_stock_disposition": 0
     },
     "date_policy": "EACH_ORIGIN_DATE_AND_ACTUAL_CLOCK_PRESERVED_NOT_ATOMIC_OR_FIRST_VINTAGE_PIT",
-    "generated_at": "2026-10-09T10:14:28.095336+00:00",
+    "generated_at": "2026-10-09T10:25:48.966331+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -65735,14 +65852,14 @@
         "status": "VERIFIED_SAVED_INSTITUTIONAL_SOURCE"
       },
       "sector": {
-        "lane_health": "IN_PROGRESS",
-        "market_session": "2026-10-08",
+        "lane_health": "LATEST_ATTEMPT_SUCCEEDED",
+        "market_session": "2026-10-09",
         "source": {
-          "bytes": 155562,
-          "git_blob": "90d20aef46835bb15b21c1de2766f0791d5c8506",
-          "read_path": "details/sector/37762010026/result.json",
+          "bytes": 188359,
+          "git_blob": "11f50325cef2d6e9c573ba473cadf67f2487d958",
+          "read_path": "details/sector/37916233484/result.json",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "c88102ebac3f651f2e926a3c0014bf19d18fd2d6ae359eacb2712a37abef1ea8"
+          "sha256": "992629f2d831309bd9de636184eafae2da430186e7ae31396a8c97ffe883223b"
         },
         "status": "SAVED_SECTOR_RESULT"
       }
@@ -65750,5 +65867,5 @@
     "stock_business_read_status": "READ_OK",
     "version": "radar-company-reading-with-concept-detail-v3"
   },
-  "projection_hash": "b8ac43281d95831d730f3998c382e515c96e856357215d9419bbb5833260e314"
+  "projection_hash": "5ba5143ad2d11d7955d8927c1427333d966c9d9d2108504a6df2a6f0d06ddc74"
 }

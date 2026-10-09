@@ -321,7 +321,6 @@
 下一步：先按明确定位恢复旧研究正文
 
 - [按需恢复：601872-cmes-full-conditional-odds-original-20261007](https://github.com/auguspp/decision-kernel/blob/d1177a0f76d2680157df4a27e741a048454f356b/docs/readings/cmes-full-odds-2026-10-07-recovery/README.md)；只有定位，本页没有恢复正文。
-- 原保存观察：SAVED&#95;RADAR&#95;ORIGINS；市场日：2026-10-08；[原观察](../radar/company-reading.json)。不是新事件。
 
 ## 688337.SH
 
