@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-10T05:56:35.912538+00:00",
+    "checked_at": "2026-10-10T06:21:54.247436+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -1392,7 +1392,7 @@
             "status": "EMPTY_RESPONSE_NOT_NO_CHANGE"
           }
         ],
-        "latest_read_status": "CAPTURE_READ",
+        "latest_read_status": "REUSED_RETAINED_CAPTURE",
         "snapshot": {
           "archive": {
             "artifact_id": 11661730310,
@@ -1729,44 +1729,44 @@
       "shibor": {
         "error_type": null,
         "latest_archive": {
-          "artifact_id": 11598908695,
-          "artifact_name": "global-market-shibor-37894521707-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707/artifacts/11598908695",
-          "bytes": 3325,
-          "expires_at": "2026-11-08T06:38:06Z",
-          "git_blob": "398c1207127213cf322dd330bd9faa989812b10c",
+          "artifact_id": 11662022734,
+          "artifact_name": "global-market-shibor-38030561108-1",
+          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108/artifacts/11662022734",
+          "bytes": 3383,
+          "expires_at": "2026-11-09T06:20:19Z",
+          "git_blob": "493f9cb00c87c419eaf930d877ed27ad7ffd1fda",
           "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
           "origin_run": {
             "conclusion": "success",
-            "created_at": "2026-10-09T06:37:43Z",
+            "created_at": "2026-10-10T06:20:01Z",
             "event": "schedule",
             "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707",
-            "id": 37894521707,
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108",
+            "id": 38030561108,
             "operation": null,
             "path": ".github/workflows/radar-global-market.yml",
             "run_attempt": 1,
-            "run_started_at": "2026-10-09T06:37:43Z",
+            "run_started_at": "2026-10-10T06:20:01Z",
             "status": "completed",
-            "updated_at": "2026-10-09T06:38:11Z"
+            "updated_at": "2026-10-10T06:20:22Z"
           },
-          "read_path": "sources/artifacts/3bfac4a8cbc10de37ab9206cfe56f0ff3c6278277a95ee5e124764aa1fe216ae.zip",
+          "read_path": "sources/artifacts/5252bdb2ed0556046f4f698df1338d8dcef04a5a73cd6db74a6d2e1bdc5dcc29.zip",
           "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "3bfac4a8cbc10de37ab9206cfe56f0ff3c6278277a95ee5e124764aa1fe216ae"
+          "sha256": "5252bdb2ed0556046f4f698df1338d8dcef04a5a73cd6db74a6d2e1bdc5dcc29"
         },
         "latest_attempt": {
           "conclusion": "success",
-          "created_at": "2026-10-09T06:37:43Z",
+          "created_at": "2026-10-10T06:20:01Z",
           "event": "schedule",
           "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707",
-          "id": 37894521707,
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108",
+          "id": 38030561108,
           "operation": null,
           "path": ".github/workflows/radar-global-market.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-09T06:37:43Z",
+          "run_started_at": "2026-10-10T06:20:01Z",
           "status": "completed",
-          "updated_at": "2026-10-09T06:38:11Z"
+          "updated_at": "2026-10-10T06:20:22Z"
         },
         "latest_capture_status": "AVAILABLE",
         "latest_outcomes": [
@@ -1776,56 +1776,56 @@
             "status": "ROWS_NORMALIZED"
           }
         ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_read_status": "CAPTURE_READ",
         "snapshot": {
           "archive": {
-            "artifact_id": 11598908695,
-            "artifact_name": "global-market-shibor-37894521707-1",
-            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707/artifacts/11598908695",
-            "bytes": 3325,
-            "expires_at": "2026-11-08T06:38:06Z",
-            "git_blob": "398c1207127213cf322dd330bd9faa989812b10c",
+            "artifact_id": 11662022734,
+            "artifact_name": "global-market-shibor-38030561108-1",
+            "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108/artifacts/11662022734",
+            "bytes": 3383,
+            "expires_at": "2026-11-09T06:20:19Z",
+            "git_blob": "493f9cb00c87c419eaf930d877ed27ad7ffd1fda",
             "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
             "origin_run": {
               "conclusion": "success",
-              "created_at": "2026-10-09T06:37:43Z",
+              "created_at": "2026-10-10T06:20:01Z",
               "event": "schedule",
               "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707",
-              "id": 37894521707,
+              "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108",
+              "id": 38030561108,
               "operation": null,
               "path": ".github/workflows/radar-global-market.yml",
               "run_attempt": 1,
-              "run_started_at": "2026-10-09T06:37:43Z",
+              "run_started_at": "2026-10-10T06:20:01Z",
               "status": "completed",
-              "updated_at": "2026-10-09T06:38:11Z"
+              "updated_at": "2026-10-10T06:20:22Z"
             },
-            "read_path": "sources/artifacts/3bfac4a8cbc10de37ab9206cfe56f0ff3c6278277a95ee5e124764aa1fe216ae.zip",
+            "read_path": "sources/artifacts/5252bdb2ed0556046f4f698df1338d8dcef04a5a73cd6db74a6d2e1bdc5dcc29.zip",
             "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-            "sha256": "3bfac4a8cbc10de37ab9206cfe56f0ff3c6278277a95ee5e124764aa1fe216ae"
+            "sha256": "5252bdb2ed0556046f4f698df1338d8dcef04a5a73cd6db74a6d2e1bdc5dcc29"
           },
           "artifact_at_read": {
-            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11598908695/zip",
-            "created_at": "2026-10-09T06:38:07Z",
-            "digest": "sha256:3bfac4a8cbc10de37ab9206cfe56f0ff3c6278277a95ee5e124764aa1fe216ae",
+            "archive_download_url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11662022734/zip",
+            "created_at": "2026-10-10T06:20:19Z",
+            "digest": "sha256:5252bdb2ed0556046f4f698df1338d8dcef04a5a73cd6db74a6d2e1bdc5dcc29",
             "expired": false,
-            "expires_at": "2026-11-08T06:38:06Z",
-            "id": 11598908695,
-            "name": "global-market-shibor-37894521707-1",
-            "node_id": "MDg6QXJ0aWZhY3QxMTU5ODkwODY5NQ==",
-            "size_in_bytes": 3325,
-            "updated_at": "2026-10-09T06:38:07Z",
-            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11598908695",
+            "expires_at": "2026-11-09T06:20:19Z",
+            "id": 11662022734,
+            "name": "global-market-shibor-38030561108-1",
+            "node_id": "MDg6QXJ0aWZhY3QxMTY2MjAyMjczNA==",
+            "size_in_bytes": 3383,
+            "updated_at": "2026-10-10T06:20:19Z",
+            "url": "https://api.github.com/repos/auguspp/decision-kernel/actions/artifacts/11662022734",
             "workflow_run": {
               "head_branch": "main",
               "head_repository_id": 1353534417,
               "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-              "id": 37894521707,
+              "id": 38030561108,
               "repository_id": 1353534417
             }
           },
           "report": {
-            "as_of_date": "2026-10-08",
+            "as_of_date": "2026-10-09",
             "authority": {
               "automatic_admission": false,
               "company_mapping": "NOT_PERFORMED",
@@ -1837,9 +1837,9 @@
               "signal_transition_authority": "NONE"
             },
             "available_values": 8,
-            "capture_hash": "b58f1d95efb211bcac6b5437910f6802d145a8c0f54b51bd073dfed923c2eb34",
-            "captured_from": "2026-10-09T06:38:03.185458+00:00",
-            "captured_through": "2026-10-09T06:38:05.952758+00:00",
+            "capture_hash": "fe335ac50c2ab2b8a35e6c0ec50d5d672152fc0979786bdaaade972fdb8ca213",
+            "captured_from": "2026-10-10T06:20:15.099301+00:00",
+            "captured_through": "2026-10-10T06:20:18.901595+00:00",
             "coverage": "SELECTED_DAILY_SERIES_ONLY_NOT_COMPLETE_GLOBAL_MARKETS",
             "family": "shibor",
             "identity": {
@@ -1848,7 +1848,7 @@
               "event": "schedule",
               "ref": "refs/heads/main",
               "repository": "auguspp/decision-kernel",
-              "run_id": 37894521707,
+              "run_id": 38030561108,
               "workflow": ".github/workflows/radar-global-market.yml"
             },
             "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
@@ -1863,17 +1863,17 @@
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor on",
-                    "observed_interval_change_bp": "1.3600",
-                    "previous_observed_date": "2026-09-30",
-                    "previous_value": "1.362",
+                    "observed_interval_change_bp": "-6.2600",
+                    "previous_observed_date": "2026-10-08",
+                    "previous_value": "1.3756",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:on",
                     "tenor": "on",
                     "unit": "ANNUAL_PERCENT",
-                    "value": "1.3756"
+                    "value": "1.313"
                   },
                   {
                     "calendar_age_at_requested_end": 0,
@@ -1881,17 +1881,17 @@
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 1w",
-                    "observed_interval_change_bp": "1.900",
-                    "previous_observed_date": "2026-09-30",
-                    "previous_value": "1.371",
+                    "observed_interval_change_bp": "-4.900",
+                    "previous_observed_date": "2026-10-08",
+                    "previous_value": "1.39",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:1w",
                     "tenor": "1w",
                     "unit": "ANNUAL_PERCENT",
-                    "value": "1.39"
+                    "value": "1.341"
                   },
                   {
                     "calendar_age_at_requested_end": 0,
@@ -1899,17 +1899,17 @@
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 2w",
-                    "observed_interval_change_bp": "-1.0200",
-                    "previous_observed_date": "2026-09-30",
-                    "previous_value": "1.398",
+                    "observed_interval_change_bp": "-2.4800",
+                    "previous_observed_date": "2026-10-08",
+                    "previous_value": "1.3878",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:2w",
                     "tenor": "2w",
                     "unit": "ANNUAL_PERCENT",
-                    "value": "1.3878"
+                    "value": "1.363"
                   },
                   {
                     "calendar_age_at_requested_end": 0,
@@ -1917,17 +1917,17 @@
                     "currency": "CNY",
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 1m",
-                    "observed_interval_change_bp": "-0.100",
-                    "previous_observed_date": "2026-09-30",
-                    "previous_value": "1.421",
+                    "observed_interval_change_bp": "-0.200",
+                    "previous_observed_date": "2026-10-08",
+                    "previous_value": "1.42",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:1m",
                     "tenor": "1m",
                     "unit": "ANNUAL_PERCENT",
-                    "value": "1.42"
+                    "value": "1.418"
                   },
                   {
                     "calendar_age_at_requested_end": 0,
@@ -1936,12 +1936,12 @@
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 3m",
                     "observed_interval_change_bp": "0.00",
-                    "previous_observed_date": "2026-09-30",
+                    "previous_observed_date": "2026-10-08",
                     "previous_value": "1.43",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:3m",
                     "tenor": "3m",
                     "unit": "ANNUAL_PERCENT",
@@ -1954,12 +1954,12 @@
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 6m",
                     "observed_interval_change_bp": "0.00",
-                    "previous_observed_date": "2026-09-30",
+                    "previous_observed_date": "2026-10-08",
                     "previous_value": "1.45",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:6m",
                     "tenor": "6m",
                     "unit": "ANNUAL_PERCENT",
@@ -1972,12 +1972,12 @@
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 9m",
                     "observed_interval_change_bp": "0.00",
-                    "previous_observed_date": "2026-09-30",
+                    "previous_observed_date": "2026-10-08",
                     "previous_value": "1.47",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:9m",
                     "tenor": "9m",
                     "unit": "ANNUAL_PERCENT",
@@ -1990,19 +1990,19 @@
                     "market_status": "UNKNOWN_NO_EXCHANGE_CALENDAR",
                     "name": "Shibor 1y",
                     "observed_interval_change_bp": "0.00",
-                    "previous_observed_date": "2026-09-30",
+                    "previous_observed_date": "2026-10-08",
                     "previous_value": "1.48",
                     "publication_time": null,
                     "publication_time_status": "NOT_PROVIDED_BY_SOURCE",
-                    "row_count": 4,
-                    "source_date": "2026-10-08",
+                    "row_count": 5,
+                    "source_date": "2026-10-09",
                     "symbol": "SHIBOR:1y",
                     "tenor": "1y",
                     "unit": "ANNUAL_PERCENT",
                     "value": "1.48"
                   }
                 ],
-                "source_received_at": "2026-10-09T06:38:05.951092+00:00",
+                "source_received_at": "2026-10-10T06:20:18.899690+00:00",
                 "status": "ROWS_NORMALIZED"
               }
             ],
@@ -2012,10 +2012,10 @@
             "status": "AVAILABLE",
             "version": "global-market-context-v1"
           },
-          "retained_at": "2026-10-09T06:39:56.209623+00:00",
+          "retained_at": "2026-10-10T06:21:52.893698+00:00",
           "run": {
             "conclusion": "success",
-            "created_at": "2026-10-09T06:37:43Z",
+            "created_at": "2026-10-10T06:20:01Z",
             "display_title": "global-market / shibor",
             "event": "schedule",
             "head_branch": "main",
@@ -2088,8 +2088,8 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37894521707",
-            "id": 37894521707,
+            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/38030561108",
+            "id": 38030561108,
             "path": ".github/workflows/radar-global-market.yml",
             "repository": {
               "archive_url": "https://api.github.com/repos/auguspp/decision-kernel/{archive_format}{/ref}",
@@ -2160,9 +2160,9 @@
               "url": "https://api.github.com/repos/auguspp/decision-kernel"
             },
             "run_attempt": 1,
-            "run_started_at": "2026-10-09T06:37:43Z",
+            "run_started_at": "2026-10-10T06:20:01Z",
             "status": "completed",
-            "updated_at": "2026-10-09T06:38:11Z"
+            "updated_at": "2026-10-10T06:20:22Z"
           }
         }
       },
@@ -2630,11 +2630,11 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 25,
+      "total_count": 26,
       "unattributed_run_ids": []
     },
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "e009103ec4d0af49690ac2bbfc918c98bc1781a34580891ef2dc10ec69591093"
+  "projection_hash": "7e0a772f3318614b51061985e645bee7332da0db425d57a4310f972c0924a37b"
 }
