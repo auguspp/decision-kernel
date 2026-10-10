@@ -1,11 +1,10 @@
-# Kernel 2.0 — 全局目标架构与渐进重构方案 v2.4
+# Kernel 2.0 — 全局目标架构与渐进重构方案 v2.5
 
-日期：2026-10-10（Asia/Singapore）。设计 ID：`K2-DESIGN-20261010-v2.4`。唯一计划与跨会话接续入口：[#508][OWNER]。有效计划为[v1.3][PLAN13]与[v1.2][PLAN12]、[v1.1][PLAN11]、[v1.0][PLAN10]未被替代条款；长期规则从已合并的[统一项目原则][PRINCIPLES]读取。
+日期：2026-10-10（Asia/Singapore）。设计 ID：`K2-DESIGN-20261010-v2.5`。唯一计划与跨会话接续入口：[#508][OWNER]。有效计划为[v1.3][PLAN13]与[v1.2][PLAN12]、[v1.1][PLAN11]、[v1.0][PLAN10]未被替代条款；长期规则从已合并的[统一项目原则][PRINCIPLES]读取。
 
 **状态：P3 GLOBAL DESIGN PROPOSAL / 待审。** 本稿提出具体能力边界、命名与拓扑决定，不表示这些技术决定已经采纳。文档获准交付和正常合并不依赖P4批准；具体架构、依赖、迁移与生产效果仍分别取得相应采纳和证据。P4/P5未启动；实时进度只在#508最新回执。
 
-**版本关系：** 承接已随#804合并的[v2.3精确前驱][V23]与[12交接][HANDOFF12]，消费[本轮开始记录][START13]。本版将主文从连续盘点记录收敛为决策包；前驱§2的完整读取范围、E21–E39、F01–F12、固定源码与未验声明作为证据附件继续有效，不重新宣称这些文件已读或这些缺口已通过。主要更新：补齐顶层模块正文覆盖及选定方法存取接点；用K2-ADR-C/N/T明确能力组合、Naming & Identity、Topology & Ownership候选；原独立`contracts/`目录候选由“合同跟随语义owner”替代。M01–M24、W1–W8、A1–A8、T1–T7、G1–G7保持原编号和全域责任。原[P1][P1]、[P2][P2]与[Reuse附录][REUSE]不重做；[旧v1/#803][OLD]保留为历史候选，其默认S1→S4不是当前范围或顺序。
-
+**版本关系：** 承接已随#805合并的[v2.4精确前驱][V24]与[13交接][HANDOFF13]，本轮范围见[开始记录14][START14]。本版补来源控制/状态反馈、Global codec、native RSS消费历史、经济输入和两条CLI尾部的证据，并据此修订同一能力合同、状态归属与迁移映射。K2-ADR-C/N/T继续PROPOSED；v2.4的E40–E45与三项决策、v2.3的E21–E39/F01–F12完整证据和未验声明保留。原M01–M24/W1–W8/A1–A8/T1–T7/G1–G7编号不变，不建立第二份计划；[P1][P1]、[P2][P2]和[Reuse附录][REUSE]不重做，[旧v1/#803][OLD]默认S1→S4不复活。
 ## 1. 目标、差距与本次推荐
 
 Kernel 2.0覆盖整个工程体系的架构审查、必要目标重新设计与渐进式全面重构。“全面”是审查和决策范围，“渐进”是施工方式；不要求所有代码重写，也不能以四项局部修补替代系统改善。最终必须降低长期维护、扩展、兼容、验证、恢复和接手的总成本。[PLAN11]
@@ -25,24 +24,28 @@ Kernel 2.0覆盖整个工程体系的架构审查、必要目标重新设计与�
 
 ### 2.1 本轮实际做了什么
 
-固定M=`6125dc681602e86926dd5cd4dadb74e9457970e2`，即#804合并。已实时恢复main、AGENTS、NEXT/#297、#508与开放main PR集合；开始时无开放main PR。前驱设计blob=`c3e2d803ced8d218ab690f98790e789a1295b30c`；现役源码与前驱盘点的M之间只有已交付文档变更。本轮没有解析生产R或调用来源、模型、producer、publisher。
+固定M=`6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc`，即#805合并。实时恢复main、AGENTS、NEXT/#297、#508/13与已合并#805，开放main PR查询为空。前驱设计blob=`51039778eced9c4e7c6aff152ac15377de8dc3f4`。取证期间没有解析生产R或调用来源、模型、producer、publisher；如随后正常文档合并触发原发布，工程证据单独登记，不混为取证或业务验收。
 
-新增完整读取11个顶层Python模块：conditional/provisional Odds、research/claim合同v1/v2、source policy v2、CLI、policy、小红书harness/voice；另完整读取4个runtime文件：research_commit_only、odds_retention、external_research_execution、external_research_identity。复用已核16个领域/旧方法模块、包初始化和live的精确相同blob，合计核29个顶层Python正文；对这29个和上述4个runtime共33个文件作静态AST解析，不导入或执行业务代码。[ROOT][RETENTION][ODDS-RETENTION][EXECUTION][EXECUTION-ID]
+**新增完整读取11份内部源码：** `.github/scripts/`中的smart-money-control、prepare-native-rss-successor、native-feed-acceptance；runtime中的smart_money_capture、global_market_context、global_public_context、radar_feed_history、economic_release_inputs、economic_source_capture、disclosure_radar、disclosure_research。完整UTF-8/Git blob核对及AST解析均通过；模块内部导入已列，未读完其所有下游，不能称完整依赖闭包。未执行这些来源入口。[SM-CONTROL][SM-CAPTURE][GLOBAL-RELAY][GLOBAL-PUBLIC][RSS-PREPARE][FEED-ACCEPT][FEED-HISTORY][ECON-INPUTS][ECON-CAPTURE][DISCLOSURE-BATCH][DISCLOSURE-METHOD]
 
-29个顶层模块的内部声明导入有109组去重模块对；向runtime/adapter的9组导入声明仍需沿各接点继续追踪。这是静态声明范围，不是全仓调用图、动态消费者穷尽、零副作用证明或性能实测。231项源码子树含目录与资源，不能把元数据枚举算作已审。有限反向搜索找到的调用者是正例，不把搜索未命中当无消费者。
+局部新增读取`smart_money_view.py:1–95`，仅核state与history开头；复看已审CLI的1–58行和相同blob的`smart_money_reading.py:250–334`，用于闭合control→R专用state→publisher的实际反馈关系，不重复宣称整份新审。反向搜索在`tests/test_smart_money.py`和相关capture/relay tests找到真实脚本消费者；仅取得片段，未完整审阅或运行这些测试文件。直接路径`tests/test_smart_money_control.py`不存在不代表该责任没有测试。[SM-STATE][SM-READING][CLI][SM-TEST]
 
-实际读取pyproject完整内容、两个资源loader及默认Odds政策JSON；样式资源本轮只核路径/树身份，不宣称已复审其全部经验内容。已核console entry、src/package-data设置。外部新增读取Python/Packaging官方合同及pluggy固定版本局部实现；没有安装候选、运行上游测试或实测框架收益。一次codeload读取失败只限制完整checkout，不影响已成功的连接器读取，不作为权限不足或自建代理的理由。
+**有界本地验证：** 对上述精确control脚本以非`__main__`加载，直接调用原`choose`、`pending_publication`、`relay_started_count`；18个合成案例通过。socket连接与子进程创建被禁止，实际尝试0；无临时复制实现替代原函数。覆盖次数上限、完成/补确认/短暂失败/权限与未知失败、未发布原件被metadata skip遮挡、已接受前驱、在途/重复/缺失/不完整历史以及跨代码版本的Relay实际启动计数。属于原函数行为证据，不是workflow或真实历史恢复，不是原单测全套执行，也不是维护成本MEASURED；脚本/结果的确切保管在本轮交接。
 
-### 2.2 新增源码判断 E40–E45
+外部复用：直接消费v2.3固定dlt1.31.0源码审阅，并新读同commit的advanced-state正式文档，以及官方滚动cursor、lag与REST session合同；滚动页的版本标记不替代固定源码版本。没有安装dlt、运行候选或核完其全部依赖/许可/状态实现，因此没有采用或性能结论。[DLT-STATE][DLT-CURSOR][DLT-LAG][DLT-REST]
 
-| 证据 | 实际事实及消费者 | 对目标的影响／未证明的部分 |
+### 2.2 新增源码判断 E46–E51
+
+v2.4 E40–E45继续按[V24]§2.2消费：三类Odds不互换、v2依赖v1、CLI/资源公共面、三种文件写入责任、execution pair与XHS/历史脚本消费者均不因本版省写而退出。
+
+| 证据 | 实际事实与消费者 | 对目标的影响／验证边界 |
 |---|---|---|
-| E40 三类Odds不是可互换provider | canonical消费完整概率及合格ObservedMarket；provisional仍调用原完整概率计算再输出不含概率的展示；conditional直接计算无概率world，不产生加权总数。conditional可明确标记研究前参考价为回顾而非PIT，provisional拒绝该时序 | 共用适合的算术与保管，不统一准入或时间语义；替换实现不能凭同字段形状通过。未做本轮数值重算。[PROVISIONAL][CONDITIONAL] |
-| E41 v2仍有真实v1依赖 | ResearchContractV2Payload继承v1并调用v1 assessment；ClaimAudit v2嵌入v1 review并调用v1 assessment；source_policy_v2是声明来源角色政策，不是HTTP权限服务。v2测试实际调用这些assessment | KEEP旧格式/判定义务、重组方法归属；`_v1`不是删除证据，不把来源角色当执行授权。重复检查是否可合并还需行为和消费者对照。[RC1][RC2][CA1][CA2][SOURCE-POLICY][V2-TEST] |
-| E42 CLI/资源属于独立公共面 | pyproject公开`decision-kernel = decision_kernel.cli:main`；CLI顶层导入多个公告/HTTP功能，所选命令之前已形成依赖。policy使用importlib.resources读取安装包内JSON；小红书也读取同包的不同资源 | 薄路由按命令构造依赖；安装后资源/命令而不只是源码import必须验证。未证导入本身触发网络或出现真实安装故障。[CLI][LIVE][POLICY][PACKAGE][XHS] |
-| E43 存取共有原语，但失败合同不同 | Research/Odds先保留输入再验证，失败保留部分结果；两文件报告则先私有staging再原子无覆盖发布；小红书可写草稿输出。Odds恢复外部固定Research完整hash，不信结果自称的hash | 共享机械I/O移出Research业务owner，create-only原件、原子报告与可修改草稿仍为三种操作；不能换成万能save/rollback。[RETENTION][ODDS-RETENTION][XHS] |
-| E44 执行身份和路径已经是合同 | packet限定`research_runs/candidates/`；identity限定execution-inputs位置，按execution_id+canonical_input_hash处理冲突。冲突时可读精确历史pair，但不能按歧义名称promotion；single Quick另按method/schema解释。projection又依赖Attention/current_state | 路径迁移需旧packet/reader解释，不只改常量；共享receipt/identity类型可窄化，旧Funnel codec与读面projection分开。没有撤掉预算或注册资格。[EXECUTION][EXECUTION-ID] |
-| E45 旁支和历史脚本也是消费者 | 小红书harness从旧Deep包的Discovery/Pre/Quick/Deep构造声明目录，voice复用它；报告helper被研究比较、TDX成员/价格、独立股票和一份已保存回放脚本直接使用 | 将旁支归入外围authoring能力，旧方法adapter不能按“非主链”删除；历史脚本原文不改，恢复方式/旧import支持须裁定。搜索只是已发现正例，不是完整退役证明。[XHS][VOICE][REPORT-USERS] |
+| E46 发布包内确有专用控制进度 | `smart_money_view.state`生成completed/unresolved/calendar进度；reading调用它并保管state；下一次smart-money-control从固定R读取该state，决定是否采集、补确认或恢复 | “综合R不是通用恢复权威”不等于所有R字段均无控制消费者。将Smart进度推进与展示分责，原R只是其明确交付路径；不能只迁页面便删除state。全量state重建/真实恢复尚未演练。[SM-STATE][SM-READING][SM-CONTROL] |
+| E47 不同进度与次数不能混成cursor | Smart计划区分最后枚举交易日、日历缺口、完整分区和未完成分区；新捕获前核上次原件是否已被读入，metadata跳过不掩盖未发布捕获；主用途按调用机会限制，Relay另数实际启动job | 保留未完成集合和前驱，不能以最大日期/最后run/head变化清账；提取control必须连同native job、runpy activity及reader处置。18案例只核三个函数，不覆盖全部计划/transport。[SM-CAPTURE][SM-CONTROL] |
+| E48 Global同为采集但失败与日期合同不同 | Relay仅特定TEMPORARY_QUEUE允许第二次attempt；公共族一次GET无重试；REQUEST_IN_PROGRESS/RECEIPT_UNAVAILABLE不等于0请求。公共v1/v2日期门槛分派，并保参考利率、UTC日桶和期货换月限制 | 共用传输/原件写入的机械部分，不共用默认retry、PIT时钟或source成功。共享助手应脱离Smart/economic业务模块；旧codec和原packet仍按旧规则重放。[GLOBAL-RELAY][GLOBAL-PUBLIC][ECON-CAPTURE] |
+| E49 来源registry与下游消费历史是两种状态 | RSS successor先核成功前驱原件/registry再取源；native acceptance显式区分isolated/initialize/continue，并分别绑定source、market、history。消费history允许记录失败但可重放的market执行，source前驱仍要求成功 | 不把“所有失败不能保存”或“有记录就是已消费成功”统一化。source版本/初见时钟与scan/execution记忆分开；停用source不等于退役消费reader。未读完整feed intake/consumer内部，保留G2。[RSS-PREPARE][FEED-ACCEPT][FEED-HISTORY] |
+| E50 经济输入仍要保留前移日期后的缺口 | 输入组装核所有直接review bundle，按接受hash去重、不按目录最新选择；保留同URL元数据冲突与OLDER_UNREVIEWED_BACKLOG；capture将原件保管与摘录匹配分开，HTTP错误body不默认保管 | config/受审资料/派生输入分别归属；dlt回看窗口不自动替代未审集合或同URL正文修订核验。extractor替换也会触及旧implementation指纹及文本匹配，不能仅搬工具。[ECON-INPUTS][ECON-CAPTURE] |
+| E51 CLI公告尾部含不同责任 | disclosure_radar按证券/发布时间分组，跨Research截止的整批仍保留；disclosure_research则校验具体旧方法assessment与原Evidence批次并调用旧Funnel | 将分组/新鲜度放纯观察，将旧方法assessment放方法/用例适配；不能把两者一起做成通用source policy或只因在runtime便都视为采集器。assessment/receipts/HTTP等余下尾部未闭合。[DISCLOSURE-BATCH][DISCLOSURE-METHOD][CLI] |
 
 ### 2.3 前驱重要约束继续生效
 
@@ -84,7 +87,7 @@ Kernel 2.0覆盖整个工程体系的架构审查、必要目标重新设计与�
 | 来源捕获 M05–10 | 特定provider/channel/对象/窗口合同／具体transport+parser／producer和保存结果reader | 授权/预算/原件owner在各用例；必需源失败阻本动作，可选补充缺失不抹基础结果 | 按request→capture→qualify分离；同ticker/同JSON不是等价provider，事件只是机会 |
 | 研究执行与历史pair M03/09/16 | 特定方法的input/result/receipt／现役host和方法实现／identity/admission、产品接续 | 预算、execution pair、前驱/消费记忆有明确owner；旧codec不因此授权新执行 | 当前执行、共享receipt、旧Funnel校验与读面projection分开；动态import也算消费者 |
 | 档案/报告保管 M11/15 | raw/progress/commit/Odds各格式；create-only或原子报告／原Git+local I/O／归档reader、TDX/比较CLI、人工恢复 | 独立Research pin、完整库存/原字节必需；失败原件与不完整报告区别保存 | 机械I/O共享；操作合同不共用万能save；新writer最后切换 |
-| 保存读包与可选观察 M13–16 | 受支持read descriptor／各reader和派生算法／原publisher、研究及Workbench | 共享API budget和候选files各唯一owner；D/补充reader失败保留无关价格/研究；已耗calls不回滚 | app composition明确启用能力及顺序；不让dataset复制client/凭证/预算 |
+| 保存读包与可选观察 M09/13–16 | 受支持read descriptor／各reader和派生算法／原publisher、研究及Workbench | 共享API budget和候选files各唯一owner；D/补充reader失败保留无关价格/研究；已耗calls不回滚 | app composition明确启用能力及顺序；不让dataset复制client/凭证/预算 |
 | 展示与显式请求 M16–18/24 | fixed-R阅读、#601追加、新闻刷新、写作brief各自合同／Workbench及XHS／Human | host权限和新请求独立于页面展示；XHS只用选定声明，原Human状态OMIT | 视图替换不得改变记录身份；停用producer不删历史reader；不自动上线/发文/Watch |
 
 必需依赖缺失只阻塞依赖它的动作；可选缺席、技术失败、数据不合格、业务quiet/WAIT/STOP使用已有不同状态，不能统一成空数组、零或成功。共享账户/凭证本身不是可卸载的权限授权插件。
@@ -99,6 +102,34 @@ Kernel 2.0覆盖整个工程体系的架构审查、必要目标重新设计与�
 | 历史reader退役 | 等价历史恢复和适用采纳成立后，才退出旧解码/别名/专属fixture | 原bytes/失败/Human/方法解释可恢复；保历史不意味着旧producer必须永远运行 |
 
 解绑hook不撤销已经发出的HTTP、Git写入或已消耗预算；未知效果不自动取消/重试。静态设计不是已完成这些演示。验证沿T2–T6、A2–A4/A7，不另建插件测试平台。
+
+### 3.4 来源进度、消费历史与发布反馈的具体归属
+
+**这是K2-ADR-C/T的细化，仍PROPOSED，不新增状态schema或自动恢复器。** 现状A把不同状态隐含寄存在view/control/reader；备选B将所有状态迁入通用pipeline state；推荐C先按下表明确owner和读写合同，机械保存可复用外部实现。A继续制造隐藏消费者，B未经资格/预算/失败对照会改变含义；C仍有小端口成本，需要G3/G6证明。若B通过实际适配与退出验证更低成本，可替代C的实现，不替换必要语义。
+
+| 对象／实际链 | 目标owner与组合 | 迁移必须保护的区别 |
+|---|---|---|
+| Smart交付进度：capture observation → view.state → reading保管state → control读取 | `application/smart_money/progress.py`拥有纯进度推进；reading负责保管与定位；control经窄读取端口取回精确进度。首批建议继续原R/state路径，不先建新state ref或库 | 完成分区、未完成集合、枚举水位、日历缺口、原source id分别保留；显示失败不清进度。停publisher可能阻后续源，此依赖必须明确测；所有R不因此成为通用restore authority |
+| Smart准入与账户使用：原调用列表／实际Relay job／未发布捕获 | `application/smart_money/control.py`保存原判定；原workflow薄调用，共享activity查询只借窄基础设施 | 主用途调用机会和Relay实际启动不是同分母；新代码/改名不能重置原预算。先对账未被消费的原件，不能为了“恢复”重复采集；unknown权限/历史范围仍拒绝 |
+| Global单次attempt＋专有日期资格 | `application/global_market/`执行、原件保管；`observations/global_market/`拥有纯plan/codec/版本与数值；通用HTTP助手由infrastructure实现 | Relay受控第二attempt≠公共no-retry；REQUEST_IN_PROGRESS/RECEIPT_UNAVAILABLE≠未请求；v1/v2日期与数值原解释，捕获时间不冒充发布时间 |
+| RSS来源版本registry与初见/出现历史 | 原feed intake拥有版本/时钟推进；建议`application/economic_feed/`组合独立输入/保管和旧codec | explicit baseline与精确successor互斥；旧版本/初见时钟不可丢；声明请求文件可在config，运行registry不是config；失去旧源不能静默初始化 |
+| native-feed消费scan＋market execution账 | `application/native_feed/`拥有消费与历史保管；source、market和history各经精确locator接口提供 | 失败但可重放execution可以保管，不能改success；格式损坏/blocked scan不获完成；branch history不是全局exactly-once；remote上传与本地ready各证明 |
+| 经济seed、已核review与派生扫描输入 | 声明/受审source原件仍由各原owner维护；`application/economic_inputs/`组装，纯对应逻辑归observations | 目录名不选择“最新接受”；同URL冲突/未审旧条目不被max日期抹去；新目录必须兼容原review inventory、文本绑定与implementation指纹 |
+
+收益假设是减少跨业务私有工具依赖、把控制进度从页面生成中剥离、明确不应更改的状态。**本版没有搬文件或新建这些目录，没有声称原件恢复已通过或新增层数必然更好。** 数据存放默认位置遵循§5.2；源/消费账的原精确Git/artifact引用继续作为迁移输入，不一律集中进`config/`或`archive/`。
+
+### 3.5 Reuse：按接管层次比较，而不是接受默认增量/重试
+
+固定候选仍为v2.3已审dlt1.31.0/`2360d229c77f7f64692acc31a4555f4cfcd50ed3`，不是新依赖。其同版高级state合同支持资源私有字典、source共享状态、已处理对象集合，与数据一起保存；滚动官方文档另说明lag窗口、cursor边界去重和自定义session。不能因为默认cursor不足就否定整个dlt，也不能将其destination原子保存直接等同Kernel的Git/artifact完成。[DLT-STATE][DLT-LAG][DLT-CURSOR][DLT-REST]
+
+| 可行复用范围 | 可能实际接管 | Kernel仍承担／需同输入验证 |
+|---|---|---|
+| 现有Requests/urllib＋内部责任拆分 | 不增加运行依赖，沿用已核来源执行与codec | 当前controller/codec/保管重复及错误归属成本仍由自己维护，不能因“运行中”默认胜出 |
+| dlt RESTClient配显式session与响应保管 | URL/分页接线、会话配置与响应访问；原件在转换前保管 | 逐族请求上限/禁止redirect、权利与body保管、null/空/缺列区别；公共no-retry和Relay特许重试不得被默认5xx/429策略覆盖；原client审阅可复用 |
+| dlt资源＋自定义分区/对象state | 可比较完整/待处理集合、源状态的机械持久化和批次处理，不限max时间戳 | 必须设计与原Git/artifact权威及失败原件的接合；数据提交成功与来源真实调用/历史上传不同。取消/初始化/refresh不得重放已耗调用或清掉合法旧账；仅套壳不算减少自有责任 |
+| 原生GitHub复用＋上述组件的混合 | workflow_call/composite复用安装/机械接线；domain和有界控制仍显式 | 旧job/step/run标题、runpy sibling和外部触发是消费者，迁移不能只更新一端；总体升级/退出成本一起计 |
+
+共同反例沿T3/T5/T7：较新日期成功但旧分区仍未完成；有旧raw但尚未被发布读入；同日跨head的Relay已执行；正文null与空表；无回执的外部调用；保留的失败market执行；旧registry的初见时钟；只停用视图而不重置采集。dlt lag可用于有证明的数据窗口，但不能凭有限lookback宣称任意旧缺口已补全。选择全pipeline前要核版本化代码、真实state提交/失败和退出、许可证/依赖、相同案例隔离试验；当前只完成正式合同补充，未运行或宣布采用/净节省。
 
 ## 4. K2-ADR-N：Naming & Identity
 
@@ -159,9 +190,9 @@ workbench/         原ES模块/服务端/浏览器入口，仍为产品边界
 | 人读研究/工作底稿 | 新同类材料默认`docs/readings/<record-id>/`；研究保管owner | create-only/追加或明确新revision；旧research_runs和docs原件不批迁；资料保存不等于typed COMMITTED |
 | typed Research/progress/Odds档案 | 新档案默认`research_runs/archives/<record-id>/<revision>/`；对应格式owner | 内层文件名/库存/bytes按原格式；progress、commit、Odds三种对象不混；旧candidates路径及execution packet约束须显式历史支持 |
 | 来源原件/提取表示 | 原获准artifact/Git保管位置；source custody owner | 原件、抽取文本和metadata权利不同；不建立默认全部公开的sources大目录。发布副本有独立定位，过期/隐私/许可仍按原范围 |
-| producer运行状态 | 原producer的state bundle/work-ref；该producer唯一恢复owner | 合格state、相同cache、bootstrap各有合同；长期新保管方案待G3，不以综合R替代；保留失败与前驱 |
+| producer运行状态 | 原producer的state bundle/work-ref；该producer或明确进度用例唯一owner | Sector恢复不由综合R替代；Smart的专用交付进度目前经固定R供control读取，按§3.4单独绑定而不赋整个R恢复权限；长期保管待G3，保失败/前驱 |
 | Human判断/接受 | 保持`docs/decisions/`及既有具名记录的Human owner | AI草稿和工程ADR不混入；新增判断不继承旧接受，不批量改名、归并或删除 |
-| 派生读包/快缓存 | 原`read-model/current-state`、`read-model/news-live`等各指定ref；原publisher | 生成/派生而非第二真源；不同ref时钟/覆盖/force合同分别保留；只读consumer不获producer权限 |
+| 派生读包/快缓存 | 原`read-model/current-state`、`read-model/news-live`等各指定ref；原publisher | 展示投影和被control消费的专用progress必须分别标识；两者目前可同R提交，不因同仓同ref统一权威。不同ref时钟/force合同保留，reader不自动获执行权限 |
 | 健康与项目进度 | #581保健康连续性，#508保2.0接续，#297只路由 | 原生Issue是不同owner对象；报告记忆不能当无状态展示删除；不复制新状态库 |
 | 测试/fixture/eval | `tests/<owning-capability>/`作为逐批目标，eval仍独立 | cross-test import、pytest收集/节点身份/分片先对账；原历史fixture与研究质量evaluation不变runtime依赖，不为减少数量塞循环 |
 | 工程指南与ADR | AGENTS/README路由WORKING-PROTOCOLS；本设计内具名ADR | 旧决定以精确Git前驱保留；不要另建实时ADR审批系统或复制计划 |
@@ -185,17 +216,17 @@ KEEP / CONSOLIDATE / REPLACE / RETIRE / DEFER均为推荐处置，非已执行�
 | M02 领域/Market/Odds/算术 | 三类Odds有不同资格和时钟；spine、Human分析、retention消费 | KEEP原语义，CONSOLIDATE领域组织/适合算术 | 概率、单位、context/Market、UNKNOWN不能互换；旧模型重建、G1/G3 |
 | M03 方法/旧合同/模型适配 | v2调用v1，Single Quick/Direct Deep共享旧receipt；host/live/archive/XHS消费 | REPLACE错位组织、KEEP旧codec；方法切换不拖当前执行链 | 方法hash/历史解释/预算及接受不继承；T2、G1/G3 |
 | M04 CLI/live/application | 五命令共享宽导入，政策资源固定；shell/工作流/用户消费 | REPLACE过宽入口为用例＋薄CLI；按命令构造依赖 | 参数/退出码/发布输出/安装后资源；CLI正反例，T1/T7 |
-| M05 source adapter/transport | F01–12多个来源共享机械助手并保特有资格 | CONSOLIDATE机械传输，KEEP单位/时钟/rights；比Requests/dlt等 | secret、redirect、重试/null语义和原件；G2，不把返回相同字段当等价 |
-| M06 capture/producer | 控制/采集/保管交织；workflow及reader消费 | REPLACE边界，CONSOLIDATE机械步骤；来源族局部演进 | request预算/身份/partial/前驱；逐族run→reader，G2/G3 |
+| M05 source adapter/transport | Global复用Smart/economic助手，来源族有不同重试/错误body规则 | CONSOLIDATE机械传输，KEEP单位/时钟/rights；比Requests/dlt等 | 逐族retry/redirect/credential/原件保管配置不能被通用缺省覆盖；E48/E50、G2/G6 |
+| M06 capture/producer | Smart枚举/完成/待修分区与Global单次捕获不同；workflow/reader/control消费 | REPLACE边界，CONSOLIDATE机械步骤；来源族局部演进 | 不把请求时间当覆盖，未完成尾部与无回执保持；E46–50、G2/G3 |
 | M07 纯观察/计算 | 部分纯函数反依宽runtime；producer、准备与UI消费 | REPLACE错向依赖；复用现有/Hamilton等实现 | 原算法/失败、无网络边界和外部包装成本，T3/G6 |
-| M08 workflows/资格 | event/data/authority混看，job/step/title/push被消费 | CONSOLIDATE原生复用；RETIRE须证实的旧边 | 手工/外部触发与source效果清单；旧自动边不扩成新研究，G2/G4 |
-| M09 状态/恢复 | Sector强state与News可选history不同；各producer恢复者消费 | KEEP必要差异，CONSOLIDATE机械存取 | 过期/cache/bootstrap资格、长期保管owner与真实恢复，G3 |
-| M10 执行/失败/健康记忆 | #581旧未交付、未知intent、各job资格；reconciler/reader消费 | CONSOLIDATE同义诊断；KEEP准入与报告分离 | 未发送与未知、target保全、原件可重建证据，T5/G3 |
-| M11 档案/历史codec | 原库存/前驱/宽Concept指纹；archive、reentry、历史脚本消费 | CONSOLIDATE保管，REPLACE宽回放边界 | 旧R重投影/Unicode/部分失败/格式与全hash，T4/G3 |
-| M12 配置/registry | 多用途数组、路径硬约束、source index；intake/Watch/Collector消费 | REPLACE重复维护源，KEEP用途区分 | 单一owner及双端迁移；新路径不改变旧packet/hash，G2/G3 |
+| M08 workflows/资格 | 原event/job/path及runpy有消费者；Smart主调用数与Relay实际启动数不同 | CONSOLIDATE原生复用；RETIRE须证实的旧边 | 拆job不能清预算/未发布原件；保旧身份、手工/外部trigger与source效果，E47、G2/G4 |
+| M09 状态/恢复 | Sector强state、Smart发布反馈、RSS原始registry与消费history不同 | KEEP必要差异，REPLACE展示/进度混居，CONSOLIDATE机械存取 | §3.4逐对象绑定；不能统一max cursor/empty reset或删失败执行，E46/E49、G3 |
+| M10 执行/失败/健康记忆 | #581旧未交付、Smart pending publication、Global未知receipt与RSS失败ledger | CONSOLIDATE同义诊断；KEEP准入/保管/报告分离 | 未发送≠未知，保存失败≠成功消费；原日期/预算/前驱，T5/G3 |
+| M11 档案/历史codec | Concept及economic有实现指纹；RSS含scan/execution原库存/前驱 | CONSOLIDATE保管，REPLACE宽回放边界 | 旧R/Unicode/原hash；extractor/renderer改变也需旧解释与拒绝复验，T4/G3 |
+| M12 配置/registry | 输入数组/请求声明、RSS已见registry与经济review bundle是不同对象 | REPLACE重复维护源，KEEP配置/原件/消费状态区分 | config只装声明，不把运行registry或已接受包按JSON后缀搬入；双端迁移、E49/E50 |
 | M13 读包合同/通用工具 | current_state兼任原语，product文案参与身份；多reader/前后端消费 | REPLACE归属、窄合同；减少错向import | 单文件认证≠整根hash、显示与记录身份版本，G1/G3/G5 |
 | M14 Collector/预算/files | 读族借机构reserve；共享client计数/候选；各reader消费 | CONSOLIDATE资源owner，REPLACE跨业务私有借用 | deepcopy/assign、原预算不可rollback、可选失败隔离，T3/G6 |
-| M15 Git发布/本地输出 | 原子报告/原件custody/综合R/News不同；reader/人工消费 | CONSOLIDATE机械I/O，KEEP各操作合同 | no-replace、部分原件保留、并发/unknown pointer，T5/G3 |
+| M15 Git发布/本地输出 | 原子报告/原件custody/综合R/News不同；Smart control依赖已发布专用state | CONSOLIDATE机械I/O，KEEP各操作合同 | 发布未读入不能再花来源预算；显示失败不抹已核进度；no-replace/unknown pointer，E46、T5/G3 |
 | M16 研究→产品/重入 | registry/work-ref/#601/Brief接续；研究者与Human消费 | CONSOLIDATE资产与请求入口；更正可发现 | 保存≠研究完成/接受/持仓；真实Quick→Brief、更正与原时钟，G5 |
 | M17 Workbench client | 19生产模块中的14client已核；迟到/跨R/原文保全 | CONSOLIDATE读取/视图；候选框架仍比较 | 保原native机制或等价替代；全测试/browser/手机与成本，G5/G6 |
 | M18 Workbench server/host | 5server与shared依赖，owner/token/permit/固定ref；原host消费 | KEEP读写隔离，CONSOLIDATE窄host合同 | 可信边缘/无旁路、凭证轮换，暂停不等免审；G5，未授权不部署 |
@@ -223,6 +254,16 @@ KEEP / CONSOLIDATE / REPLACE / RETIRE / DEFER均为推荐处置，非已执行�
 | XHS harness/voice → `application/publication/`及独立CLI薄接入 | 旧Deep claim catalogue、voice、人工命令/草稿 | 先保旧Deep adapter再考虑方法无关输入；选定声明/OMIT/无自动发文不变；草稿覆盖不伪装原件custody，人工使用G4待核 |
 | registry/输入数组 → `config/<owner>/`，读用途例`config/reading/purposes.json` | Collector、archive/index、B2、Watch、intake；execution-inputs另有owner | 一套新writer/consumer迁移，不把不同用途合并；旧R/旧packet继续按原path/schema；先查workflow数组与push/外部trigger，不回填消费历史 |
 
+来源控制本批新增五个同表范围的映射，仍为DESIGN_ESTIMATE：
+
+| 当前责任 → 目标建议 | 已知消费者／改进目标 | 不可跳过的迁移证据 |
+|---|---|---|
+| smart_money_view.state → `application/smart_money/progress.py`；原control → 同能力control | capture、reading、control、原工作流和测试；避免页面模块拥有未来采集进度 | 原state JSON/首次与后继结果相同，丢history不重置；保原R locator与未发布原件等待；先迁reader/control再退旧view导出 |
+| global_*_context纯plan/日期/codec → `observations/global_market/`；capture → `application/global_market/` | 两工作流、global_market_reading、现有CLI；让重放不依赖网络执行实现 | v1/v2、不同attempt上限、partial/无回执/单位/日期反例；原saved summary与拒绝保持，不改历史源码原件 |
+| economic capture的PublicResponse/安全HTTP助手 → `infrastructure/http/`窄实现；业务绑定仍归economic | global_public_context及economic捕获，CLI/workflow；解除借工具导入业务parser | 只共享同义机械合同；公共Global保管HTTP失败body与economic不读取HTTPError body的不同策略保留；旧implementation hash映射先设计，不能拔验证 |
+| RSS源registry与native scan/execution历史 → 两个独立应用owner及各自codec | prepare-native-rss-successor、native-feed-acceptance、原源/股票多用途workflow | `runpy`相邻脚本调用、source/market/history三个locator、failure可保管不改success；init/continue边界、原上传封装及容量不自动清理 |
+| disclosure_radar分组 → `observations/disclosures/`；disclosure_research旧method适配 → `methods/`或公告用例 | CLI及原assessment；减少轻分组依赖旧Funnel | Research cutoff跨批仍保整批；原Evidence集合、补充证据不覆盖、旧方法输出/旧命令保持；assessment/receipts/HTTP尾部闭合后才移动 |
+
 一个可执行切片还须列：M与采纳决定、精确base/head及old→new、全部直接消费者及已证下游、外部实现选择、正/负/历史样本、预计与实测成本、格式reader/writer切换顺序、production影响、恢复、回退与旧责任退出。未审消费者阻该切片，不阻无关已获准文档工作。
 
 ## 8. 完整迁移、工程与验收
@@ -233,7 +274,7 @@ KEEP / CONSOLIDATE / REPLACE / RETIRE / DEFER均为推荐处置，非已执行�
 |---|---|---|
 | W1 公共合同/保护样本 | M01–04/11/13/16/19；把能力合同、命名/owner与原正反例固定 | P3整体采纳；实际diff→trigger→source effect对账；不切生产数据 |
 | W2 共享原语/资源 | M01/05/10/13–15；窄类型、文件/传输、预算/files owner | 真实消费者与Reuse选择；same bytes/异常/预算；旧重复/转发真正退出 |
-| W3 用例/producer/恢复 | M04/06/08–10/12；三种依赖边、job/step资格、#581记忆 | G2/G3；保持原时钟/权限、有限恢复与unknown intent；新旧writer权威不并存 |
+| W3 用例/producer/恢复 | M04/06/08–10/12；三种依赖边、job/step资格、#581记忆与§3.4进度/消费账 | G2/G3；先核Smart publisher反馈和RSS双历史；保持时钟/权限/有限恢复，不能同时双写或清账 |
 | W4 来源/观察各族 | M05–07；Sector/Stock/News/Industry/economic/D及财务输入 | W1/W2及相关W3；逐族垂直迁移；原件→最终消费者，无重采；旧指纹保全、新回放闭包缩小 |
 | W5 方法/档案/历史 | M02/03/11/12/16/24；旧Funnel、generic、Single Quick、存取/中文原名 | G1/G3；不同hash/格式与两类保存失败不混；reader先、writer后；回退仍读已发布格式 |
 | W6 读包/发布/Workbench | M13–18；显式可选组合、三类效果、独立时钟与产品重入 | 相关W3–W5；T3/T5及原host/client、跨R/迟到拒绝；Sites不自动部署 |
@@ -269,6 +310,8 @@ T1改领域资格；T2换研究方法；T3已有保存源增加用途/替换具�
 
 共同反例继续：News历史恢复失败不妨碍独立当前采集但保缺口；D候选撤回不退API预算且保价格/研究；未知dispatch先对账；Sector过期不靠cache/综合R续跑；#581非同target成功不擦旧gap；资料转存不自动研究；原R/坏原文/迟到回包拒绝。候选只接管纯计算时按该范围计收益，不因不管理Git就宣判失败；完整采用若声称接管恢复则必须实际证明。[V23][REUSE]
 
+本版E46–E51另要求将§3.5共同反例放入原T3/T5/T7；本轮18函数案例仅补控制行为正反例，不冒充这些跨模块验收已完成。通过完整CI也不能将“progress在R中被读取”扩大为全部生产状态已安全迁移。
+
 P1的#799 full累计613作业秒、main34秒、publisher138秒仍是历史样本，不是本轮收益。最终量化阈值须在G6同口径基线取得、P4前采纳；现在不编造百分比。若新增结构/外部适配使总负担增加，应调整设计，而非降低完工标准。
 
 ## 9. G1–G7剩余证据与下一决策包
@@ -276,14 +319,14 @@ P1的#799 full累计613作业秒、main34秒、publisher138秒仍是历史样本
 | 门 | 本版已补 | 尚未完成、验证方式与受限动作 |
 |---|---|---|
 | G1 依赖/公共消费者 | 29顶层正文与声明图、4个runtime执行/存取接点、console/package-data；前驱19生产mjs图保留 | CLI向runtime/adapter尾部、来源控制与动态/手工/外部消费者仍需追踪；不得称全源码闭包或据此全局删除 |
-| G2 producer/配置/资格 | 继承F01–12，新增packet固定prefix和执行catalog接点 | F01多purpose/native-feed控制、F02 Smart Money control/capture、F03/04 Global codec及F10/11 economic生命周期；追请求/状态/writer/reader，闭合对应能力/placement切片 |
+| G2 producer/配置/资格 | F02 control/capture反馈、F03/04两Global codec、F01 native acceptance/history、F10/11 capture/输入及两公告尾部；E46–51与具体迁移表 | feed intake/consumer内部、Smart各source parser/docs/Relay尾部、economic discovery/review、stock其余purpose与公告assessment/receipts/HTTP仍未全审；优先补影响状态替代和退出的实际调用，不重复本版11文件 |
 | G3 状态/档案/恢复 | 原件先存后验、报告原子发布、Odds同Research恢复、execution pair与旧路径约束 | 真实历史原件/全部work-ref、容量/期限和恢复演练；验证旧R、新writer及回退，不从代码阅读签实际恢复 |
-| G4 退出 | v2→v1、XHS与历史脚本明确正例；四类退出表与8个映射样本 | 原owner意图、manual/CLI/external trigger、全部专属fixture/配置；支持期/等价reader明确后才能退出 |
+| G4 退出 | v2→v1/XHS/历史脚本及runpy/control为明确正例；四类退出与新增来源映射 | 原owner意图、manual/CLI/external trigger、全部专属fixture/配置；支持期/等价reader明确后才能退出 |
 | G5 产品/host | 继承Workbench生产声明/三份测试源码和权限/迟到结果证据 | 余下12份test.mjs、browser、真实host可信边缘/资产/无旁路和Quick→Brief/更正；Sites暂停不免审、不擅自部署 |
-| G6 成本/测试/候选 | 具体T1–T7变更点，官方打包/命名合同、pluggy局部固定代码；无新运行测量 | 全fixture义务、实际代表任务基线、必要候选隔离试验/许可/依赖/副作用、完整架构对比；试验不自动获准 |
+| G6 成本/测试/候选 | 具体T1–T7、原pluggy/dlt源码审阅、dlt高级state合同及18项control函数行为检查；不是成本实测 | 全fixture义务、实际代表任务基线、必要候选隔离试验/许可/依赖/副作用、完整架构对比；试验不自动获准 |
 | G7 独立接手 | 通过唯一入口恢复本轮并留下可定位后继 | 真正新上下文或维护者的独立任务证据；本会话不能自签 |
 
-**下一包：沿G2闭合上述来源控制/codec与CLI尾部消费者，将结果回写本稿能力合同、M05–M12及配置/历史迁移映射；对影响架构取舍的真实状态和候选成本优先补证。** 不再重读已核29顶层正文、33文件静态范围和19生产mjs，不重做P1/P2；有新diff或真实矛盾才重开相关部分。G3/G4/G5/G6/G7保持未验，不藏到DEFER。
+**下一包：优先闭合G2的feed intake/consumer与economic discovery/review，再对其可定位的保存样本补G3历史恢复证据；把结果回写§3.4状态归属和§7迁移表。** Smart parser/Relay、stock其余purpose及CLI assessment/receipts/HTTP尾部仍明列；按是否阻碍当前决策排序，不以换领域隐藏缺口。 不再重读已核29顶层正文、33文件静态范围和19生产mjs，不重做P1/P2；有新diff或真实矛盾才重开相关部分。G3/G4/G5/G6/G7保持未验，不藏到DEFER。
 
 Human无需重批全面审查、Reuse/Modularity、统一原则或普通设计文档。最终仍需裁定：具体目标拓扑和外部实现接管范围、受支持公共/旧reader与精确RETIRE清单、长期恢复/保管变更、成本/CI门槛、候选试验/依赖采用、P4批次以及产品部署/发行。K2-ADR-N/T从“只有候选分类”推进到明确建议，不等于最终采纳或逐切片映射全部齐备。
 
@@ -291,7 +334,7 @@ C的2026-10-08/09/12/13/14自然窗、D冻结/成熟结果与#351/#621/#581等�
 
 ## 10. 精确来源与证据入口
 
-内部新增代码固定M；旧证据保留原commit，不把文档标签更新当重新执行。官方滚动文档于2026-10-10读取；pluggy只读固定1.6.0局部manager和官方合同，不声称完整采用审查。没有复制第三方代码。实际PR/head、原始CI证据、合并与正常发布均以#508最终回执为准。
+本版新增代码固定M=`6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc`；旧v2.4/v2.3证据保留原commit。官方滚动dlt页于2026-10-10读取，新advanced-state文档固定在原候选commit；旧pluggy局部审阅不扩大为完整采用。没有复制第三方实现或安装新包。实际PR/head、受控函数原始检查、完整CI、合并与正常发布以#508最终交接为准。
 
 报告原语反向搜索还定位到以下实际调用者；本轮只消费其命中接点，不声称已完整重读每个调用者：
 
@@ -346,3 +389,25 @@ C的2026-10-08/09/12/13/14自然窗、D冻结/成熟结果与#351/#621/#581等�
 [PY-RESOURCES]: https://docs.python.org/3.12/library/importlib.resources.html
 [PYPA-ENTRY]: https://packaging.python.org/en/latest/specifications/entry-points/
 [CI]: https://github.com/auguspp/decision-kernel/blob/6125dc681602e86926dd5cd4dadb74e9457970e2/docs/CI-MAINLINE.md
+
+[V24]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/docs/kernel-2.0-design.md
+[HANDOFF13]: https://github.com/auguspp/decision-kernel/issues/508#issuecomment-6098430990
+[START14]: https://github.com/auguspp/decision-kernel/issues/508#issuecomment-6098747928
+[SM-CONTROL]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/.github/scripts/smart-money-control.py
+[SM-CAPTURE]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/smart_money_capture.py
+[SM-STATE]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/smart_money_view.py#L1-L95
+[SM-READING]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/smart_money_reading.py#L250-L334
+[GLOBAL-RELAY]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/global_market_context.py
+[GLOBAL-PUBLIC]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/global_public_context.py
+[RSS-PREPARE]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/.github/scripts/prepare-native-rss-successor.py
+[FEED-ACCEPT]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/.github/scripts/native-feed-acceptance.py
+[FEED-HISTORY]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/radar_feed_history.py
+[ECON-INPUTS]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/economic_release_inputs.py
+[ECON-CAPTURE]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/economic_source_capture.py
+[DISCLOSURE-BATCH]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/disclosure_radar.py
+[DISCLOSURE-METHOD]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/src/decision_kernel/runtime/disclosure_research.py
+[SM-TEST]: https://github.com/auguspp/decision-kernel/blob/6d8b7a4dd14560eb739a9984b4a9cc0b8d97bebc/tests/test_smart_money.py
+[DLT-STATE]: https://github.com/dlt-hub/dlt/blob/2360d229c77f7f64692acc31a4555f4cfcd50ed3/docs/website/docs/general-usage/incremental/advanced-state.md
+[DLT-CURSOR]: https://dlthub.com/docs/general-usage/incremental/cursor
+[DLT-LAG]: https://dlthub.com/docs/general-usage/incremental/lag
+[DLT-REST]: https://dlthub.com/docs/dlt-ecosystem/verified-sources/rest_api/advanced
