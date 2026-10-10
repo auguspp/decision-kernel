@@ -18,16 +18,9 @@ It is **not** Decision OS v2 and it is **not** a new platform build.
 
 ## Operating principles
 
-1. **Own only investment cognition invariants.** PIT, exact lineage, frozen state identity, deterministic Odds inputs, Human accountability, authority boundaries, and Human-surface eligibility belong here when changing them would break the decision system itself.
-2. **Research method is versioned policy, not constitution.** A useful research recipe can be strict without becoming a permanent Kernel invariant. `research_contract_v1.py` and `claim_audit_contract_v1.py` preserve current research-quality policy separately from Kernel commit authority.
-3. **Reuse commodity infrastructure.** Market-data transport, news aggregation, HTTP, retries, scheduling, process supervision, logging, storage plumbing, and UI stay outside the core and should use mature tools/services with thin boundaries.
-4. **Modular monolith, thin workflow.** Modules stay independently understandable; a small application workflow connects them. No plugin platform, event bus, provider framework, or orchestration framework by default.
-5. **Quiet stop is a product outcome.** A workflow may deepen, wait, drop, stop quietly, or wake the Human. It does not need to run every stage.
-6. **Human authority stays final.** Research, Odds, and Decision Rehearsal never become an autonomous investment decision, position size, portfolio action, execution instruction, or capital authority.
-7. **Extract proven core; do not wholesale-copy the old repository.** Existing Decision OS implementations and tests are source material. Transitional plumbing stays behind unless it proves it belongs in the kernel.
-8. **GitHub/open-source reuse before custom construction.** Recover what already exists internally, then actively inspect mature GitHub solutions before committing to custom architecture or code; verify official contracts alongside them. Prefer direct use, configuration or a thin adapter to an owned subsystem. Existing reference projects are a starting point, not a closed whitelist.
+**[Unified project principles and working rules](WORKING-PROTOCOLS.md#project-principles)** are the single principle text; [AGENTS.md](AGENTS.md) provides task-specific entry and shared boundaries. The original eight principles are consolidated there, with their history and scope preserved rather than maintained as a second list here.
 
-This is a personal-use project, not a speculative commercial platform. Evaluate standalone/self-hosted tools, CLI utilities, suitable copyleft projects and small proven implementations as well as libraries. Judge actual fitness, licence, public-repository distribution, security and maintenance constraints, not hypothetical future commercialization. The full [Reuse First rule](WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check) retains candidate-specific obligations, evidence and authority boundaries; broader evaluation does not authorize automatic adoption.
+[Reuse First](WORKING-PROTOCOLS.md#reuse-first--required-external-prior-art-check) and [Modularity First](WORKING-PROTOCOLS.md#modularity-first--composable-capabilities-and-safe-exit) apply together: choose the right implementation, then make its integration, replacement and safe exit explicit. Semantic/Human authority, durable evidence, replaceable methods, qualified STOP, Reconcile, real capability discovery and proportional verification/governance remain part of the same rules. Consolidation does not adopt the proposed Kernel 2.0 topology or authorize production migration.
 
 ## Constitution vs Research Contract
 
@@ -54,8 +47,8 @@ Examples:
 - require FACT + INFERENCE + ASSUMPTION claim classes
 - require variant perception and richer research narratives
 - require fundamental / expectation / liquidity clock assessments
-- require three to five monitoring indicators
 - use a two-to-five-scenario research set
+- require three to five monitoring indicators
 - require explicit scenario assumptions and financial drivers
 - require bounded adversarial review
 
