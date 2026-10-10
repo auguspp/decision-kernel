@@ -1,10 +1,10 @@
-# Kernel 2.0 — 全局目标架构与渐进重构方案 v2.1
+# Kernel 2.0 — 全局目标架构与渐进重构方案 v2.2
 
-日期：2026-10-10（Asia/Singapore）。设计 ID：`K2-DESIGN-20261010-v2.1`。唯一计划与跨会话接续入口：[#508][OWNER]。有效计划为[v1.2 架构级 Reuse First][PLAN12]、[v1.1 全面目标纠偏][PLAN11]和[v1.0][PLAN10]未被替代条款。
+日期：2026-10-10（Asia/Singapore）。设计 ID：`K2-DESIGN-20261010-v2.2`。唯一计划与跨会话接续入口：[#508][OWNER]。有效计划为[v1.2 架构级 Reuse First][PLAN12]、[v1.1 全面目标纠偏][PLAN11]和[v1.0][PLAN10]未被替代条款。
 
 **状态：P3 GLOBAL DESIGN PROPOSAL / 待审。** Human已同意继续全面规划与架构复用比较；本稿不是全仓审计完成、具体架构采纳、依赖安装或P4施工授权。保存、CI、合并、采纳、实施、生产与产品验收分别成立。实时进度只在#508最新回执，不在本文另设进度表。
 
-**版本关系：** 本稿整合[原v2][V2]与[架构复用证据附录v1][REUSE]的设计影响，继续在同一PR #804、同一路径评审，不增加第三份设计队列。原v2与附录的精确版本、来源和未运行声明保留；附录是证据输入，不与本文竞争当前目标。原[v1/#803][OLD]作为历史候选保留，其“原拓扑为主”和默认S1→S4已不再是当前推荐。P1/#801、P2/#802交付事实不撤销、不重做，其有界KEEP不构成全域免审。
+**版本关系：** 本稿承接[v2.1执行/状态设计][V21]，加入来源家族和来源层复用证据；继续整合[原v2][V2]与[架构复用证据附录v1][REUSE]的设计影响，继续在同一PR #804、同一路径评审，不增加第三份设计队列。原v2与附录的精确版本、来源和未运行声明保留；附录是证据输入，不与本文竞争当前目标。原[v1/#803][OLD]作为历史候选保留，其“原拓扑为主”和默认S1→S4已不再是当前推荐。P1/#801、P2/#802交付事实不撤销、不重做，其有界KEEP不构成全域免审。
 
 ## 1. 目标、差距与本版变化
 
@@ -20,15 +20,15 @@ Kernel 2.0是覆盖整个工程体系的架构审查、必要的目标重新设�
 
 固定边界：GitHub仍为正式代码/证据/状态后端；PIT、UNKNOWN、Evidence/Research/Odds/Human区分；历史和原话保留；AI Investment Authority=NONE。开放事项：代码拓扑、实现归属、内部接口、配置位置、读包与运行状态表示、兼容维护方式、测试组织、CI具体实现和依赖管理。现役规则在替代方案获准并完成适用验证前不变。
 
-本版新增的不是更多施工承诺，而是六项有代码依据的设计约束：区分事件机会与合格数据依赖；识别#581的报告记忆；保留已有有界恢复而非统一重试策略；揭示工作流文本的配置消费者；把旧执行入口与现役共享实现分开；明确外部数据集复制与共享预算的适配问题。它们具体影响M04/M06/M08–M15/M19/M21/M23及W2/W3/W5/W6/W7/W8，详见下文。
+v2.1已保留六项有代码依据的设计约束：区分事件机会与合格数据依赖；识别#581的报告记忆；保留已有有界恢复而非统一重试策略；揭示工作流文本的配置消费者；把旧执行入口与现役共享实现分开；明确外部数据集复制与共享预算的适配问题。它们具体影响M04/M06/M08–M15/M19/M21/M23及W2/W3/W5/W6/W7/W8，详见下文。本版新增F01–F12来源接线与E27–E32：代码push的source effect、job/step兼容、宽指纹的维护成本、B2跨来源耦合、不同前驱/增量状态及dlt采集适配。它们进入原M/W/G，不变成新的施工队列。
 
 ## 2. 证据基线与实际覆盖
 
-代码M=`4e9da1d037d6cefce0a7735ee74349666430a9bf`；本次文档编辑前的PR头H=`9d94d0e0f01cd32b1c9895d2297a8c2d61a2526a`。已重新恢复AGENTS、NEXT、#297、#508及07回执，核#804仍开放且仅两份工程文档在途。未读取生产R，未调用source/model/producer/publisher或安装候选依赖。
+代码M=`4e9da1d037d6cefce0a7735ee74349666430a9bf`；本次文档编辑前的PR头H=`a5da26a464e04d6c6b2ae3ad4c57d3101ad66354`。已重新恢复AGENTS、NEXT、#297、#508及08回执，核#804仍开放且仅两份工程文档在途。未读取生产R，未调用source/model/producer/publisher或安装候选依赖。
 
 P1的责任/对象/成本样本、P2的十二类工程先例和复用附录的内部接点/外部候选直接复用。保留的结论只在原读取范围内有效；不能将树存在、搜索命中、旧文档或成功run标签当成全源码已审、现役性或零消费者证明。[P1][P2][REUSE]
 
-### 2.1 本次增量读取与静态核对
+### 2.1 前驱v2.1读取与静态核对（作为已保存证据复用）
 
 | 输入 | 实际读取范围 | 本地核对对象 |
 |---|---|---|
@@ -42,9 +42,9 @@ P1的责任/对象/成本样本、P2的十二类工程先例和复用附录的�
 | `saved_research_once.py` | 全文566行，共享Retainer、模型请求/返回保管和方法执行 | blob `4819ec4cf257881c41f0752fa8420643694d7fb6` |
 | Kedro `memory_dataset.py` | 固定候选版本全文153行 | blob `f4482e75addb0fe9393cf5d80f1f16efbfe76d5c` |
 
-以上八份正文重新计算Git blob相符；Python只做标准库AST解析，YAML使用BaseLoader保留`on`键。未导入或执行这些源码。另读Sector workflow的生产/恢复/保管主要区间、`stock_research_intake.py:1–130`、`incremental_disclosure_intake.py:1–150`及Kedro内存数据集测试前190行。复核已保留base/扩展Collector、D reader/算法/测试、档案/索引及Workbench读取接口。`WORK_REF`等有界搜索只提供正例，未穷尽全仓引用。[SECTOR-WF][STOCK-INTAKE][DISC-INTAKE][K-MEM-TEST]
+前驱已对以上八份正文重算Git blob并核对相符；Python只做标准库AST解析，YAML使用BaseLoader保留`on`键，未导入或执行这些源码。本轮复用其精确证据，不把这八份重新计为新增。前驱另读Sector workflow的生产/恢复/保管主要区间、`stock_research_intake.py:1–130`、`incremental_disclosure_intake.py:1–150`及Kedro内存数据集测试前190行。复核已保留base/扩展Collector、D reader/算法/测试、档案/索引及Workbench读取接口。`WORK_REF`等有界搜索只提供正例，未穷尽全仓引用。[SECTOR-WF][STOCK-INTAKE][DISC-INTAKE][K-MEM-TEST]
 
-本地公开archive请求因DNS失败未得到完整checkout；连接器和MCP读取成功。这限制全仓自动扫描结论，不证明GitHub无权限，也不能成为自建工具或代理工作流的理由。没有把局部静态分析变成永久扫描器、CI门禁或新的执行平台。
+前驱及本轮公开archive取回均未得到完整checkout；本轮下载工具URL门与一次urllib DNS读取分别失败，连接器和MCP读取成功。这限制全仓自动扫描结论，不证明GitHub无权限，也不能成为自建工具或代理工作流的理由。没有把局部静态分析变成永久扫描器、CI门禁或新的执行平台。
 
 ### 2.2 当前代码能证明的主链，及其不能证明的运行事实
 
@@ -67,13 +67,48 @@ P1的责任/对象/成本样本、P2的十二类工程先例和复用附录的�
 
 **E22：存在可精确定位的历史自动边。** 当前`decision-inbox`只声明workflow_dispatch；`saved-disclosure-research`的workflow_run job却要求其上游event=schedule。因此当前M下新发起的原生Inbox不能满足这条旧自动分支。该事实支持G4核查这一条边是否已失去执行责任，不证明整个公告研究workflow无消费者：它仍有manual和request-only push。更不能把条件改为接受manual Inbox从而新增自动研究。旧scheduled run及必要reader保留，删除或改接先核原owner/历史意图。[INBOX-WF][DISC-WF]
 
-**E23：#581不只是可以丢弃的展示缓存。** `report_issue()`读取Issue正文中`radar-continuity-status-v1`的原JSON，调用`retain_unresolved()`后写回。原未交付身份按lane/target保留，非同一目标的后来成功不能清除它。它实际承担报告连续性记忆；迁移必须保留或证明可从原件完整重建。它仍不是dispatch准入权威，也不是Human判断数据库，不能由报告字段授予重试权限。原v2对“机器健康投影”的宽泛理解应据此收紧。[RECONCILE]
+**E23：#581不只是可以丢弃的展示缓存。** `report_issue()`读取Issue正文中`radar-continuity-status-v1`的原JSON，调用`retain_unresolved()`后写回。原未交付身份按lane/target保留，非同一目标的后来成功不能清除它。它实际承担报告连续性记忆；迁移必须保留或证明可从原件重建。它仍不是dispatch准入权威，也不是Human判断数据库，不能由报告字段授予重试权限。原v2对“机器健康投影”的宽泛理解应据此收紧。[RECONCILE]
 
 **E24：必要恢复不能被统一成零重试或默认重试。** reconciler已有最多3次每周期source attempt、活动检查、精确诊断类别、冷却、main CI、旧intent核对等有限规则。未知dispatch保持UNRECONCILED/DISPATCH_UNCERTAIN；明确定义的未发出与已接受待结果分别记录。模型调用和create-only写入又有自己的不重试边界。W3应保留已有获准语义，通用库的retry/resume不能替代；本稿也不扩大原有限source recovery。[RECONCILE][ONCE]
 
 **E25：工作流文本还是配置接口。** base `Collector.research()`读取同M的Inbox workflow，从具名literal arrays提取decision_packages和research_attention_handoffs。当前两组为空，而shadow和显式公告扫描另有六公司样本；重复证券不等于同一生产意图。把数组搬进新配置/catalog需要同时迁移writer、reader、测试和旧版本解释；不能只改YAML再认为reader仍正确。用途registry不能变成新授权清单。[INBOX-WF][BASE]
 
 **E26：旧名称不等于无用实现。** `saved_research_once.py`已退出Suken固定launcher，`__main__`明确拒绝运行，但现役hosts复用其Retainer和模型循环。按once/旧日期删整个文件会误退共享责任。应分别审查保管机械步骤、模型适配、方法选择和历史codec的归属；旧执行责任已退不重做，仍有消费者的实现允许CONSOLIDATE，不因复杂就继续全体KEEP。[ONCE][STOCK-INTAKE][STOCK-RESEARCH-WF]
+
+### 2.4 来源家族增量：从触发一直核到直接消费者
+
+本批固定同一M，完整读取12份workflow、10份runtime reader/compat和B2脚本，共23份内部文件；另完整读取固定dlt RESTClient。24份均重算Git blob与连接器元数据相符，Python仅AST解析、YAML用BaseLoader保留`on`；不导入或执行业务/上游代码。部分范围另读`tushare_relay.py:1–140`及dlt的retry、tests、pyproject，见§3.4。源请求数/字节上限来自代码合同，不是本轮真实请求或运行成本。
+
+| 入口（均为完整workflow读取） | 已核输入、执行和保管 | 已核直接消费者／仍缺证据 | 处置和复用含义 |
+|---|---|---|---|
+| [F01][WF-STOCK] `hithink-stock-dump-trial.yml` | 八个手工purpose、六个job；Stock接精确Sector原件，independent/source-check/native-feed等独立；theme分支另有指定路径push；多种独立artifact | base Collector按实际stock-reading job选；independent读面已在组合根接线，细部本轮未读；native-feed脚本只定位，不能签全部purpose内部资格 | M06/08/23：REPLACE多用途接线候选；保留不同来源/研究权限及已消费pilot，不以trial名称判整份可退 |
+| [F02][WF-SMART] `radar-smart-money.yml` | 两个原定时＋手工模式；control、主capture、Relay补充、FTShare诊断/试验分开，30日artifact；Relay依已核主源或精确旧源 | 完整`smart_money_reading`：排除诊断、核本attempt/job、最多一次control绑定前驱；保留history/state/gzip chunks与可选Relay。control/capture算法未读全 | M09/14/15：CONSOLIDATE机械读写，KEEP主/补充隔离、精确前驱和缺口；不得将旧源复用冒称新采集 |
+| [F03][WF-GLOBAL-MARKET] `radar-global-market.yml` | indices/Shibor两用途、各自原cron与as-of；显式Relay凭证；精确代码/CI，分族artifact30日 | 完整`global_market_reading`按族重建，旧v1两族与v2六族分别解释；source codec仅由导入/调用定位 | M05/07/12：共享transport不统一资产/期间语义；保留来源各自日期与失败 |
+| [F04][WF-GLOBAL-PUBLIC] `radar-global-public.yml` | Treasury/FX/commodity/crypto四用途及原cron；无业务凭证，原字节/失败/离线replay，分族artifact30日 | 同一完整reader的独立query和family状态；不用public失败抹Relay，失败run内可读原件亦须重建 | M06/15：CONSOLIDATE同义保管；成功判定不能统一为workflow绿灯，实际source parsers仍待核 |
+| [F05][WF-IND] `radar-industry-breadth.yml` | Sector完成事件或手工；三个无needs的job：breadth/public-context/industrial-fundamentals，独立原件30日 | 完整三个reader：breadth要求全run成功，另两项核自己的job；历史external样本另列，fundamentals同capture不重复消费增量 | M08/10/14：审资格粒度与可选失败，而非简单合并成一个job；E28 |
+| [F06][WF-CONCEPT] `radar-concept-source.yml` | 明确session/code；原capture/verify，最多15请求；payload和inert源码tar分开，artifact30日 | 完整`concept_radar_reading`以可信installed verifier和compat校验最新primary，供公司组合；不执行tar | M07/11/23：保留原字节回放，重组未来验证闭包；E29，不放宽旧来源资格 |
+| [F07][WF-DETAIL] `radar-concept-detail.yml` | 明确primary run/code/offset，最多三项六请求；base.zip与独立补充，30日 | 完整`concept_detail_reading`核primary run/head/artifact/字节/日期；完整compat双端指纹对照；只一批而非累积全覆盖 | KEEP补充与主源绑定；CONSOLIDATE组合/保管；未来窄codec替代宽文件指纹的方案待验证 |
+| [F08][WF-TDX] `tdx-concept-snapshot.yml` | 已使用eltdx 3.2.2，下载wheel并记hash；snapshot＋同host可选trend；源文件/请求身份/回放，30日 | 完整`tdx_concept_reading`[TDX-READ]：原snapshot和新版嵌套envelope、可选trend/member分开；full-run入口门仍在 | REUSE现成解析/协议能力，不另写TDX；对整套外部架构/组件与现有适配仍可比较；可信本地回放不等于执行源档代码 |
+| [F09][WF-VIBE] `vibe-concept-snapshot.yml` | 仅明确手工code/mainCI，capture/replay，无key/no-retry，30日artifact | 手工replay是已知消费者；本轮原组合根和publisher未见Vibe专属入口，indexed search零命中不是全局无消费者证明；人工/历史仍UNKNOWN | M23：用途核查候选，不自行RETIRE整模块，也不自动接成新增每日源 |
+| [F10][WF-ECON-DISC] `economic-release-discovery.yml` | directory与native RSS两用例；RSS bootstrap/精确predecessor显式分开；push只接声明的successor request；90日 | workflow内`economic_release_inputs verify`、RSS `prepare-native-rss-successor`/`radar_feed_intake verify`；capture/控制函数与研究产品下游未穷尽 | KEEP目录与正文/研究分离；补齐source生命周期，不把普通代码变动变成新RSS基线 |
+| [F11][WF-ECON-CAP] `economic-source-capture.yml` | 手工＋四项代码/配置路径push；最多四个已审页面capture/verify，完整/失败proof90日 | 原离线verify为直接消费者；未证明完整产品下游或当前自动边已无用途 | E27：修改代码可能触发source effect，必须在实际迁移之前裁定触发处置，不擅自删除或触发 |
+| [F12][WF-B2] `b2-disclosure-appointments.yml` | 三种手工source-kind、显式registry IDs/period/目录或PDF定位；不同源边界，30日原件 | 完整731行脚本：原件先保存、目录调用原CNINFO parser、PDF复用archive/getter/extractor；registration-proposal尚无有效ref，后续Git保管/登记/发布另行完成 | M01/05/08/12：已有复用保留并审过宽依赖；只借Relay六类助手却被全Relay hash/共享并发门耦合，E30 |
+
+本表覆盖指定入口及所述直接消费者，**不是12族capture内部逻辑、全部测试、所有手工用途或真实生产链全通过**。`external_radar_reading`[EXTERNAL-READ]完整读取证明它消费明确的历史News/Industry样本，不能因名字external就认定它消费经济RSS/B2。F01/F10/F11的控制/捕获函数缺口继续留在G2，不藏入DEFER。
+
+### 2.5 本批对目标架构的六项实质修正
+
+**E27：代码迁移有隐含source effect。** F11的push路径包含自身workflow、`economic_source_capture.py`、`economic_node_study.py`和seed；F01的theme push还监听capture脚本和样本。与F10的显式request-only push不同，普通工程路径改动就有源调用接线。W1必须在移动/替换相关代码前核本次diff是否命中效果入口，确定获准的隔离/触发迁移方式；不是把它变成所有PR的新审批平台，也不能靠`skip ci`绕开验证。只改本设计路径不命中这些源入口。[WF-ECON-CAP][WF-STOCK][WF-ECON-DISC]
+
+**E28：job/step/title/path已是部分reader的兼容接口。** F05三个job没有needs；breadth reader在读取artifact前要求全run成功，Easy Stock和industrial reader却分别核自己的job。Easy Stock还核三个精确step名。故原生workflow_call/composite、拆job或改显示名会影响证据解释，不只是YAML去重复。建议目标为与实际用途一致的qualification unit（run/job/step/原件），对独立可用数据避免无理由的兄弟失败传播；具体改变仍须查历史/测试并采纳，当前仅识别耦合，不宣称已发生生产故障或立即改成job级放行。[WF-IND][BREADTH-READ][EASY-READ][FUND-READ]
+
+**E29：宽实现指纹把局部变化变成跨域兼容维护。** `concept_detail_compat.py`有九张主要实现映射；最初完整映射17个文件，primary子集13个。代码明确记录#530显示函数、#579/#728 Sector、#757/#769 Collector预算等不被该回放调用的变更，却需保存额外installed/historical配对。这是可定位的结构性成本，不只是文件长。比较A继续映射、B抽出原纯能力并约束未来回放闭包、C由合适外部组件承担通用部分且保留Kernel来源/格式合同。推荐优先验证B/C的窄边界：新产物精确绑定必要验证实现/版本与输入，而非每次指纹覆盖无关宽模块；旧映射/原件留到有替代恢复证据才退。不能删除指纹、用当前hash追认旧失败、执行archive里的tar，或把某框架cache key当资格证明。[CONCEPT-COMPAT][CONCEPT-READ][DETAIL-READ]
+
+**E30：B2有明确的跨来源技术耦合。** 全脚本AST对`relay`的属性引用只有`RelayError/SECRET_ENV/_unique/decode/now/require`；已读这些定义，属于错误、JSON、时钟和凭证反射防护，不是Relay市场请求。实际公告用独立Requests/CNINFO。与此同时workflow核整个Relay blob，并共用Global market的`radar-global-market-relay`并发组。应比较中性原语归属与维持现状的净成本；锁的历史目的、其他外部竞争者尚UNKNOWN，不能据“不同端点”自动删锁或撤哈希门。对应M01/05/08/12与W2/W3。[B2-CODE][RELAY-HELPERS][WF-B2][WF-GLOBAL-MARKET]
+
+**E31：不是一个通用latest-success或cache对象。** Global按六族保存最新尝试和最后可读批次；Smart Money用精确control-bound前驱及history/state，历史恢复失败不能清空重基线；industrial同capture再发布保留上次比较增量；Concept补充必须绑定primary。它们可共用传输/字节/存放实现，但状态角色、来源日/检查日和旧结果含义须分别保持。设计不默认制造一个总cursor/checkpoint；外部组件接管范围也按这些差异计成本。[GLOBAL-READ][SMART-READ][FUND-READ][DETAIL-READ]
+
+**E32：采集组件的返回值可能压平Kernel必须保留的区别。** dlt RESTClient在提取数据时可把JSON null变成空列表，且其上游测试明确覆盖该行为；分页器可能已将`PageData.request`更新到下一页上下文，不能直接当已经发出的原请求记录。B2当前区分null/空表/缺列/未查询，并先保存原始页。因此可复用显式session/原始response/hook，但必须在转换前保管本次实际request/response及失败，显式页限、目的地和no-retry；若只能继续维护全套旧实现再套一层，就没有净收益。它是可验证适配条件，不是永久拒绝dlt。[DLT-CLIENT][DLT-TEST][B2-CODE]
 
 ## 3. 架构备选与架构级复用
 
@@ -119,9 +154,25 @@ A/B/C回答改动幅度；实现从哪里来是另一个轴。每项重大选择
 
 Kedro固定`2e4375bd90e0ed09e179563c2ef9e29f4a2eb22f`；Hamilton固定`bed5a272904bd7d68bc03167978f663e1906738c`。此前具体阅读区间、版本标签差异和许可/依赖边界保留在附录。本轮不以README或发行标签作生产采用证明。未安装/运行两候选；没有测得节省比例。Dagster此前仅文档定位，证据不足，不作优劣判定。适用P2直接使用，新能力仍做有界新检索，候选集不是封闭白名单。[REUSE]
 
-**本轮新增：Kedro的数据复制合同必须纳入适配。** 固定版本MemoryDataset的load/save采用显式copy_mode或按类型推断；普通对象通常deepcopy，亦可配置assign保留同一引用。已读对应测试的同对象/浅拷贝/深拷贝反例，未执行。因此将带凭证、API已用次数、memo和候选文件的Collector当普通dataset传递，可能复制资源计数或产生错误共享；这是代码支持的集成风险，不是已复现的Kernel故障。assign是可比较的解决方式，不能凭此直接否决Kedro，也不能未经测试认定assign安全。[K-MEM][K-MEM-TEST][K-MEM-DOC]
+**v2.1保留的适配发现：Kedro的数据复制合同。** 固定版本MemoryDataset的load/save采用显式copy_mode或按类型推断；普通对象通常deepcopy，亦可配置assign保留同一引用。已读对应测试的同对象/浅拷贝/深拷贝反例，未执行。因此将带凭证、API已用次数、memo和候选文件的Collector当普通dataset传递，可能复制资源计数或产生错误共享；这是代码支持的集成风险，不是已复现的Kernel故障。assign是可比较的解决方式，不能凭此直接否决Kedro，也不能未经测试认定assign安全。[K-MEM][K-MEM-TEST][K-MEM-DOC]
 
 建议优先比较“已验证普通数据/字节＋纯计算”进入外部组件，resource budget、不可重复效果和最终发布留给明确owner；或通过显式共享资源适配而不复制live client。若适配仍把整个Collector藏进万能节点、原复杂度一项未退，只增加外层图，不算复用收益。反过来，不为展示图而制造大量无消费者小节点。
+
+### 3.4 来源采集与原生工程复用：不只比较函数图
+
+新增候选dlt固定为**1.31.0 / `2360d229c77f7f64692acc31a4555f4cfcd50ed3`**（Release/tag由原生GitHub核对）。完整读取`dlt/sources/helpers/rest_client/client.py`432行；局部读`requests/retry.py:1–250`、实际目录定位的`tests/sources/helpers/rest_client/test_client.py:1–180`、`pyproject.toml:1–150`及官方REST helpers合同。未安装、未执行任何测试或pipeline；未审全部依赖/许可/初始化外发。包元数据声明Apache-2.0不是整个依赖链合规结论；未复制上游实现。[DLT-CLIENT][DLT-RETRY][DLT-TEST][DLT-PKG][DLT-DOC]
+
+| 同口径方案 | 能交给已有实现的责任 | Kernel仍负责什么／采用前验证 |
+|---|---|---|
+| 原Requests/stdlib＋现役source parser | 已有连接、响应、原始字节和具体来源映射，迁移最小；已有AKShare映射/eltdx/NewsNow/CZSC等按原证据复用 | 若保留仍要收敛重复错误/JSON/保管和宽依赖，不以熟悉现状作理由；新用途变更点和测试成本须与替代比 |
+| GitHub原生composite／reusable workflow | 可复用已有安装、代码/CI核验和保管技术步骤，不新造scheduler | composite是原job内steps，reusable workflow提供job级复用，不能随意互换；现有reader消费精确job/step/title，迁移要双边证据；不得让共享steps扩大token、源权限或cron。[GH-REUSE] |
+| dlt独立RESTClient＋明确session/分页/response hook | Requests客户端、分页及返回上下文有实际入口，可不使用destination/pipeline平台 | 默认session会加可配置重试，可传已约束Session；须明确timeout/redirect/trust_env/HTTP预算与原字节保管；不把自动selector/paginator、忽略404/null→[]当Kernel源语义 |
+| dlt更完整声明式source/pipeline | 候选可接管更多资源关系、cursor、提取/加载，不能先假设必须新建服务器才可用 | 本轮只审独立客户端，不声称完整架构优劣已定；GitHub状态权威、历史append/create-only、PIT/部分失败与退出成本仍须比较。不将dltHub平台/Agent能力混成所选客户端的必需依赖 |
+| 本项目自建统一抓取/状态平台 | 本轮未证明独特需求或相对净收益 | 不开建。已有组件配置或薄适配满足时优先复用，工具未安装/本地取回受限不是自建理由 |
+
+dlt `_create_request`接受完整HTTP(S) URL，`_send_request`使用会话的环境设置，DEBUG日志可含请求参数/headers；这些是集成控制点，不是已经发生泄露。候选试验须固定可信目的地、无环境凭证/代理、日志策略和实际发送次数；用可信配置而非source文本控制hook。普通GET/POST可返回原Response，不能因为paginated数据有null归一化就否认其原件保管接点。默认重试可配，不能据默认行为排除；也不能仅配置项存在就宣称满足全部边界。
+
+**当前设计选择：** W2/W3先比较原生已有机制的责任归位与dlt等组件薄适配；不采纳全局替换。对只有有限单页原件保管的用途，dlt可接管的执行责任可能少，属于待测假设；真正多页/多资源用途可能更有收益。G6以同一B2/Global受控样本比原件、失败、请求数、改动点、依赖安装/升级与退出成本，不预定任何胜者。Kedro/Hamilton继续在其真正适合的用例/纯计算域比较，不强迫一个框架承担全部Kernel。
 
 ## 4. 公共接口、数据与状态权威
 
@@ -186,16 +237,16 @@ Kedro固定`2e4375bd90e0ed09e179563c2ef9e29f4a2eb22f`；Hamilton固定`bed5a2729
 | M02 领域/Research/Market/Odds/数值 | 通用commit闭包已核，全部内部规则仍待G1；spine、provisional/conditional和恢复者消费 | KEEP不变量；CONSOLIDATE必要领域组织，审policy与law而非冻结原结构 |
 | M03 方法/旧合同/模型适配 | 方法执行与历史Funnel合同共置；hosts、live、旧包reader消费；RETAINED＋E26 | REPLACE错位组织；KEEP必要旧codec；共享SDK/方法循环分别审复用，不更改研究接受 |
 | M04 CLI/live/application | 多用途命令和组合、workflow入口；CODE/RETAINED | REPLACE过宽编排为明确用例/薄CLI；与Kedro组件/项目组织比较，旧支持入口有限过渡 |
-| M05 provider transport/adapter | 网络与来源特有资格分布多处；capture、回放与reader；部分UNKNOWN | CONSOLIDATE同义传输；KEEP来源特有单位/日期/权限；按实际组件与进程边界评估复用 |
-| M06 capture/producer | 来源获取、控制、保管混居；原workflows及下游消费；主链CODE，全族未闭合 | CONSOLIDATE机械步骤、REPLACE错位边界；不能让通用runner继承新采集/重试权限 |
+| M05 provider transport/adapter | 网络与来源特有资格分布多处；F01–12/E30/E32补到入口及消费者，capture内部仍部分UNKNOWN | CONSOLIDATE同义传输；KEEP来源特有单位/日期/权限；按实际组件与进程边界评估复用，增加dlt独立客户端比较而不预装 |
+| M06 capture/producer | 来源获取、控制、保管混居；原workflows及下游消费；主链＋12来源workflow及所列直接reader为CODE；各capture算法/控制未全闭合 | CONSOLIDATE机械步骤、REPLACE错位边界；不能让通用runner继承新采集/重试权限 |
 | M07 纯观察/计算 | D及各Sector/Stock/News等纯函数与I/O同域；producer、研究准备和UI消费 | REPLACE错误依赖/组织；比较直接函数、Hamilton等实际转换组件；原算法尽量复用 |
-| M08 workflows/事件/资格 | E21五job多目的，E22旧自动边，事件机会不等于data依赖 | CONSOLIDATE原生steps；REPLACE过宽目的入口为候选；RETIRE仅已证失去责任的具体边，禁止自动改接 |
+| M08 workflows/事件/资格 | E21/E22及E27/E28：多purpose、旧自动边、push效果、job/step/title资格；事件不等于data或authority | CONSOLIDATE原生steps；REPLACE过宽目的入口为候选；RETIRE仅已证失去责任的具体边，禁止自动改接 |
 | M09 producer状态/恢复 | Sector artifact强依赖、News history可选；原producer/恢复者消费；CODE＋RETAINED | KEEP必要差异；CONSOLIDATE机械读写；长期状态后端替换需G3证据与裁定，不能从R冒领权威 |
-| M10 执行/失败/报告记忆 | E23 #581读改写、E24有限恢复/未知intent；reconciler/运维/恢复者消费 | CONSOLIDATE同义诊断；KEEP报告记忆与准入分离；REPLACE冗余实现须先证明原件可重建 |
-| M11 档案/历史codec | registry/index/raw/progress/commit/Odds耦合；archive、D、reentry、人工恢复消费 | CONSOLIDATE保管责任；比较路径/版本策略；新policy与历史分支成本纳入，不自动采用S1 |
-| M12 配置/registry/生产意图 | E25 reader解析workflow数组；intake/Watch/Collector消费，不同集合不同意图 | REPLACE确实重复的维护源；KEEP用途/接受/声明区分；外部catalog只在单一权威成立时采用 |
+| M10 执行/失败/报告记忆 | E23/E24加E28/E31：#581、有限恢复/未知intent、不同job资格/源前驱；reconciler/reader消费 | CONSOLIDATE同义诊断；KEEP报告记忆与准入分离；REPLACE冗余实现须先证明原件可重建 |
+| M11 档案/历史codec | 档案/codec及E29宽实现指纹；archive、Concept回放、D、reentry、人工恢复消费 | CONSOLIDATE保管责任；比较路径/版本及窄回放闭包；旧完整指纹配对保留至替代恢复证明，新policy不自动采用S1 |
+| M12 配置/registry/生产意图 | E25数组与E30 B2显式registry选择；intake/Watch/Collector消费，不同集合不同意图 | REPLACE确实重复的维护源；KEEP用途/接受/声明区分；外部catalog只在单一权威成立时采用 |
 | M13 读包合同/通用工具 | current_state同时持有hash/path/ZIP与读面业务；多族纯计算与reader依赖 | REPLACE归属，分纯原语、codec和读面规则；输出原字节/哈希不能因迁址变化 |
-| M14 Collector/预算/候选文件 | 多族借机构Radar reserve、共享可变files/API；Kedro复制影响资源身份 | CONSOLIDATE资源owner；REPLACE跨业务私有依赖；与外部组件数据/资源分离方案同台比较 |
+| M14 Collector/预算/候选文件 | 多族借机构Radar reserve、共享files/API；E28/E31各族隔离和增量；Kedro复制影响资源身份 | CONSOLIDATE资源owner；REPLACE跨业务私有依赖；与外部组件数据/资源分离方案同台比较 |
 | M15 Git发布/综合R/News | 原publisher与Retainer不同写合同；综合/News/研究/产品消费 | CONSOLIDATE同义Git机械操作；KEEP ref用途/create-only/前驱差异；不能统一为任意save/overwrite |
 | M16 研究→产品/重入/时间线 | registry、work refs、Quick/Brief/Inbox各路径；RETAINED/LOCATOR | CONSOLIDATE已保存资产与请求消费；KEEP原Human和时钟；完整更正/接续闭环由G5补齐 |
 | M17 Workbench client | 已读reading，app/product/业务页未完整审；浏览器与重入用户消费 | CONSOLIDATE读取/视图模型，必要REPLACE；同台比较现有与成熟组件，不预定前端框架 |
@@ -204,7 +255,7 @@ Kedro固定`2e4375bd90e0ed09e179563c2ef9e29f4a2eb22f`；Hamilton固定`bed5a2729
 | M20 CI/工程自动化 | 四scope/分片/环境严格复用已有成本；PR、main、publisher消费 | CONSOLIDATE冗余执行/证据实现；比较更简单完整执行等替代，现役合同不提前放宽 |
 | M21 依赖/打包/供应链 | 轻core与extras/dev重复声明，tag/SHA差异；轻reader、生产、native、dev消费 | CONSOLIDATE维护源；比较pip/constraints/lock/uv与所选外部库环境，精确Action策略全域审查 |
 | M22 文档/治理/跨会话 | 旧NEXT、候选和现行协议易混；研究者/不同模型/维护者消费 | CONSOLIDATE任务触发→当前合同→原证据；RETIRE过时当前指针，不删历史、不加规则数据库 |
-| M23 one-shot/兼容/退役 | E26旧launcher已退但共享实现现役；人工/CLI/workflow/fixture/历史reader仍需核 | RETIRE精确失去执行责任的入口；KEEP历史读取；CONSOLIDATE仍有消费者的实现，拒绝按名称批删 |
+| M23 one-shot/兼容/退役 | E26共享实现、E29旧回放映射、F09 Vibe手工用途；人工/CLI/workflow/fixture仍需核 | RETIRE精确失去执行责任的入口；KEEP历史读取；CONSOLIDATE仍有消费者的实现，拒绝按名称批删 |
 | M24 旁支/third_party/资源 | 小红书harness依赖研究包，样式/包资源与人工消费待核 | CONSOLIDATE为外围能力或必要历史组件；DEFER新功能启用而非免审；无使用证据不推导可删 |
 
 ### 5.2 收益、兼容成本、风险与必要验证
@@ -290,10 +341,10 @@ P3内部继续R1取证与R2设计互相修正，R3正式采纳；不重开P0/P1/
 
 | 批次 | 覆盖与目标变化 | 前置、独立验证和退出 |
 |---|---|---|
-| W1 公共合同和保护样本 | M01–04/11/13/16/19；区分支持行为、旧格式与内部实现 | P3采纳后冻结原成功/拒绝/历史/CLI样本；不切生产格式，复用现有fixture |
+| W1 公共合同和保护样本 | M01–04/11/13/16/19；区分支持行为、旧格式与内部实现 | P3采纳后冻结原成功/拒绝/历史/CLI样本；先核实际diff→触发→source effect，未裁定不移动效果路径；不切生产格式 |
 | W2 共享原语与技术资源归位 | M01/05/10/13/14/15；同义hash/path/transport、预算/候选文件owner | W1＋真实消费者；比较原生/外部组件，验证同bytes/预算/错误，退出旧重复实现与转发 |
-| W3 应用、producer、配置和恢复边界 | M04/06/08–10/12；事件、data、authority三种边与报告记忆 | W1/W2＋G2/G3；不更改原时钟/请求，保留有限恢复与未知intent；目标writer唯一 |
-| W4 观察/来源各族结构重组 | M05–07；Sector/Stock/News/Industry/economic/D及财务输入 | W1/W2及受影响W3；按族垂直迁移，比较直接函数与外部执行，核来源→最终消费者，不重采 |
+| W3 应用、producer、配置和恢复边界 | M04/06/08–10/12；事件、data、authority三种边、job/step资格与报告记忆；审E30共享锁而不自动取消 | W1/W2＋G2/G3；不更改原时钟/请求，保留有限恢复与未知intent；目标writer唯一 |
+| W4 观察/来源各族结构重组 | M05–07；Sector/Stock/News/Industry/economic/D及财务输入 | W1/W2及受影响W3；按族垂直迁移，比较现有/dlt/纯函数执行与窄回放闭包；旧指纹恢复先保护，核来源→最终消费者，不重采 |
 | W5 研究方法、档案和历史合同 | M02/03/11/12/16/24；方法执行/模型适配与旧codec、原件/接受分开 | G1/G3及W1/W2；两种研究交付与旧R/中文恢复；新writer最后启用，回退仍读已发布新格式 |
 | W6 读包、发布和Workbench | M13–18；缩小Collector过宽组合、明确client/host和产品重入 | 相关W3/W4/W5；综合R/News/Issue独立；T3/T5及原CLI/host测试；Sites不自动部署 |
 | W7 测试、CI、依赖和文档整合 | M19–22；fixture、义务归属、环境维护源和供应链 | 从W1开始量化、结构稳定部分先做；同保护集合/环境/失败和成本；新工具先授权试验/采纳 |
@@ -334,21 +385,21 @@ P1既有#799 full累计613作业秒、独立main 34秒、publisher 138秒只作�
 
 | 门 | 本版增量 | 仍需补证及阻塞范围 |
 |---|---|---|
-| G1 全局依赖/公共消费者 | 主链workflow事件/命令、配置文本消费、共享Retainer与预算接点 | 全source import闭包、动态import/CLI/包资源、全部人工/外部消费者；阻塞精确拓扑和旧路径退出 |
-| G2 producer/配置/资格链 | 四份完整workflow、Sector主要接线、reconciler与Research保管；E21/E25 | 其余source/经济/B2/行业/Concept/全Stock多目的的输入→run→原件→reader及预算/失败owner；不宣称全族已审 |
-| G3 状态/档案/恢复 | 完整Sector persistence、#581报告记忆、原Retainer与intake片段 | 代表真实历史格式/原件与容量/期限、全部work-ref写者/读者、恢复演练；新格式/状态权威替换须先闭合 |
-| G4 生命周期/退役 | E22具体旧自动边、E26共享实现不可按旧名删除 | 原owner/历史意图、manual/push/CLI/fixture和旧R消费者；无此证据不删边或模块 |
+| G1 全局依赖/公共消费者 | 主链、F01–F12及所列reader/脚本、配置文本/标签消费者、共享Retainer/预算与E29指纹 | 全source import闭包、动态import/CLI/包资源、全部人工/外部消费者；阻塞精确拓扑和旧路径退出 |
+| G2 producer/配置/资格链 | 前驱加本批12份完整source workflow、B2全脚本和10份reader/compat；E27–E32 | F01 native-feed/各purpose控制，F02 control/capture，F03/04 source codecs及F10/11 capture/lifecycle内部与其全部下游仍需补；本批不签完整G2 |
+| G3 状态/档案/恢复 | Sector/#581/Retainer加Smart Money/Global/industrial/Concept明确前驱与增量角色 | 代表真实历史格式/原件与容量/期限、全部work-ref写者/读者、恢复演练；新格式/状态权威替换须先闭合 |
+| G4 生命周期/退役 | E22旧自动边、E26共享实现、E27效果入口、E29兼容映射和F09手工Vibe用途 | 原owner/历史意图、manual/push/CLI/fixture和旧R消费者；无此证据不删边或模块 |
 | G5 Workbench/研究产品 | 复用原reading及Quick/Inbox独立时钟合同 | 全client/server/host及更正、真实Quick→Brief消费；Sites暂停不免审，线上证明另立 |
-| G6 变更成本/测试/候选 | T3/T5接口差异与共同失败集；Kedro复制合同/测试源码 | T1–T7实际基线、全fixture义务、环境与必要候选隔离试验；未安装未测成本保持UNKNOWN |
+| G6 变更成本/测试/候选 | T3/T5、Kedro复制、dlt request/response/分页/重试差异；E29地图/代码范围静态数值非成本实测 | T1–T7实际基线、全fixture义务、环境与必要候选隔离试验；未安装未测成本保持UNKNOWN |
 | G7 独立接手 | 通过原#508回执恢复本任务，但仍为本会话连续工作 | 真正新上下文/维护者的独立任务证据；本轮不能自签 |
 
-### 10.2 下一取证包的有限边界
+### 10.2 下一取证包：全局领域／方法依赖及产品接口，不再重读本批workflow
 
-不再重讲Kedro/Hamilton介绍或重复News/D已有源码。下一包优先补**尚未读全的source家族与其消费者**：`hithink-stock-dump-trial.yml`多目的、`radar-smart-money.yml`、`radar-global-public.yml`、`radar-global-market.yml`、`radar-industry-breadth.yml`、Concept三类/TDX，以及`economic-release-discovery.yml`、`economic-source-capture.yml`、`b2-disclosure-appointments.yml`。从已取得树的精确入口沿命令走到写入物、直接reader与实际失败owner；不能只看workflow标题。
+本批F01–F12指定入口与所列reader证据已加入同一矩阵，未审capture/控制细部按G2继续保留；不把“入口包完成”说成G2全通过。下一包转**G1领域/方法和G5 Workbench的全量文件覆盖**：固定同一M，从实际source和workbench树取得清单，逐步形成可核的静态import/JS module图；列出动态import、CLI、package resources和外部/人工调用的额外边界。没有完整正文的节点标LOCATOR，不凭import图判安全删除。
 
-交付到同一设计的覆盖表：每条已读入口/输入/执行效果/保管对象/消费者/重复责任/复用候选；未读明确列出。源调用不执行，不开生产恢复；阅读metadata不是再采来源。然后对G1域/方法闭包与G3/G4/G5/G6分别补齐，不把剩余大域永久移为DEFER。各有限包在同一矩阵累积，最终全域必须交账。
+先核`research_commit`及领域spine、旧方法/新交付者与历史codec的闭包，再核Workbench client/server/host及其实际研究资料/请求消费者。复用P1/P2、E21–32和已有代码文件，不重讲外部框架；对共享引用落实T1/T2/T6的变更责任点。G2剩余控制器与G3原件/恢复、G4具体退出和G6真实成本依该图继续收口，不能将重要未审域DEFER出全面目标。
 
-工具/本地缺口仅阻塞相关证明；能够只读核实的继续，不让Human搬文件或重复授权。拟采用的新工具确需安装/执行时，带最小目的/环境/数据/费用/退出说明一次提交，不用任意依赖先装再解释。
+结果写回原24M与本设计；#508只更新实际证据/下一步。新方案采纳仍在P3-R3；源/模型/生产恢复、候选安装/执行不因静态图读取自动获准。若本地完整checkout仍不可得，继续用已授权连接器取得正文和可核范围，或明确局部受限，不造代理工作流、不让Human搬文件。真正新上下文接手只记实际证据，本轮连续对话不自签G7。
 
 ### 10.3 Human尚需裁定，而不是现在重新确认目标
 
@@ -386,3 +437,35 @@ P1既有#799 full累计613作业秒、独立main 34秒、publisher 138秒只作�
 [K-MEM]: https://github.com/kedro-org/kedro/blob/2e4375bd90e0ed09e179563c2ef9e29f4a2eb22f/kedro/io/memory_dataset.py
 [K-MEM-TEST]: https://github.com/kedro-org/kedro/blob/2e4375bd90e0ed09e179563c2ef9e29f4a2eb22f/tests/io/test_memory_dataset.py#L1-L190
 [K-MEM-DOC]: https://docs.kedro.org/en/stable/api/io/kedro.io.MemoryDataset/
+
+[V21]: https://github.com/auguspp/decision-kernel/blob/a5da26a464e04d6c6b2ae3ad4c57d3101ad66354/docs/kernel-2.0-design.md
+[WF-STOCK]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/hithink-stock-dump-trial.yml
+[WF-SMART]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-smart-money.yml
+[WF-GLOBAL-MARKET]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-global-market.yml
+[WF-GLOBAL-PUBLIC]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-global-public.yml
+[WF-IND]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-industry-breadth.yml
+[WF-CONCEPT]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-concept-source.yml
+[WF-DETAIL]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/radar-concept-detail.yml
+[WF-TDX]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/tdx-concept-snapshot.yml
+[WF-VIBE]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/vibe-concept-snapshot.yml
+[WF-ECON-DISC]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/economic-release-discovery.yml
+[WF-ECON-CAP]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/economic-source-capture.yml
+[WF-B2]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/workflows/b2-disclosure-appointments.yml
+[GLOBAL-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/global_market_reading.py
+[SMART-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/smart_money_reading.py
+[BREADTH-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/industry_breadth_reading.py
+[EASY-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/easy_stock_reading.py
+[FUND-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/industry_fundamentals_reading.py
+[TDX-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/tdx_concept_reading.py
+[CONCEPT-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/concept_radar_reading.py
+[DETAIL-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/concept_detail_reading.py
+[CONCEPT-COMPAT]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/concept_detail_compat.py
+[EXTERNAL-READ]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/external_radar_reading.py
+[B2-CODE]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/.github/scripts/b2-disclosure-appointments.py
+[RELAY-HELPERS]: https://github.com/auguspp/decision-kernel/blob/4e9da1d037d6cefce0a7735ee74349666430a9bf/src/decision_kernel/runtime/tushare_relay.py#L1-L140
+[DLT-CLIENT]: https://github.com/dlt-hub/dlt/blob/2360d229c77f7f64692acc31a4555f4cfcd50ed3/dlt/sources/helpers/rest_client/client.py
+[DLT-RETRY]: https://github.com/dlt-hub/dlt/blob/2360d229c77f7f64692acc31a4555f4cfcd50ed3/dlt/sources/helpers/requests/retry.py#L1-L250
+[DLT-TEST]: https://github.com/dlt-hub/dlt/blob/2360d229c77f7f64692acc31a4555f4cfcd50ed3/tests/sources/helpers/rest_client/test_client.py#L1-L180
+[DLT-PKG]: https://github.com/dlt-hub/dlt/blob/2360d229c77f7f64692acc31a4555f4cfcd50ed3/pyproject.toml#L1-L150
+[DLT-DOC]: https://dlthub.com/docs/dlt-ecosystem/verified-sources/rest_api/advanced
+[GH-REUSE]: https://docs.github.com/en/actions/concepts/workflows-and-actions/reusing-workflow-configurations
