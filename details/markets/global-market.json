@@ -10,7 +10,7 @@
       "research_authority": "NONE",
       "signal_transition_authority": "NONE"
     },
-    "checked_at": "2026-10-10T02:48:52.735061+00:00",
+    "checked_at": "2026-10-10T05:53:40.572418+00:00",
     "complete_global_coverage": false,
     "families": {
       "commodities": {
@@ -1319,80 +1319,24 @@
       },
       "indices": {
         "error_type": null,
-        "latest_archive": {
-          "artifact_id": 11598820837,
-          "artifact_name": "global-market-indices-37891943795-1",
-          "artifact_url": "https://github.com/auguspp/decision-kernel/actions/runs/37891943795/artifacts/11598820837",
-          "bytes": 6973,
-          "expires_at": "2026-11-08T06:11:42Z",
-          "git_blob": "4271ccc7ffb424f84a4b661f01ce8d5725597669",
-          "meaning": "EXACT_ARCHIVE_READ_COPY_NOT_PRODUCTION_RESTORE",
-          "origin_run": {
-            "conclusion": "success",
-            "created_at": "2026-10-09T06:07:53Z",
-            "event": "schedule",
-            "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-            "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37891943795",
-            "id": 37891943795,
-            "operation": null,
-            "path": ".github/workflows/radar-global-market.yml",
-            "run_attempt": 1,
-            "run_started_at": "2026-10-09T06:07:53Z",
-            "status": "completed",
-            "updated_at": "2026-10-09T06:11:46Z"
-          },
-          "read_path": "sources/artifacts/7b5ee517ef89e0a11c6c51f3ca48cb0c39bc37bb403ae51eea100f2ad552ef20.zip",
-          "read_ref_rule": "USE_THE_SAME_PINNED_READING_COMMIT",
-          "sha256": "7b5ee517ef89e0a11c6c51f3ca48cb0c39bc37bb403ae51eea100f2ad552ef20"
-        },
+        "latest_archive": null,
         "latest_attempt": {
-          "conclusion": "success",
-          "created_at": "2026-10-09T06:07:53Z",
+          "conclusion": null,
+          "created_at": "2026-10-10T05:51:53Z",
           "event": "schedule",
           "head_sha": "88f5a11eeefe79c0748b77f16e5bd13063249e76",
-          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/37891943795",
-          "id": 37891943795,
+          "html_url": "https://github.com/auguspp/decision-kernel/actions/runs/38028951500",
+          "id": 38028951500,
           "operation": null,
           "path": ".github/workflows/radar-global-market.yml",
           "run_attempt": 1,
-          "run_started_at": "2026-10-09T06:07:53Z",
-          "status": "completed",
-          "updated_at": "2026-10-09T06:11:46Z"
+          "run_started_at": "2026-10-10T05:51:53Z",
+          "status": "in_progress",
+          "updated_at": "2026-10-10T05:51:56Z"
         },
-        "latest_capture_status": "PARTIAL",
-        "latest_outcomes": [
-          {
-            "attempt_count": 2,
-            "id": "SPX",
-            "status": "TEMPORARY_QUEUE"
-          },
-          {
-            "attempt_count": 2,
-            "id": "IXIC",
-            "status": "TABLE_UNCONFIRMED"
-          },
-          {
-            "attempt_count": 2,
-            "id": "HSI",
-            "status": "TEMPORARY_QUEUE"
-          },
-          {
-            "attempt_count": 1,
-            "id": "HKTECH",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "attempt_count": 2,
-            "id": "N225",
-            "status": "ROWS_NORMALIZED"
-          },
-          {
-            "attempt_count": 2,
-            "id": "GDAXI",
-            "status": "ROWS_NORMALIZED"
-          }
-        ],
-        "latest_read_status": "REUSED_RETAINED_CAPTURE",
+        "latest_capture_status": null,
+        "latest_outcomes": [],
+        "latest_read_status": "CAPTURE_IN_PROGRESS",
         "snapshot": {
           "archive": {
             "artifact_id": 11598820837,
@@ -2630,11 +2574,11 @@
       "examined": 20,
       "limit": 20,
       "meaning": "BOUNDED_LATEST_ATTEMPTS_NOT_ALL_HISTORY",
-      "total_count": 24,
+      "total_count": 25,
       "unattributed_run_ids": []
     },
     "source_calls": 0,
     "version": "global-market-reading-v2"
   },
-  "projection_hash": "9a7f6d7712dcc3deae4932e3c8477abf733de4100ec431bc7ec524df5d34e903"
+  "projection_hash": "1252ef4c60f5720bac9d627908db68e21a392f6444830322615373c597d851cf"
 }
