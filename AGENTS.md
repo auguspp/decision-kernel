@@ -29,7 +29,7 @@ Read only the applicable route, with its linked corrections and contracts. Conne
 
 | Task | First entry | Additional reading when applicable |
 | --- | --- | --- |
-| Construction, planning, architecture reuse | [NEXT](docs/NEXT-PHASE-CONSTRUCTION.md) → [#297](https://github.com/auguspp/decision-kernel/issues/297) → current task | Protocol sections on Reconcile, Governance and Reuse below; applicable #508/#511 records, not all comments |
+| Construction, planning, architecture reuse | [NEXT](docs/NEXT-PHASE-CONSTRUCTION.md) → [#297](https://github.com/auguspp/decision-kernel/issues/297) → current task | Protocol sections on Reconcile, Governance, Reuse and Modularity below; applicable #508/#511 records, not all comments |
 | CI / verification-obligation changes | [#297](https://github.com/auguspp/decision-kernel/issues/297) → current CI task, then [CI-MAINLINE](docs/CI-MAINLINE.md) | Historical [#354 receipts](https://github.com/auguspp/decision-kernel/issues/354) supply prior evidence, not the current queue; preserve content/draft_feedback/full/merge_reuse and exact full/main/publisher boundaries |
 | GitHub operations / capability questions | [github-native-operations](docs/github-native-operations.md) | The standing preflight below and actual target; no permanent capability matrix |
 | Workbench / Sites | Current product task through #297; [github-native-operations](docs/github-native-operations.md) for delivery/host boundaries | For actual page checks use the [isolated browser entry](workbench/browser/README.md), then relevant code/tests and feature documents; browser proof is separate from full CI, Sites deployment and phone acceptance |
@@ -66,6 +66,10 @@ Before committing along a materially changed premise, apply [Reconcile](WORKING-
 ## Governance lifecycle
 
 For a rule/method/lesson change or demonstrated retrieval conflict, apply the [governance lifecycle](WORKING-PROTOCOLS.md#governance-lifecycle). Preserve rationale, ownership, applicability, retrieval, acceptance and exit conditions. A moved rule without a reachable consumer is not successfully relocated. Candidate patches are not accepted policy; no per-rule registry or recurring governance platform.
+
+## Modularity First — composable capabilities and safe exit
+
+Apply [Modularity First](WORKING-PROTOCOLS.md#modularity-first--composable-capabilities-and-safe-exit) alongside Reuse First when introducing, replacing, disabling or retiring a capability. Keep a stable semantic/authority core, explicit capability contracts and composition points, with independently evolvable implementations. Changes belong at legitimate integration points, not unrelated business internals; optional absence must preserve unrelated work and honest unavailable/UNKNOWN states. Distinguish runtime disablement, provider replacement, execution-entry retirement and historical-reader retirement. Preserve lawful history and reconcile irreversible or uncertain effects; no blanket hot-plug requirement, new plugin platform or framework adoption. Compare actual lifecycle costs and prove applicable consumer/recovery behavior. [Human adoption and scope](https://github.com/auguspp/decision-kernel/issues/508#issuecomment-6097686457).
 
 ## Reuse First — required external prior-art check
 
