@@ -130,7 +130,7 @@ Yahoo =F 是供应商期货序列，不冒充现货/结算价；换月连续性�
 [原始ZIP](../../sources/artifacts/62f7feffec3cb27a2bca7da00d09637ac558ab0899a917c3402e3c15e80f2952.zip)
 
 ## 黄金与原油 · 供应商期货日线
-本次读取：REUSED_RETAINED_CAPTURE
+本次读取：FAILED_RUN_CAPTURE_READ
 
 最后可读批次run：37902006881
 # 黄金与原油 · 供应商期货日线
