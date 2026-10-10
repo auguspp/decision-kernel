@@ -1,8 +1,8 @@
 {
   "projection": {
     "automatic_admission": false,
-    "base_reading_hash": "827d83fba12619a86f148ca26ba3238439a585b6e3712c9dd8e8d85825322806",
-    "generated_at": "2026-10-10T08:24:50.465298+00:00",
+    "base_reading_hash": "c8f65d477dbfb3aca6cb249600124ea12c818f493c54fed9cc647ef67e676da4",
+    "generated_at": "2026-10-10T13:22:02.444775+00:00",
     "human_attention_authority": "NONE",
     "investment_authority": "NONE",
     "model_calls": 0,
@@ -16303,5 +16303,5 @@
     "signal_transition_authority": "NONE",
     "version": "easy-stock-public-context-v1"
   },
-  "projection_hash": "91473085e232ae1b49fbe8574e80a706c8b0475c7bf0bd5f0bc0c12950131b54"
+  "projection_hash": "042cba3c2b0cc6cfa5c21711d61b2a2e0a14a33a3ec967e016b83c77722ad961"
 }
